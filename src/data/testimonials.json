@@ -1,0 +1,57 @@
+[
+  {
+    "quote": "Working closely with Nicholas was like having a true partner in product. Together we elevated design across our company and the startups we guided, and built processes that united product, design and engineering.",
+    "author": "Luca Dabra",
+    "role": "Head of Product",
+    "company": "1Kubator",
+    "avatar": "/src/assets/images/avatars/luca.jpg",
+    "avatarW": 44,
+    "avatarH": 44,
+    "main": true
+  },
+  {
+    "quote": "Nicholas helped us resolve years of design and technical debt in our video app. Thanks to his redesign, development speed increased by 40% and content creation time dropped by half.",
+    "author": "Julien Comte",
+    "role": "Founder",
+    "company": "Makidoo",
+    "avatar": "#",
+    "avatarW": 44,
+    "avatarH": 44
+  },
+  {
+    "quote": "Nicholas brought clarity to our roadmap and aligned product with vision. His structured design process improved collaboration across teams and helped us cut release cycles by 25%.",
+    "author": "Lucile Voisin",
+    "role": "Founder",
+    "company": "DansTaRoue",
+    "avatar": "#",
+    "avatarW": 44,
+    "avatarH": 44
+  },
+  {
+    "quote": "Working one-to-one with Nicholas turned our idea into a product. In three months, we shipped the first version of our editing app, cutting delivery time by 30%.",
+    "author": "Matthieu Gindre",
+    "role": "Founder",
+    "company": "Talers",
+    "avatar": "#",
+    "avatarW": 44,
+    "avatarH": 44
+  },
+  {
+    "quote": "#",
+    "author": "Maxence Henric",
+    "role": "Art Director",
+    "company": "Freelance",
+    "avatar": "#",
+    "avatarW": 44,
+    "avatarH": 44
+  },
+  {
+    "quote": "#",
+    "author": "Guillaume Colombel",
+    "role": "Interactive Dev",
+    "company": "Freelance",
+    "avatar": "#",
+    "avatarW": 44,
+    "avatarH": 44
+  }
+]

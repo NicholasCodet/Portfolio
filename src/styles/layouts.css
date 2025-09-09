@@ -1,0 +1,26 @@
+:root {
+  --rail-offset: var(--space-8);
+  --content-pad: clamp(var(--space-16), 5vw, var(--space-80));
+}
+
+.section {
+  border-top: 1px solid var(--colour-slate-300);
+}
+
+.container {
+  max-width: 1000px;
+  position: relative;
+  margin: 0 auto;
+  padding: var(--space-128) var(--content-pad);
+
+  background: linear-gradient(var(--colour-slate-300), var(--colour-slate-300))
+      left var(--rail-offset) top / var(--space-1) 100% no-repeat,
+    linear-gradient(var(--colour-slate-300), var(--colour-slate-300)) right
+      var(--rail-offset) top / var(--space-1) 100% no-repeat;
+}
+
+@media (min-width: 960px) {
+  :root {
+    --rail-offset: var(--space-0);
+  }
+}

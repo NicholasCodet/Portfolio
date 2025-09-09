@@ -1,0 +1,93 @@
+/* ===== References ===== */
+
+/* grille: titre à gauche, rail à droite */
+.references .refs-grid {
+  display: grid;
+  gap: var(--sp-6);
+  align-items: center;
+}
+@media (min-width: 64rem) {
+  .references .refs-grid {
+    grid-template-columns: 1fr 3fr;
+  }
+}
+
+.references .refs-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.references .refs-marquee {
+  position: relative;
+  overflow: hidden;
+  /* fondu discret aux bords */
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 4%,
+    #000 96%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 4%,
+    #000 96%,
+    transparent
+  );
+}
+
+/* piste animée: 2 rangées identiques → loop sans couture */
+.references .refs-track {
+  display: inline-flex;
+  will-change: transform;
+  animation: refs-loop var(--duration, 30s) linear infinite;
+}
+
+/* pause au hover/focus clavier */
+.references .refs-marquee:hover .refs-track,
+.references .refs-marquee:focus-within .refs-track {
+  animation-play-state: paused;
+}
+
+.references .refs-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  flex-wrap: nowrap; /* 1 seule ligne */
+}
+
+.references .refs-logo {
+  flex: 0 0 auto;
+  opacity: 0.95;
+  filter: grayscale(1);
+  transition: opacity 0.2s ease;
+}
+.references .refs-logo:hover {
+  opacity: 1;
+}
+
+.references .refs-logo img {
+  display: block;
+  height: auto;
+  max-height: 44px;
+}
+
+/* l'animation translate exactement d'une largeur de rangée */
+@keyframes refs-loop {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(var(--roww) * -1));
+  }
+}
+
+/* accessibilité: réduit les animations si demandé */
+@media (prefers-reduced-motion: reduce) {
+  .references .refs-track {
+    animation: none !important;
+  }
+}

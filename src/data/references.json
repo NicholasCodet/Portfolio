@@ -1,0 +1,53 @@
+{
+  "corporates": [
+    {
+      "name": "BNP Paribas",
+      "src": "src/assets/images/logos/bnp-paribas.svg",
+      "width": 184,
+      "height": 44,
+      "alt": "BNP Paribas"
+    },
+    {
+      "name": "Boehringer Ingelheim",
+      "src": "src/assets/images/logos/boehringer-ingelheim.svg",
+      "width": 142,
+      "height": 44,
+      "alt": "Boehringer Ingelheim"
+    },
+    {
+      "name": "Capgemini",
+      "src": "src/assets/images/logos/capgemini.svg",
+      "width": 174,
+      "height": 44,
+      "alt": "Capgemini"
+    },
+    {
+      "name": "Crédit Agricole",
+      "src": "src/assets/images/logos/credit-agricole.svg",
+      "width": 187,
+      "height": 44,
+      "alt": "Crédit Agricole"
+    },
+    {
+      "name": "Danone",
+      "src": "src/assets/images/logos/danone.svg",
+      "width": 170,
+      "height": 44,
+      "alt": "Danone"
+    },
+    {
+      "name": "Deliveroo",
+      "src": "src/assets/images/logos/deliveroo.svg",
+      "width": 151,
+      "height": 44,
+      "alt": "Deliveroo"
+    },
+    {
+      "name": "Groupama",
+      "src": "src/assets/images/logos/groupama.svg",
+      "width": 167,
+      "height": 44,
+      "alt": "Groupama"
+    }
+  ]
+}

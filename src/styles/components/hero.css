@@ -1,0 +1,198 @@
+/* ===== Aurora background (hors <main>) ===== */
+.aurora {
+  position: absolute;
+  top: -80px;
+  inset: -20vh -20vw auto -20vw;
+  height: 70vh;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(45% 45% at 20% 10%, #7dd3fc55, transparent 65%),
+    radial-gradient(55% 55% at 60% 0%, #e879f955, transparent 65%),
+    radial-gradient(50% 50% at 90% 20%, #fde04755, transparent 60%),
+    radial-gradient(60% 60% at 40% 40%, #a78bfa55, transparent 70%);
+  filter: blur(40px) saturate(120%);
+}
+
+/* ===== Hero ===== */
+.hero {
+  padding-block: clamp(4rem, 10vw, 8rem) var(--sp-12);
+}
+.hero .hero-wrap {
+  max-width: 60rem; /* ~960px */
+}
+
+/* availability pill */
+.availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.875rem;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+  margin-bottom: var(--sp-6);
+}
+
+.availability .dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px #22c55e22;
+  position: relative;
+}
+
+.availability .dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #22c55e;
+  animation: dot-pulse 2s ease-out infinite;
+  opacity: 0.6;
+}
+
+@keyframes dot-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  70% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .availability .dot::after {
+    animation: none;
+  }
+}
+
+/* titles & copy */
+.hero-title {
+  margin: 0 0 var(--sp-4);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  font-size: clamp(2rem, 4.5vw + 0.5rem, 4rem);
+  color: var(--fg);
+}
+.hero-lead {
+  margin: 0 0 var(--sp-3);
+  font-weight: 800;
+  font-size: clamp(1.125rem, 1.2vw + 1rem, 1.5rem);
+}
+.hero-sub {
+  margin: 0 0 var(--sp-6);
+  color: var(--muted);
+  max-width: 52ch;
+}
+
+/* actions */
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  border: 1px solid var(--border);
+}
+.btn.email {
+  background: #0a0f1a;
+  color: #fff;
+  border-color: rgba(0, 0, 0, 0.22);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.hero-actions .or {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.socials a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: inherit;
+}
+.icon {
+  display: inline-block;
+}
+
+/* mobile buttons full-width option (si souhaité, commente si non) */
+@media (max-width: 47.999rem) {
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+  }
+
+  /* Ligne 1 : bouton email full width */
+  .hero-actions .btn.email {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Ligne 2 : OR centré full width */
+  .hero-actions .or {
+    flex: 0 0 100%;
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  /* Ligne 3 : socials full width, items espacés */
+  .hero-actions .socials {
+    flex: 0 0 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between; /* 🔥 dispersion */
+    gap: 0; /* pas d’écart supplémentaire */
+    padding-inline: 0.25rem; /* petit souffle aux bords */
+  }
+  .hero-actions .socials li {
+    flex: 0 0 auto;
+  }
+}
+
+/* focus visible */
+.hero a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* reduce motion — l’aurora reste statique, donc rien à couper */
+@media (prefers-reduced-motion: reduce) {
+  .aurora {
+    filter: blur(40px) saturate(110%);
+  }
+}

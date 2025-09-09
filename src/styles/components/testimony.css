@@ -1,0 +1,74 @@
+/* ===== Testimony ===== */
+.testimony {
+  padding-block: var(--sp-16);
+}
+
+.testimony-figure {
+  margin: 0 auto;
+  max-width: var(--maxw); /* garde cohérence globale */
+  width: min(100%, var(--maxw));
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-8);
+}
+
+.testimony-quote {
+  max-width: var(--maxw, 880px); /* largeur contrôlable via style inline */
+  text-align: center;
+  margin: 0;
+}
+
+.testimony-quote p {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  /* grande taille fluide, proche de la maquette */
+  font-size: clamp(1.4rem, 2.4vw + 0.5rem, 2.25rem);
+  color: var(--fg);
+}
+
+/* guillemets discrets (optionnel) */
+.testimony-quote p::before,
+.testimony-quote p::after {
+  content: "“";
+  font-weight: 700;
+  opacity: 0.15;
+}
+.testimony-quote p::after {
+  content: "”";
+}
+
+.testimony-author {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.testimony-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.testimony-meta {
+  display: grid;
+  align-items: center;
+}
+.testimony-meta .name {
+  font-weight: 700;
+}
+.testimony-meta .role {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+/* accessibilité: si réduction de mouvement, rien à changer (pas d'anim) */
+/* responsive spacing */
+@media (min-width: 64rem) {
+  .testimony {
+    padding-block: var(--sp-20, 6rem);
+  }
+}

@@ -1,0 +1,10 @@
+[
+  { "id": "figma", "label": "Figma", "icon": "icon-figma" },
+  { "id": "framer", "label": "Framer", "icon": "icon-framer" },
+  { "id": "notion", "label": "Notion", "icon": "icon-notion" },
+  { "id": "airtable", "label": "Airtable", "icon": "icon-airtable" },
+  { "id": "arc", "label": "Arc", "icon": "icon-arc" },
+  { "id": "linear", "label": "Linear", "icon": "icon-linear" },
+  { "id": "raycast", "label": "Raycast", "icon": "icon-raycast" },
+  { "id": "zed", "label": "Zed", "icon": "icon-zed" }
+]
