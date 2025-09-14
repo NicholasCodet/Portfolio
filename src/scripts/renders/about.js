@@ -1,5 +1,7 @@
 // @/src/scripts/renders/about.js
 import { fetchJSON } from "../utils/fetch-json.js";
+import { escape } from "../utils/dom.js";
+import { fetchSocials, filterByIds, renderSocialItem } from "../utils/socials.js";
 
 export async function mountAbout({
   selector = "section.about",
@@ -23,12 +25,12 @@ export async function mountAbout({
 
   // --- Fetch data (soft-fail)
   const socials = filterByIds(
-    await safeJSON(new URL(socialsPath, import.meta.url).href),
+    await fetchSocials(new URL(socialsPath, import.meta.url).href),
     socialIds,
     (s) => s.name || s.id
   );
   const tools = filterByIds(
-    await safeJSON(new URL(toolkitPath, import.meta.url).href),
+    (await fetchJSON(new URL(toolkitPath, import.meta.url).href)) || [],
     toolIds,
     (t) => t.id || t.label
   );
@@ -39,14 +41,14 @@ export async function mountAbout({
   container.innerHTML = `
     <div class="about-grid">
       <header class="about-head" aria-labelledby="about-title">
-        <p class="eyebrow">${esc(eyebrow)}</p>
-        <h2 id="about-title" class="h2">${esc(title)}</h2>
+        <p class="eyebrow">${escape(eyebrow)}</p>
+        <h2 id="about-title" class="h2">${escape(title)}</h2>
       </header>
 
       <figure class="about-media">
         ${
           photoUrl
-            ? `<img src="${photoUrl}" alt="Portrait of ${esc(
+            ? `<img src="${photoUrl}" alt="Portrait of ${escape(
                 name
               )}" loading="lazy" decoding="async">`
             : ""
@@ -55,17 +57,17 @@ export async function mountAbout({
 
       <div class="about-meta">
         <div class="about-id">
-          <strong class="name">${esc(name)}</strong>
-          <span class="role">${esc(role)}</span>
+          <strong class="name">${escape(name)}</strong>
+          <span class="role">${escape(role)}</span>
         </div>
         <ul class="about-socials" role="list" aria-label="Social links">
-          ${socials.map((s) => svgInline(s)).join("")}
+          ${socials.map((s) => renderSocialItem(s, { withLabel: false, size: 20 })).join("")}
         </ul>
       </div>
 
       <div class="about-right">
-        <h3 class="lede-title">${esc(ledeTitle)}</h3>
-        <p class="lede">${esc(lede)}</p>
+        <h3 class="lede-title">${escape(ledeTitle)}</h3>
+        <p class="lede">${escape(lede)}</p>
       </div>
 
       <div class="career">
@@ -93,42 +95,11 @@ export async function mountAbout({
 }
 
 /* ================= Helpers ================= */
-async function safeJSON(url) {
-  try {
-    return await fetchJSON(url);
-  } catch {
-    return [];
-  }
-}
-function filterByIds(list, ids, getId) {
-  if (!Array.isArray(list)) return [];
-  if (!ids || !ids.length) return list;
-  const set = new Set(ids.map(String));
-  return list.filter((x) => set.has(String(getId(x))));
-}
 function resolve(p) {
   if (!p) return "";
   return p.startsWith("/src/")
     ? new URL("../../" + p.slice(5), import.meta.url).href
     : p;
-}
-function esc(s = "") {
-  return String(s)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-function svgInline(s) {
-  const vb = s.viewBox || "0 0 24 24";
-  const paths = Array.isArray(s.paths) ? s.paths : [];
-  return `<li><a href="${
-    s.href
-  }" target="_blank" rel="noopener" aria-label="${esc(s.ariaLabel || s.name)}">
-    <svg viewBox="${vb}" width="20" height="20" aria-hidden="true">
-      ${paths.map((p) => `<path d="${p.d}"></path>`).join("")}
-    </svg></a></li>`;
 }
 function svgTool(t) {
   if (t.paths && t.paths.length) {

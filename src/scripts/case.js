@@ -1,14 +1,10 @@
-console.log("Home Script Loaded");
+console.log("Case Script Loaded");
 
 import { mountFooter } from "./renders/footer.js";
-import { mountHero } from "./renders/hero.js";
-import { mountReferences } from "./renders/references.js";
 import { initPressFeedback } from "./utils/buttons.js";
 import { onReady } from "./utils/ready.js";
 
 onReady(() => {
   initPressFeedback();
-  mountHero();
-  mountReferences();
   mountFooter();
 });

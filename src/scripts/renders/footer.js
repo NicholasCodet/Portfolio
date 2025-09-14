@@ -1,21 +1,28 @@
+import { escape } from "../utils/dom.js";
 import { fetchJSON } from "../utils/fetch-json.js";
+import {
+  fetchSocials,
+  filterByIds,
+  renderSocialItem,
+} from "../utils/socials.js";
+import { inlineSpriteOnce } from "../utils/svg.js";
+import { showToast } from "../utils/toast.js";
 
 export async function mountFooter({
   selector = ".section.footer",
   email = "nicholas.codet@gmail.com",
-  caseStudiesPath = "../../data/case-studies.json",
-
-  socialsPath = "../../data/socials.json",
-  socialIds = ["LinkedIn", "Dribbble", "Medium", "GitHub"],
 
   spritePath = "../../assets/icons/sprite.svg",
+  socialsPath = "../../data/socials.json",
+  socialIds = ["LinkedIn", "Dribbble", "Medium", "GitHub"],
+  caseStudiesPath = "../../data/case-studies.json",
 
   projectsLimit = 4,
 } = {}) {
-  const root = document.querySelector(selector);
-  if (!root) return;
+  const section = document.querySelector(selector);
+  if (!section) return;
 
-  const container = root.querySelector(".container");
+  const container = section.querySelector(".container");
   if (!container) return;
 
   const spriteUrl = new URL(spritePath, import.meta.url).href;
@@ -26,23 +33,24 @@ export async function mountFooter({
   const soUrl = new URL(socialsPath, import.meta.url).href;
   const [csRaw, socialsRaw] = await Promise.all([
     fetchJSON(csUrl),
-    fetchJSON(soUrl),
+    fetchSocials(soUrl),
   ]);
 
-  // Ensure the SVG sprite is inlined once to avoid external <use> issues
-  await ensureInlineSprite(spriteUrl);
+  await inlineSpriteOnce(spriteUrl);
 
   const projects = Array.isArray(csRaw)
     ? pickSelected(csRaw, projectsLimit)
     : [];
 
-  const socials = filterSocials(socialsRaw, socialIds);
+  const socials = filterByIds(socialsRaw, socialIds, (s) => s.name || s.id);
 
   const projectsHTML = projects.map(toProjectLink).join("");
-  const socialsHTML = socials.map(svgSocial).join("");
+  const socialsHTML = socials
+    .map((s) => renderSocialItem(s, { withLabel: true, size: 20 }))
+    .join("");
 
   container.innerHTML = `
-    <div class="ft-grid">
+    <div class="ft-wrap">
       <div class="ft-about">
         <div class="block-id">
           <p class="name">Nicholas Codet</p>
@@ -185,87 +193,5 @@ export async function mountFooter({
         </a>
       </li>
     `;
-  }
-
-  function filterSocials(list, ids) {
-    if (!Array.isArray(list)) return [];
-    if (!ids || !ids.length) return list;
-    const byName = new Map(list.map((x) => [String(x.name || x.id), x]));
-    const out = ids.map((id) => byName.get(String(id))).filter(Boolean);
-    return out.length ? out : list;
-  }
-
-  function svgSocial(s) {
-    const vb = s.viewBox || "0 0 24 24";
-    const paths = Array.isArray(s.paths) ? s.paths : [];
-    const label = s.ariaLabel || s.name || "Social link";
-    return `
-      <li>
-        <a href="${s.href}" target="_blank" rel="noopener" aria-label="${escape(
-      label
-    )}">
-          <svg class="icon" viewBox="${vb}" width="20" height="20" aria-hidden="true" focusable="false" fill="currentColor">
-            ${paths
-              .map((p) => {
-                const fr = p.fillRule ? ` fill-rule="${p.fillRule}"` : "";
-                const cr = p.clipRule ? ` clip-rule="${p.clipRule}"` : "";
-                return `<path d="${p.d}"${fr}${cr}></path>`;
-              })
-              .join("")}
-          </svg>
-          ${escape(s.name)}
-        </a>
-      </li>
-    `;
-  }
-
-  function escape(str = "") {
-    return String(str)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-  async function ensureInlineSprite(url) {
-    if (document.getElementById("__sprite_inline")) return;
-    try {
-      const res = await fetch(url);
-      if (!res.ok) return;
-      const text = await res.text();
-      const div = document.createElement("div");
-      div.innerHTML = text.trim();
-      const svg = div.querySelector("svg");
-      if (!svg) return;
-      svg.id = "__sprite_inline";
-      svg.setAttribute("aria-hidden", "true");
-      svg.style.position = "absolute";
-      svg.style.width = "0";
-      svg.style.height = "0";
-      svg.style.overflow = "hidden";
-      document.body.prepend(svg);
-    } catch {
-      // ignore fetch/inject errors
-    }
-  }
-
-  let __toastEl = null;
-  let __toastTimer = null;
-  function showToast(message = "Copied!", duration = 1600) {
-    if (!__toastEl) {
-      __toastEl = document.createElement("div");
-      __toastEl.className = "toast";
-      __toastEl.setAttribute("role", "status");
-      __toastEl.setAttribute("aria-live", "polite");
-      document.body.appendChild(__toastEl);
-    }
-    __toastEl.textContent = String(message);
-    void __toastEl.offsetWidth;
-    __toastEl.classList.add("show");
-    clearTimeout(__toastTimer);
-    __toastTimer = setTimeout(() => {
-      __toastEl.classList.remove("show");
-    }, duration);
   }
 }

@@ -1,11 +1,5 @@
 import { fetchJSON } from "../utils/fetch-json.js";
 
-/**
- * Section References
- * - <section class="section references"><div class="container"></div></section>
- * - Lit /src/data/references.json (clé: corporates)
- * - Titre gauche, logos à droite (marquee fluide, loop infini)
- */
 export async function mountReferences({
   selector = "section.references",
   title = "Trusted by the world's most talented brands",
