@@ -1,45 +1,29 @@
 .testimony-figure {
-  margin: 0 auto;
-  max-width: var(--maxw); /* garde cohérence globale */
-  width: min(100%, var(--maxw));
   display: grid;
   justify-items: center;
-  gap: var(--sp-8);
 }
 
 .testimony-quote {
-  max-width: var(--maxw, 880px); /* largeur contrôlable via style inline */
   text-align: center;
-  margin: 0;
-}
-
-.testimony-quote p {
-  margin: 0;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.25;
-  /* grande taille fluide, proche de la maquette */
-  font-size: clamp(1.4rem, 2.4vw + 0.5rem, 2.25rem);
-  color: var(--fg);
+  margin-bottom: var(--space-40);
 }
 
 .testimony-quote p::before,
 .testimony-quote p::after {
   content: "“";
-  font-weight: 700;
 }
 
 .testimony-author {
   display: grid;
   grid-auto-flow: column;
   align-items: center;
-  gap: var(--sp-4);
+  gap: var(--space-8);
 }
 
 .testimony-avatar {
-  width: 56px;
-  height: 56px;
-  border-radius: 999px;
+  width: var(--size-44);
+  height: var(--size-44);
+  border-radius: var(--radius-full);
   object-fit: cover;
 }
 
@@ -47,10 +31,26 @@
   display: grid;
   align-items: center;
 }
+
 .testimony-meta .name {
-  font-weight: 700;
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-md);
+  color: var(--colour-slate-800);
 }
+
 .testimony-meta .role {
-  color: var(--muted);
-  font-size: 0.9375rem;
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-md);
+  color: var(--colour-slate-600);
+}
+
+@media (min-width: 576px) {
+  .testimony-quote {
+    text-align: center;
+    margin: 0 var(--space-80) var(--space-40);
+  }
 }

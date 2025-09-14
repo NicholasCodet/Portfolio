@@ -30,9 +30,9 @@ export async function mountTestimony({
   const roleLine = [t.role, companyLabel].filter(Boolean).join("");
 
   container.innerHTML = `
-    <figure class="testimony-figure" >
+    <figure class="testimony-figure">
       <blockquote class="testimony-quote">
-        <p>${escape(t.quote)}</p>
+        <p class="headline-1">${escape(t.quote)}</p>
       </blockquote>
       <figcaption class="testimony-author">
         ${
