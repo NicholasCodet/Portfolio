@@ -2,9 +2,9 @@ import { fetchJSON } from "../utils/fetch-json.js";
 
 export async function mountReferences({
   selector = "section.references",
-  title = "Trusted by the world's most talented brands",
+
   pxPerSec = 20,
-  minItems = 6,
+  minItems = 5,
 } = {}) {
   const section = document.querySelector(selector);
   if (!section) return;
@@ -12,24 +12,21 @@ export async function mountReferences({
   const container = section.querySelector(".container");
   if (!container) return;
 
-  // 1) Charger le JSON
-  const dataUrl = new URL("../../data/references.json", import.meta.url).href;
-  const data = await fetchJSON(dataUrl);
+  const dataPath = new URL("../../data/references.json", import.meta.url).href;
+  const data = await fetchJSON(dataPath);
   const items = data?.corporates ?? [];
   if (!items.length) {
     section.hidden = true;
     return;
   }
 
-  // 2) Assurer une densité minimale
   let rowItems = items.slice();
   while (rowItems.length < minItems) rowItems = rowItems.concat(items);
 
-  // 3) Générer le HTML
   const rowHTML = rowItems.map(renderLogo).join("");
   container.innerHTML = `
-    <div class="refs-grid">
-      <h2 class="refs-title" id="refs-title">${title}</h2>
+    <div class="refs-layout">
+      <p class="refs-title">Trusted by the world's <br class="break-up"/> most talented brands</p>
       <div class="refs-marquee" role="region" aria-roledescription="carousel" aria-labelledby="refs-title">
         <div class="refs-track">
           <ul class="refs-row" role="list">${rowHTML}</ul>
@@ -39,15 +36,42 @@ export async function mountReferences({
     </div>
   `;
 
-  // 4) Mesure → variables CSS (durée, largeur)
-  const marquee = container.querySelector(".refs-marquee");
   const firstRow = container.querySelector(".refs-row");
+  const secondRow = container.querySelector(".refs-row + .refs-row");
+  const track = container.querySelector(".refs-track");
 
   const setAnimationVars = () => {
-    const rowWidth = firstRow?.scrollWidth || 0;
-    const seconds = Math.max(12, rowWidth / pxPerSec);
-    marquee.style.setProperty("--roww", `${rowWidth}px`);
-    marquee.style.setProperty("--duration", `${seconds.toFixed(2)}s`);
+    const rect = firstRow?.getBoundingClientRect();
+    const rowWidth = rect ? rect.width : 0;
+    const gap = secondRow
+      ? parseFloat(getComputedStyle(secondRow).marginLeft) || 0
+      : 0;
+    const distance = rowWidth + gap;
+    const seconds = Math.max(12, distance / pxPerSec);
+
+    if (!track) return;
+
+    if (track._refsStyleEl) {
+      try {
+        track._refsStyleEl.remove();
+      } catch {}
+      track._refsStyleEl = null;
+    }
+
+    const name = `refsLoop_${Math.random().toString(36).slice(2)}`;
+    const styleEl = document.createElement("style");
+    styleEl.textContent = `@keyframes ${name} { from { transform: translateX(0); } to { transform: translateX(-${distance}px); } }`;
+    document.head.appendChild(styleEl);
+    track._refsStyleEl = styleEl;
+
+    track.style.animationName = name;
+    track.style.animationDuration = `${seconds}`.includes("s")
+      ? `${seconds}`
+      : `${seconds.toFixed(2)}s`;
+    track.style.animationTimingFunction = "linear";
+    track.style.animationIterationCount = "infinite";
+    track.style.animationDirection = "normal";
+    track.style.animationFillMode = "none";
   };
 
   setAnimationVars();

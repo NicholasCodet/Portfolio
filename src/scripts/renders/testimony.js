@@ -1,12 +1,14 @@
+import { escape } from "../utils/dom.js";
 import { fetchJSON } from "../utils/fetch-json.js";
 
 export async function mountTestimony({
   selector = "section.testimony",
+
   dataPath = "../../data/testimonials.json",
-  maxWidth = 880,
 } = {}) {
   const section = document.querySelector(selector);
   if (!section) return;
+
   const container = section.querySelector(".container");
   if (!container) return;
 
@@ -19,7 +21,6 @@ export async function mountTestimony({
 
   const t = list.find((x) => x.main) || list[0];
 
-  // Résolution inline du chemin avatar (compatible Vite)
   const avatarUrl =
     t.avatar && t.avatar.startsWith("/src/")
       ? new URL("../../" + t.avatar.slice(5), import.meta.url).href
@@ -29,9 +30,9 @@ export async function mountTestimony({
   const roleLine = [t.role, companyLabel].filter(Boolean).join("");
 
   container.innerHTML = `
-    <figure class="testimony-figure" style="--maxw:${maxWidth}px">
+    <figure class="testimony-figure" >
       <blockquote class="testimony-quote">
-        <p>${escapeHTML(t.quote)}</p>
+        <p>${escape(t.quote)}</p>
       </blockquote>
       <figcaption class="testimony-author">
         ${
@@ -39,24 +40,15 @@ export async function mountTestimony({
             ? `
           <img class="testimony-avatar"
                src="${avatarUrl}" alt=""
-               width="${t.avatarW || 56}" height="${t.avatarH || 56}"
+               width="${t.avatarW || 44}" height="${t.avatarH || 44}"
                loading="lazy" decoding="async">`
             : ""
         }
         <div class="testimony-meta">
-          <strong class="name">${escapeHTML(t.author)}</strong>
-          <span class="role">${escapeHTML(roleLine)}</span>
+          <strong class="name">${escape(t.author)}</strong>
+          <span class="role">${escape(roleLine)}</span>
         </div>
       </figcaption>
     </figure>
   `;
-}
-
-function escapeHTML(s = "") {
-  return String(s)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
 }

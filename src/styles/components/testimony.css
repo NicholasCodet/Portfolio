@@ -1,8 +1,3 @@
-/* ===== Testimony ===== */
-.testimony {
-  padding-block: var(--sp-16);
-}
-
 .testimony-figure {
   margin: 0 auto;
   max-width: var(--maxw); /* garde cohérence globale */
@@ -28,15 +23,10 @@
   color: var(--fg);
 }
 
-/* guillemets discrets (optionnel) */
 .testimony-quote p::before,
 .testimony-quote p::after {
   content: "“";
   font-weight: 700;
-  opacity: 0.15;
-}
-.testimony-quote p::after {
-  content: "”";
 }
 
 .testimony-author {
@@ -63,12 +53,4 @@
 .testimony-meta .role {
   color: var(--muted);
   font-size: 0.9375rem;
-}
-
-/* accessibilité: si réduction de mouvement, rien à changer (pas d'anim) */
-/* responsive spacing */
-@media (min-width: 64rem) {
-  .testimony {
-    padding-block: var(--sp-20, 6rem);
-  }
 }
