@@ -1,22 +1,17 @@
+import { escape } from "../utils/dom.js";
 import { fetchJSON } from "../utils/fetch-json.js";
 
-/**
- * Testimonials — cartes multiples (tous les items sauf { main:true }).
- * Structure attendue : <section class="section testimonials"><div class="container"></div></section>
- */
 export async function mountTestimonials({
   selector = "section.testimonials",
   dataPath = "../../data/testimonials.json",
-  limit = 6, // 2 x 3
-  eyebrow = "What people say",
-  title = "Testimonials",
+
+  limit = 6,
 } = {}) {
   const section = document.querySelector(selector);
   if (!section) return;
   const container = section.querySelector(".container");
   if (!container) return;
 
-  // 1) Data
   const url = new URL(dataPath, import.meta.url).href;
   const list = await fetchJSON(url);
   if (!Array.isArray(list) || !list.length) {
@@ -30,26 +25,43 @@ export async function mountTestimonials({
     return;
   }
 
-  // 2) Calcul des colonnes (≥ md)
-  const cols = Math.min(3, cards.length); // 1, 2 ou 3
-  const isCompact = cards.length < 3; // centre si 1–2
-
-  // 3) Markup
   container.innerHTML = `
     <header class="t-header" aria-labelledby="testimonials-title">
-      <p class="eyebrow">${escapeHTML(eyebrow)}</p>
-      <h2 id="testimonials-title" class="h2">${escapeHTML(title)}</h2>
+      <p class="eyebrow">Client Feedback</p>
+      <h2 class="heading-2">Trusted by founders and product leaders</h2>
     </header>
 
-    <div class="testimonials-grid${
-      isCompact ? " is-compact" : ""
-    }" style="--cols:${cols}">
+    <div class="t-layout">
       ${cards.map(renderCard).join("")}
     </div>
   `;
 
+  // Calc .t-quote higher height
+  const layout = container.querySelector(".t-layout");
+  if (layout) {
+    const getQuotes = () => Array.from(layout.querySelectorAll(".t-quote"));
+
+    const computeAndSetMaxQuote = () => {
+      layout.style.removeProperty("--t-quote-h");
+      const max = getQuotes().reduce(
+        (acc, el) => Math.max(acc, el.getBoundingClientRect().height),
+        0
+      );
+      if (max > 0)
+        layout.style.setProperty("--t-quote-h", `${Math.ceil(max)}px`);
+    };
+
+    const ro = new ResizeObserver(() => computeAndSetMaxQuote());
+    getQuotes().forEach((el) => ro.observe(el));
+
+    const onResize = () => computeAndSetMaxQuote();
+    window.addEventListener("resize", onResize, { passive: true });
+
+    requestAnimationFrame(computeAndSetMaxQuote);
+  }
+
   function renderCard(t) {
-    const src =
+    const avatarUrl =
       t.avatar && t.avatar.startsWith("/src/")
         ? new URL("../../" + t.avatar.slice(5), import.meta.url).href
         : t.avatar || "";
@@ -59,32 +71,28 @@ export async function mountTestimonials({
 
     return `
     <div class="t-item">
-      <article class="t-card">
-        <blockquote class="t-quote"><p>${escapeHTML(t.quote)}</p></blockquote>
-        <footer class="t-footer">
+
+      <figure class="t-figure">
+        <blockquote class="t-quote">
+          <p class="text-md">${escape(t.quote)}</p>
+        </blockquote>
+        <figcaption class="t-author">
           ${
-            src
-              ? `<img class="t-avatar" src="${src}" alt="" width="${
-                  t.avatarW || 48
-                }" height="${t.avatarH || 48}" loading="lazy" decoding="async">`
+            avatarUrl
+              ? `
+            <img class="t-avatar" 
+                src="${avatarUrl}" alt=""  
+                width="${t.avatarW || 44}" height="${t.avatarH || 44}" 
+                loading="lazy" decoding="async">`
               : ""
           }
           <div class="t-meta">
-            <strong class="name">${escapeHTML(t.author)}</strong>
-            <span class="role">${escapeHTML(roleLine)}</span>
+            <strong class="name">${escape(t.author)}</strong>
+            <span class="role">${escape(roleLine)}</span>
           </div>
-        </footer>
-      </article>
+        </figcaption>
+      </figure>
     </div>
   `;
   }
-}
-
-function escapeHTML(s = "") {
-  return String(s)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
 }

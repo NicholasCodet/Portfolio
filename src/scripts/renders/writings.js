@@ -1,9 +1,8 @@
+import { escape } from "../utils/dom.js";
 import { fetchJSON } from "../utils/fetch-json.js";
 
-export async function mountWriting({
-  selector = "section.writing",
-  eyebrow = "Writing",
-  title = "Thoughts on design,\ntech and product strategy",
+export async function mountWritings({
+  selector = "section.writings",
   mediumUser = "your-handle", // ← ton @ Medium (sans @)
   funcUrl = "/.netlify/functions/medium", // proxy
   fallbackPath = "../../data/articles.json", // local fallback
@@ -14,14 +13,10 @@ export async function mountWriting({
   const container = section.querySelector(".container");
   if (!container) return;
 
-  // header
   container.innerHTML = `
     <header class="w-head" aria-labelledby="w-title">
-      <p class="eyebrow">${escapeHTML(eyebrow)}</p>
-      <h2 id="w-title" class="h2">${escapeHTML(title).replaceAll(
-        "\\n",
-        "<br>"
-      )}</h2>
+      <p class="eyebrow">Writing</p>
+      <h2 class="heading-2"> Thoughts on design,\ntech and product strategy</h2>
     </header>
     <ul class="w-list" role="list"></ul>
   `;
@@ -54,16 +49,16 @@ export async function mountWriting({
     return `
     <li class="w-item">
       <div class="w-left">
-        <div class="w-meta">${escapeHTML(meta)}</div>
+        <div class="w-meta">${escape(meta)}</div>
         <h3 class="w-title">
           <a href="${url}" target="_blank" rel="noopener">
-            ${escapeHTML(it.title)}
+            ${escape(it.title)}
           </a>
         </h3>
       </div>
       <div class="w-cta">
         <a class="w-link" href="${url}" target="_blank" rel="noopener">
-          Read the article <span class="chev" aria-hidden="true">›</span>
+          Read the article <span class="chev" aria-hidden="true"></span>
         </a>
       </div>
     </li>
@@ -77,13 +72,5 @@ export async function mountWriting({
       day: "2-digit",
       year: "numeric",
     });
-  }
-  function escapeHTML(s = "") {
-    return String(s)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
   }
 }

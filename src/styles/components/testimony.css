@@ -1,11 +1,11 @@
 .testimony-figure {
   display: grid;
   justify-items: center;
+  gap: var(--space-40);
 }
 
 .testimony-quote {
   text-align: center;
-  margin-bottom: var(--space-40);
 }
 
 .testimony-quote p::before,
@@ -29,7 +29,6 @@
 
 .testimony-meta {
   display: grid;
-  align-items: center;
 }
 
 .testimony-meta .name {

@@ -2,10 +2,12 @@
   border-top: var(--size-1) solid var(--colour-slate-300);
 }
 
+/*
 .section:last-of-type,
 .section:first-of-type {
   border-top: none;
 }
+*/
 
 .container {
   max-width: 1000px;

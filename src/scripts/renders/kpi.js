@@ -17,8 +17,8 @@ export function mountKPI({
         .map(
           (i) => `
         <li class="kpi-item">
-          <span class="kpi-value">${i.value}</span>
-          <span class="kpi-label">${i.label}</span>
+          <span class="kpi-value heading-1">${i.value}</span>
+          <span class="kpi-label text-md">${i.label}</span>
         </li>
       `
         )

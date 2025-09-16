@@ -6,6 +6,9 @@
 @import url(./components/hero.css);
 @import url(./components/references.css);
 @import url(./components/testimony.css);
+@import url(./components/testimonials.css);
+@import url(./components/kpi.css);
+@import url(./components/writings.css);
 @import url(./components/footer.css);
 
 .aurora {

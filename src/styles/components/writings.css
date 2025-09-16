@@ -1,8 +1,3 @@
-/* ===== Writing ===== */
-.writing {
-  padding-block: var(--sp-16);
-}
-
 .writing .w-head {
   display: grid;
   gap: var(--sp-2);

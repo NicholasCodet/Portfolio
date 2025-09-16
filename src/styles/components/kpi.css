@@ -1,45 +1,21 @@
-/* ===== KPI ===== */
-.kpi {
-  padding-block: var(--sp-16);
-}
-
 .kpi .kpi-list {
   display: grid;
-  gap: var(--sp-12);
-  grid-template-columns: repeat(
-    3,
-    minmax(0, 1fr)
-  ); /* desktop: 3 colonnes fixes */
-  align-items: start;
+  gap: var(--space-40);
+  grid-template-columns: repeat(auto, 1fr);
+  align-items: center;
   justify-items: center;
   text-align: center;
-  max-width: var(--maxw);
-  margin-inline: auto;
 }
 
 .kpi .kpi-item {
-  display: grid;
-  gap: var(--sp-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
 }
 
-.kpi .kpi-value {
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.01em;
-  /* taille proche du design, fluide */
-  font-size: clamp(2rem, 2.5vw + 1rem, 3rem);
-  color: var(--fg);
-}
-
-.kpi .kpi-label {
-  color: var(--muted);
-  font-size: 0.9375rem;
-}
-
-/* Mobile / tablettes: wrap et centre automatiquement */
-@media (max-width: 63.999rem) {
+@media (min-width: 576px) {
   .kpi .kpi-list {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     justify-items: center;
   }
 }

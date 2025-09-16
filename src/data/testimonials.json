@@ -14,7 +14,7 @@
     "author": "Julien Comte",
     "role": "Founder",
     "company": "Makidoo",
-    "avatar": "#",
+    "avatar": "/src/assets/images/avatars/julien-comte.png",
     "avatarW": 44,
     "avatarH": 44
   },
@@ -23,7 +23,7 @@
     "author": "Lucile Voisin",
     "role": "Founder",
     "company": "DansTaRoue",
-    "avatar": "#",
+    "avatar": "/src/assets/images/avatars/lucile-voisin.png",
     "avatarW": 44,
     "avatarH": 44
   },
@@ -32,7 +32,7 @@
     "author": "Matthieu Gindre",
     "role": "Founder",
     "company": "Talers",
-    "avatar": "#",
+    "avatar": "/src/assets/images/avatars/matthieu-gindre.png",
     "avatarW": 44,
     "avatarH": 44
   },
@@ -41,7 +41,7 @@
     "author": "Maxence Henric",
     "role": "Art Director",
     "company": "Freelance",
-    "avatar": "#",
+    "avatar": "/src/assets/images/avatars/maxence-henric.png",
     "avatarW": 44,
     "avatarH": 44
   },
@@ -50,7 +50,7 @@
     "author": "Guillaume Colombel",
     "role": "Interactive Dev",
     "company": "Freelance",
-    "avatar": "#",
+    "avatar": "/src/assets/images/avatars/guillaume-colombel.png",
     "avatarW": 44,
     "avatarH": 44
   }

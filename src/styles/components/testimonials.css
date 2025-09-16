@@ -1,125 +1,92 @@
-/* ===== Testimonials (header + cards) ===== */
-
-/* Header */
-.testimonials .t-header {
-  display: grid;
-  gap: var(--sp-2);
-  margin-bottom: var(--sp-6);
-}
-.testimonials .t-header .eyebrow {
-  margin: 0;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.testimonials .t-header .h2 {
-  margin: 0;
-  font-size: clamp(1.25rem, 1.2vw + 1rem, 1.75rem);
-}
-
-/* ===== Mobile: carousel swipe ===== */
-.testimonials .testimonials-grid {
+.testimonials .t-layout {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 85%;
-  gap: 1rem; /* valeur fixe pour éviter dépendance à un token */
+  gap: var(--space-24);
   overflow-x: auto;
   overflow-y: visible;
-  scroll-snap-type: x mandatory;
-  scroll-padding-left: 1rem;
-  padding-left: 1rem;
+  scroll-snap-type: x mandatory; /*snap content*/
+  padding: 0 clamp(var(--space-12), 3.765vw, var(--space-24));
+  scroll-padding-left: var(--space-24);
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  max-width: var(--maxw);
   margin-inline: auto;
 }
-.testimonials .testimonials-grid::-webkit-scrollbar {
+
+.testimonials .t-layout::-webkit-scrollbar {
   display: none;
 }
-.testimonials .testimonials-grid > .t-item {
+
+.testimonials .t-layout .t-item {
   scroll-snap-align: start;
 }
 
-/* ===== Desktop: 3 colonnes fixes, lignes centrées ===== */
-@media (min-width: 64rem) {
-  .testimonials .testimonials-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* centre la dernière ligne */
-    gap: 24px; /* gap constant (remplace var si manquante) */
-    overflow: visible;
-    padding-left: 0;
-    max-width: var(--maxw);
-    margin-inline: auto;
-  }
-
-  /* Largeur EXACTE 1/3 en tenant compte du gap :
-     100% - 2 gaps par ligne, le tout divisé par 3  */
-  .testimonials .testimonials-grid > .t-item {
-    /* si tu tiens à tes tokens: remplace 24px par var(--sp-6, 24px) dans les 2 endroits */
-    flex: 0 0 calc((100% - (2 * 24px)) / 3);
-    max-width: calc((100% - (2 * 24px)) / 3);
-    width: calc((100% - (2 * 24px)) / 3);
-  }
-
-  /* La card remplit son wrapper */
-  .testimonials .testimonials-grid > .t-item > .t-card {
-    height: 100%;
-  }
-}
-
-/* ===== Card ===== */
-.t-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: #fff;
-  padding: var(--sp-6);
-  box-shadow: var(--shadow);
+.t-figure {
   display: grid;
-  gap: var(--sp-6);
-  height: 100%;
+  justify-items: left;
+  gap: var(--space-24);
 }
 
 .t-quote {
-  margin: 0;
-}
-.t-quote p {
-  margin: 0;
-  color: var(--fg);
-  line-height: 1.5;
-  font-size: 1rem;
+  height: var(--t-quote-h, auto);
 }
 
-.t-footer {
+.t-author {
   display: grid;
   grid-auto-flow: column;
   align-items: center;
-  gap: var(--sp-4);
+  gap: var(--space-8);
 }
+
 .t-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 999px;
+  width: var(--size-44);
+  height: var(--size-44);
+  border-radius: var(--radius-full);
   object-fit: cover;
 }
+
 .t-meta {
-  display: grid; /* place name on its own row, then role/company */
+  display: grid;
 }
+
 .t-meta .name {
-  font-weight: 700;
-  /* ensures the following role line starts on a new line */
-  display: block;
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-md);
+  color: var(--colour-slate-800);
 }
+
 .t-meta .role {
-  color: var(--muted);
-  font-size: 0.9375rem;
-  white-space: nowrap; /* keep role and company on the same line */
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-md);
+  color: var(--colour-slate-600);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .testimonials .testimonials-grid {
+  .testimonials .t-layout {
     scroll-behavior: auto;
+  }
+}
+
+@media (min-width: 576px) {
+  .testimonials .t-layout {
+    grid-auto-columns: 45%;
+  }
+}
+
+@media (min-width: 960px) {
+  .testimonials .t-layout {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .testimonials .t-layout .t-item {
+    flex: 0 0 calc((100% - (2 * var(--space-24))) / 3);
   }
 }
