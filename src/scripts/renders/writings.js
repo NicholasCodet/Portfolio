@@ -1,36 +1,25 @@
 import { escape } from "../utils/dom.js";
 import { fetchJSON } from "../utils/fetch-json.js";
+import { inlineSpriteOnce } from "../utils/svg.js";
 
 export async function mountWritings({
   selector = "section.writings",
-  mediumUser = "your-handle", // ← ton @ Medium (sans @)
-  funcUrl = "/.netlify/functions/medium", // proxy
-  fallbackPath = "../../data/articles.json", // local fallback
-  limit = 3,
+
+  spritePath = "../../assets/icons/sprite.svg",
+  dataPath = "../../data/articles.json",
+  limit = 4,
 } = {}) {
   const section = document.querySelector(selector);
   if (!section) return;
   const container = section.querySelector(".container");
   if (!container) return;
 
-  container.innerHTML = `
-    <header class="w-head" aria-labelledby="w-title">
-      <p class="eyebrow">Writing</p>
-      <h2 class="heading-2"> Thoughts on design,\ntech and product strategy</h2>
-    </header>
-    <ul class="w-list" role="list"></ul>
-  `;
+  const spriteUrl = new URL(spritePath, import.meta.url).href;
+  await inlineSpriteOnce(spriteUrl);
 
-  const listEl = container.querySelector(".w-list");
-
-  // 1) Medium (serverless) → 2) fallback JSON
-  let items = await fetchJSON(
-    `${funcUrl}?user=${encodeURIComponent(mediumUser)}&limit=${limit}`
-  );
-  if (!Array.isArray(items) || !items.length) {
-    const fb = new URL(fallbackPath, import.meta.url).href;
-    items = (await fetchJSON(fb)) || [];
-  }
+  const url = new URL(dataPath, import.meta.url).href;
+  let items = (await fetchJSON(url)) || [];
+  if (!Array.isArray(items) || !items.length) items = [];
   items = items.slice(0, limit);
 
   if (!items.length) {
@@ -38,29 +27,45 @@ export async function mountWritings({
     return;
   }
 
+  container.innerHTML = `
+    <header class="w-header" aria-labelledby="writings-title">
+      <p class="eyebrow">Writing</p>
+      <h2 class="heading-2">Thoughts on design, tech and product strategy</h2>
+    </header>
+
+    <ul class="w-list" role="list"></ul>
+  `;
+
+  const listEl = container.querySelector(".w-list");
   listEl.innerHTML = items.map(renderItem).join("");
 
-  function renderItem(it) {
-    const url = it.url || "#";
-    const date = it.published ? formatDate(it.published) : "";
-    const mins = Number(it.minutes) ? `${it.minutes} min` : "";
+  function renderItem(art) {
+    const url = art.url || "#";
+    const date = art.published ? formatDate(art.published) : "";
+    const mins = Number(art.minutes) ? `${art.minutes} min` : "";
     const meta = [date, mins].filter(Boolean).join(" • ");
 
     return `
     <li class="w-item">
-      <div class="w-left">
-        <div class="w-meta">${escape(meta)}</div>
-        <h3 class="w-title">
-          <a href="${url}" target="_blank" rel="noopener">
-            ${escape(it.title)}
-          </a>
-        </h3>
-      </div>
-      <div class="w-cta">
-        <a class="w-link" href="${url}" target="_blank" rel="noopener">
-          Read the article <span class="chev" aria-hidden="true"></span>
-        </a>
-      </div>
+      <a href="${url}" target="_blank" rel="noopener">
+        <article class="w-card">
+          <div class="w-left">
+            <div class="w-meta text-sm">${escape(meta)}</div>
+            <h4 class="w-title sub-heading-2">
+              ${escape(art.title)}
+            </h4>
+          </div>
+
+          <div class="w-right">
+            <span class="link">
+              Read the article
+              <svg class="icon linear" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
+                <use href="${spriteUrl}#icon-arrowRight-linear"></use>
+              </svg>
+            </span>
+          </div>
+        </article>
+      </a>
     </li>
   `;
   }

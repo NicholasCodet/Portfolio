@@ -1,7 +1,3 @@
-/* ===== About ===== */
-.about {
-  padding-block: var(--sp-16);
-}
 .about .container {
   min-width: 0;
 }

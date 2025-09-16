@@ -1,7 +1,11 @@
 // @/src/scripts/renders/about.js
-import { fetchJSON } from "../utils/fetch-json.js";
 import { escape } from "../utils/dom.js";
-import { fetchSocials, filterByIds, renderSocialItem } from "../utils/socials.js";
+import { fetchJSON } from "../utils/fetch-json.js";
+import {
+  fetchSocials,
+  filterByIds,
+  renderSocialItem,
+} from "../utils/socials.js";
 
 export async function mountAbout({
   selector = "section.about",
@@ -61,7 +65,9 @@ export async function mountAbout({
           <span class="role">${escape(role)}</span>
         </div>
         <ul class="about-socials" role="list" aria-label="Social links">
-          ${socials.map((s) => renderSocialItem(s, { withLabel: false, size: 20 })).join("")}
+          ${socials
+            .map((s) => renderSocialItem(s, { withLabel: false, size: 20 }))
+            .join("")}
         </ul>
       </div>
 

@@ -1,104 +1,65 @@
-.writing .w-head {
-  display: grid;
-  gap: var(--sp-2);
-  margin-bottom: var(--sp-8);
-}
-.writing .eyebrow {
-  margin: 0;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.writing .h2 {
-  margin: 0;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  font-size: clamp(1.5rem, 2.2vw + 1rem, 2.25rem);
-}
-
-.writing .w-list {
-  margin: 0;
-  padding: 0;
+.writings .w-list {
   list-style: none;
-  display: grid;
-  gap: var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
 }
-/* Item layout: meta + title à gauche, CTA à droite (desktop) */
-.writing .w-item {
+
+.writings a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.writings .w-card {
   display: grid;
-  gap: var(--sp-4);
-  align-items: center;
-  /* mobile: tout en colonne, CTA sous le titre */
   grid-template-columns: 1fr;
+  gap: var(--space-16);
+  padding: var(--space-8) 0;
+  align-items: center;
 }
 
-@media (min-width: 64rem) {
-  .writing .w-item {
-    grid-template-columns: 1fr auto; /* gauche | droite */
-    gap: var(--sp-6);
-  }
+.writings .w-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
 }
 
-.writing .w-left {
-  display: grid;
-  gap: 0.35rem; /* espace entre meta et titre */
+.writings .w-title {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.writing .w-meta {
-  color: var(--muted);
-  font-size: 0.9375rem;
-}
-
-.writing .w-title {
-  margin: 0;
-  font-size: 1.0625rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
-
-.writing .w-title a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.writing .w-title a:hover {
-  text-decoration: underline;
-}
-
-.writing .w-cta {
-  justify-self: start; /* mobile */
-}
-@media (min-width: 64rem) {
-  .writing .w-cta {
-    justify-self: end; /* desktop: à droite */
-  }
-}
-
-.writing .w-link {
-  text-decoration: none;
-  font-weight: 600;
+.writings .link {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-}
-.writing .w-link:hover {
-  text-decoration: underline;
-}
-.writing .w-link .chev {
-  display: inline-block;
-  border: 1.5px solid currentColor;
-  border-radius: 8px;
-  width: 1.25rem;
-  height: 1.25rem;
-  line-height: 1.1rem;
-  text-align: center;
-  font-weight: 800;
+  gap: var(--space-8);
+  color: var(--colour-slate-600);
 }
 
-/* focus clavier visible */
-.writing a:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
+.writings .link .icon {
+  stroke: currentColor;
+}
+
+.writings .link:hover {
+  text-decoration: underline;
+  color: var(--colour-slate-950);
+}
+
+@media (min-width: 576px) {
+  .writings .w-card {
+    grid-template-columns: 1fr auto;
+  }
+
+  .writings .w-right {
+    justify-self: end;
+  }
+
+  .writings .w-title {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
 }

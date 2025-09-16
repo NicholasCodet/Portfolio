@@ -186,7 +186,7 @@ export async function mountFooter({
     return `
       <li>
         <a href="${url}">
-          <svg class="icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
+          <svg class="icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
             <use href="#icon-markerRight-bold"></use>
           </svg>
           ${label}
