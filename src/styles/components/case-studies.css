@@ -1,178 +1,73 @@
-/* ===== Case Studies (home section) ===== */
-.case-studies {
-  padding-block: var(--sp-16);
-}
-
-/* Header */
-.case-studies .cs-head {
+.case-studies .cs-layout {
   display: grid;
-  gap: var(--sp-2);
-  margin-bottom: var(--sp-8);
-}
-.case-studies .eyebrow {
-  margin: 0;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.case-studies .h2 {
-  margin: 0;
-  font-size: clamp(1.5rem, 2.2vw + 1rem, 2.5rem);
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-}
-
-/* Grid des 2 études */
-.case-studies .cs-grid {
-  display: grid;
-  gap: var(--sp-8);
-}
-@media (min-width: 64rem) {
-  .case-studies .cs-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--sp-10);
-  }
+  gap: var(--space-40);
+  margin-bottom: var(--space-80);
 }
 
 .cs-card {
-  display: grid;
-  gap: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
 }
 
-/* Media avec ratio (pas de width/height dans le JSON) */
-.cs-media {
-  display: block;
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
-  background: #f6f7f9;
-  aspect-ratio: 16 / 10;
-}
-.cs-media img {
+.cs-card img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.cs-media.ph {
-  background: linear-gradient(180deg, #f3f5f7, #eceff3);
-}
 
 .cs-body {
-  display: grid;
-  gap: 0.5rem;
-}
-.cs-title {
-  margin: 0;
-  font-size: 1.125rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
-.cs-title a {
-  text-decoration: none;
-  color: inherit;
-}
-.cs-title a:hover {
-  text-decoration: underline;
-}
-.cs-desc {
-  margin: 0;
-  color: var(--muted);
-}
-.cs-cta {
-  margin: 0.5rem 0 0;
-}
-.cs-cta .link {
-  text-decoration: none;
-  font-weight: 600;
-}
-.cs-cta .link:hover {
-  text-decoration: underline;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
 }
 
-/* ===== Sous-section: Design explorations (Dribbble) ===== */
-.cs-explore {
-  margin-top: var(--sp-14);
+.cs-desc {
+  height: var(--cs-desc-h, auto);
 }
+
+/*Shots*/
 
 .cs-explore-head {
   display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
   align-items: center;
   justify-content: space-between;
-  gap: var(--sp-4);
-  margin-bottom: var(--sp-6);
-}
-.cs-explore .h3 {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  margin-bottom: var(--space-40);
 }
 
-/* Bouton light */
-.btn.light {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 0.9rem;
-  border-radius: 999px;
-  background: #fff;
-  border: 1px solid var(--border);
-  text-decoration: none;
-  color: inherit;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
-}
-
-/* Carousel horizontal scrollable (tous breakpoints) */
 .explore-rail {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: clamp(
-    240px,
-    28vw,
-    320px
-  ); /* largeur d’une carte selon viewport */
-  gap: var(--sp-6);
+  grid-auto-columns: clamp(240px, 20vw, 280px);
+  gap: var(--space-24);
   overflow-x: auto;
   overflow-y: visible;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding-bottom: 0.25rem;
 }
+
 .explore-rail::-webkit-scrollbar {
   display: none;
 }
 
-.explore-card {
-  scroll-snap-align: start;
-  display: block;
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  background: #f6f7f9;
-  aspect-ratio: 4 / 3;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
-}
 .explore-card img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.explore-ph {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(180deg, #f3f5f7, #e9eef3);
-}
 
-/* Focus visible (clavier) */
-.cs-media:focus-visible,
-.explore-card:focus-visible,
-.btn.light:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
+@media (min-width: 576px) {
+  .case-studies .cs-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-24);
+  }
+
+  .cs-card .link {
+    justify-content: end;
+  }
 }

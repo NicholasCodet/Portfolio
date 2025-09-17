@@ -32,22 +32,6 @@
   text-overflow: ellipsis;
 }
 
-.writings .link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-8);
-  color: var(--colour-slate-600);
-}
-
-.writings .link .icon {
-  stroke: currentColor;
-}
-
-.writings .link:hover {
-  text-decoration: underline;
-  color: var(--colour-slate-950);
-}
-
 @media (min-width: 576px) {
   .writings .w-card {
     grid-template-columns: 1fr auto;

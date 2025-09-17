@@ -26,7 +26,7 @@ export async function mountReferences({
   const rowHTML = rowItems.map(renderLogo).join("");
   container.innerHTML = `
     <div class="refs-layout">
-      <p class="refs-title">Trusted by the world's <br class="break-up"/> most talented brands</p>
+      <p id="refs-title" class="refs-title">Trusted by the world's <br class="break-up"/> most talented brands</p>
       <div class="refs-marquee" role="region" aria-roledescription="carousel" aria-labelledby="refs-title">
         <div class="refs-track">
           <ul class="refs-row" role="list">${rowHTML}</ul>

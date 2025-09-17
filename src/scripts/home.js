@@ -1,5 +1,6 @@
 console.log("Home Script Loaded");
 
+import { mountCaseStudies } from "./renders/case-studies.js";
 import { mountFooter } from "./renders/footer.js";
 import { mountHero } from "./renders/hero.js";
 import { mountKPI } from "./renders/kpi.js";
@@ -14,6 +15,7 @@ onReady(() => {
   initPressFeedback();
   mountHero();
   mountReferences();
+  mountCaseStudies();
   mountTestimony();
   mountTestimonials();
   mountKPI();

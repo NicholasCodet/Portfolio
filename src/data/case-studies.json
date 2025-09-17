@@ -2,7 +2,7 @@
   {
     "thumbnail": "",
     "title": "Kaelis The Crypto Ring",
-    "description": "",
+    "description": "Screenless wearable enabling secure, offline crypto payments through gestures.",
     "href": "#",
     "slug": "",
     "featured": true
@@ -10,9 +10,17 @@
   {
     "thumbnail": "",
     "title": "Talers The Writing App",
-    "description": "",
+    "description": "Platform centralising drafting, notes, and publishing into one unified writing experience.",
     "href": "#",
     "slug": "",
     "featured": true
+  },
+  {
+    "thumbnail": "",
+    "title": "Unknown",
+    "description": "Short Description",
+    "href": "#",
+    "slug": "",
+    "featured": false
   }
 ]

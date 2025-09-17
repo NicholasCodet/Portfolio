@@ -7,7 +7,7 @@ export async function mountWritings({
 
   spritePath = "../../assets/icons/sprite.svg",
   dataPath = "../../data/articles.json",
-  limit = 4,
+  limit = 3,
 } = {}) {
   const section = document.querySelector(selector);
   if (!section) return;

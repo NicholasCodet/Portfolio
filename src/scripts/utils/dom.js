@@ -1,5 +1,4 @@
 // Generic DOM/string utilities
-
 export function escape(str = "") {
   return String(str)
     .replaceAll("&", "&amp;")
@@ -8,4 +7,3 @@ export function escape(str = "") {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
-

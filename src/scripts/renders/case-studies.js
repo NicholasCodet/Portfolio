@@ -1,37 +1,32 @@
+import { escape } from "../utils/dom.js";
 import { fetchJSON } from "../utils/fetch-json.js";
+import { inlineSpriteOnce } from "../utils/svg.js";
 
-/**
- * Case Studies + Design Explorations (Dribbble)
- * - Section HTML attendue : <section class="section case-studies"><div class="container"></div></section>
- * - Thumbs: /src/... résolus via new URL(..., import.meta.url)
- * - Sous-section Dribbble : fetch via Netlify Function, fallback local shots.json
- */
 export async function mountCaseStudies({
   selector = "section.case-studies",
   casesPath = "../../data/case-studies.json",
-  eyebrow = "Case studies",
-  title = "Making complex products simple, useful and loved",
-  casesLimit = 2,
-  // Dribbble
-  dribbbleFn = "/.netlify/functions/dribbble?limit=10",
-  dribbbleUsername = "nicholas_codet",
-  fallbackShotsPath = "../../data/shots.json",
-  shotsMax = 10,
+
+  spritePath = "../../assets/icons/sprite.svg",
+  dribbbleProfile = "nicholascodet",
+  shotsPath = "../../data/shots.json",
+
+  caseLimit = 4,
+  shotsLimit = 10,
 } = {}) {
   const section = document.querySelector(selector);
   if (!section) return;
   const container = section.querySelector(".container");
   if (!container) return;
 
-  /* ----------------------------- CASE STUDIES ----------------------------- */
+  const spriteUrl = new URL(spritePath, import.meta.url).href;
+  await inlineSpriteOnce(spriteUrl);
+
   const csUrl = new URL(casesPath, import.meta.url).href;
   const list = await fetchJSON(csUrl);
 
-  const ordered = Array.isArray(list)
-    ? list.filter((x) => x.featured).concat(list.filter((x) => !x.featured))
+  const items = Array.isArray(list)
+    ? list.filter((x) => x && x.featured === true).slice(0, caseLimit)
     : [];
-
-  const items = ordered.slice(0, casesLimit);
 
   const cardsHTML = items
     .map((it) => {
@@ -42,68 +37,91 @@ export async function mountCaseStudies({
           : it.thumbnail || "";
 
       return `
-      <article class="cs-card">
-        <a class="cs-media" href="${link}">
-          ${
-            src
-              ? `<img src="${src}" alt="${escapeHTML(
-                  it.title
-                )} preview" loading="lazy" decoding="async">`
-              : `<div class="cs-media ph" aria-hidden="true"></div>`
-          }
-        </a>
-        <div class="cs-body">
-          <h3 class="cs-title"><a href="${link}">${escapeHTML(
-        it.title
-      )}</a></h3>
-          ${
-            it.description
-              ? `<p class="cs-desc">${escapeHTML(it.description)}</p>`
-              : ""
-          }
-          <p class="cs-cta">
-            <a class="link" href="${link}">Read the case study <span aria-hidden="true">↗</span></a>
-          </p>
-        </div>
-      </article>
+      <a href="${link}">
+        <article class="cs-card">
+            ${
+              src
+                ? `<img src="${src}" alt="${escape(it.title)} 
+                  preview" loading="lazy" decoding="async">`
+                : `<div class="img-placeholder" aria-hidden="true"></div>`
+            }
+          <div class="cs-body">
+              <h4 class="cs-title sub-heading-1">
+                ${escape(it.title)}
+              </h4>
+
+              ${
+                it.description
+                  ? `<p class="cs-desc">${escape(it.description)}</p>`
+                  : ""
+              }
+            </div>
+            <span class="link">
+              Read the case study
+              <svg class="icon linear" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
+                <use href="${spriteUrl}#icon-arrowRight-linear"></use>
+              </svg>
+            </span>
+        </article>
+      </a>
     `;
     })
     .join("");
 
   container.innerHTML = `
-    <header class="cs-head" aria-labelledby="cs-title">
-      <p class="eyebrow">${escapeHTML(eyebrow)}</p>
-      <h2 id="cs-title" class="h2">${escapeHTML(title)}</h2>
+    <header class="cs-header" aria-labelledby="cs-title">
+      <p class="eyebrow">Case studies</p>
+      <h2 class="heading-2">Making complex products simple, useful and loved</h2>
     </header>
-    <div class="cs-grid">
+
+    <div class="cs-layout">
       ${cardsHTML}
     </div>
   `;
 
-  /* ----------------------- DESIGN EXPLORATIONS (Shots) -------------------- */
-  // Wrapper sous-section
+  // Equalize all .cs-desc heights to match the tallest description
+  const layout = container.querySelector(".cs-layout");
+  if (layout) {
+    const getDescs = () => Array.from(layout.querySelectorAll(".cs-desc"));
+
+    const computeAndSetMaxDesc = () => {
+      layout.style.removeProperty("--cs-desc-h");
+      const max = getDescs().reduce(
+        (acc, el) => Math.max(acc, el.getBoundingClientRect().height),
+        0
+      );
+      if (max > 0) layout.style.setProperty("--cs-desc-h", `${Math.ceil(max)}px`);
+    };
+
+    const ro = new ResizeObserver(() => computeAndSetMaxDesc());
+    getDescs().forEach((el) => ro.observe(el));
+
+    const onResize = () => computeAndSetMaxDesc();
+    window.addEventListener("resize", onResize, { passive: true });
+
+    requestAnimationFrame(computeAndSetMaxDesc);
+  }
+
+  // Shots
   const explore = document.createElement("div");
   explore.className = "cs-explore";
   explore.innerHTML = `
     <div class="cs-explore-head">
-      <h3 class="h3">Design explorations</h3>
-      <a class="btn light" href="https://dribbble.com/${dribbbleUsername}" target="_blank" rel="noopener">
-        See more on Dribbble
+      <h3 class="heading-3">Design explorations</h3>
+      <a class="btn-md btn-secondary" href="https://dribbble.com/${dribbbleProfile}" target="_blank" rel="noopener">
+        <span class="shadow"></span>
+        <span class="edge"></span>
+        <span class="front">See more on Dribbble</span>
       </a>
     </div>
     <div class="explore-rail" aria-label="Dribbble shots carousel"></div>
   `;
   container.appendChild(explore);
 
-  // 1) Tente le live via Netlify Function
-  let shots = await fetchJSON(dribbbleFn);
-  // 2) Fallback local si pas de data
-  if (!Array.isArray(shots) || !shots.length) {
-    const fbUrl = new URL(fallbackShotsPath, import.meta.url).href;
-    shots = (await fetchJSON(fbUrl)) || [];
-  }
-  // 3) Cap à 10 (max UX)
-  if (shots.length > shotsMax) shots = shots.slice(0, shotsMax);
+  const fbUrl = new URL(shotsPath, import.meta.url).href;
+  let shots = (await fetchJSON(fbUrl)) || [];
+  if (!Array.isArray(shots)) shots = [];
+  shots = shots.slice(0, shotsLimit);
 
   if (!shots.length) {
     explore.hidden = true;
@@ -118,29 +136,18 @@ export async function mountCaseStudies({
         s.image && s.image.startsWith("/src/")
           ? new URL("../../" + s.image.slice(5), import.meta.url).href
           : s.image || "";
-      const title = s.title || "Shot";
+      const title = s.title || "Dribbble Shot";
       return `
-      <a class="explore-card" href="${url}" target="_blank" rel="noopener" aria-label="${escapeHTML(
-        title
-      )}">
+      <a class="explore-card " href="${url}" target="_blank" rel="noopener" 
+      aria-label="${escape(title)}">
         ${
           src
-            ? `<img src="${src}" alt="${escapeHTML(
-                title
-              )}" loading="lazy" decoding="async">`
-            : `<div class="explore-ph" aria-hidden="true"></div>`
+            ? `<img src="${src}" alt="${escape(title)}" 
+              loading="lazy" decoding="async">`
+            : `<div class="img-placeholder" aria-hidden="true"></div>`
         }
       </a>
     `;
     })
     .join("");
-
-  function escapeHTML(s = "") {
-    return String(s)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
 }
