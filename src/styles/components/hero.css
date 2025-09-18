@@ -73,13 +73,7 @@
 }
 
 .hero-actions .or {
-  text-align: center;
-
-  font-family: var(--font-primary);
-  font-size: var(--text-md);
-  font-weight: var(--font-medium);
-  line-height: var(--line-height-md);
-  color: var(--colour-slate-600);
+  display: none;
 }
 
 .hero-list.socials {
@@ -108,6 +102,17 @@
   .hero-actions {
     justify-content: start;
     gap: var(--space-48);
+  }
+
+  .hero-actions .or {
+    display: inline;
+    text-align: center;
+
+    font-family: var(--font-primary);
+    font-size: var(--text-md);
+    font-weight: var(--font-medium);
+    line-height: var(--line-height-md);
+    color: var(--colour-slate-600);
   }
 
   .hero-list.socials {

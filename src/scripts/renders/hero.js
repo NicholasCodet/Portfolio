@@ -56,7 +56,7 @@ export async function mountHero({
 
         <ul class="hero-list socials" role="list" aria-label="Social links">
           ${socials
-            .map((s) => renderSocialItem(s, { withLabel: false, size: 20 }))
+            .map((s) => renderSocialItem(s, { withLabel: false, size: 24 }))
             .join("")}
         </ul>
       </div>

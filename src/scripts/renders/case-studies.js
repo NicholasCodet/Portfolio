@@ -90,7 +90,8 @@ export async function mountCaseStudies({
         (acc, el) => Math.max(acc, el.getBoundingClientRect().height),
         0
       );
-      if (max > 0) layout.style.setProperty("--cs-desc-h", `${Math.ceil(max)}px`);
+      if (max > 0)
+        layout.style.setProperty("--cs-desc-h", `${Math.ceil(max)}px`);
     };
 
     const ro = new ResizeObserver(() => computeAndSetMaxDesc());

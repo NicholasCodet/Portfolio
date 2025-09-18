@@ -174,9 +174,8 @@ export async function mountFooter({
 
   // helpers
   function pickSelected(list, limit) {
-    const featured = list.filter((x) => x.featured);
-    const others = list.filter((x) => !x.featured);
-    return featured.concat(others).slice(0, limit);
+    // Only include items explicitly marked as featured: true
+    return list.filter((x) => x && x.featured === true).slice(0, limit);
   }
 
   function toProjectLink(p) {

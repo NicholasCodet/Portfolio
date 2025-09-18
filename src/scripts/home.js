@@ -4,6 +4,7 @@ import { mountCaseStudies } from "./renders/case-studies.js";
 import { mountFooter } from "./renders/footer.js";
 import { mountHero } from "./renders/hero.js";
 import { mountKPI } from "./renders/kpi.js";
+import { mountAbout } from "./renders/about.js";
 import { mountReferences } from "./renders/references.js";
 import { mountTestimonials } from "./renders/testimonials.js";
 import { mountTestimony } from "./renders/testimony.js";
@@ -17,6 +18,7 @@ onReady(() => {
   mountReferences();
   mountCaseStudies();
   mountTestimony();
+  mountAbout();
   mountTestimonials();
   mountKPI();
   mountWritings();
