@@ -41,42 +41,68 @@ export async function mountReferences({
   const track = container.querySelector(".refs-track");
 
   const setAnimationVars = () => {
+    if (!track) return;
+
+    // Compute size
     const rect = firstRow?.getBoundingClientRect();
     const rowWidth = rect ? rect.width : 0;
-    const gap = secondRow
-      ? parseFloat(getComputedStyle(secondRow).marginLeft) || 0
-      : 0;
+    const gap = secondRow ? parseFloat(getComputedStyle(secondRow).marginLeft) || 0 : 0;
     const distance = rowWidth + gap;
     const seconds = Math.max(12, distance / pxPerSec);
 
-    if (!track) return;
+    // Preserve current progress before resetting animation
+    let offsetPx = 0;
+    try {
+      const tr = getComputedStyle(track).transform;
+      if (tr && tr !== "none") {
+        const m = new DOMMatrixReadOnly(tr);
+        offsetPx = Math.abs(m.m41);
+      }
+    } catch {}
 
+    const prevDistance = Number(track.dataset.refsDistance || 0);
+    const progress = prevDistance > 0 ? (offsetPx % prevDistance) / prevDistance : 0;
+
+    // Replace keyframes safely
     if (track._refsStyleEl) {
-      try {
-        track._refsStyleEl.remove();
-      } catch {}
+      try { track._refsStyleEl.remove(); } catch {}
       track._refsStyleEl = null;
     }
-
     const name = `refsLoop_${Math.random().toString(36).slice(2)}`;
     const styleEl = document.createElement("style");
     styleEl.textContent = `@keyframes ${name} { from { transform: translateX(0); } to { transform: translateX(-${distance}px); } }`;
     document.head.appendChild(styleEl);
     track._refsStyleEl = styleEl;
 
+    // Apply animation keeping progress
     track.style.animationName = name;
-    track.style.animationDuration = `${seconds}`.includes("s")
-      ? `${seconds}`
-      : `${seconds.toFixed(2)}s`;
+    track.style.animationDuration = `${seconds.toFixed(2)}s`;
     track.style.animationTimingFunction = "linear";
     track.style.animationIterationCount = "infinite";
     track.style.animationDirection = "normal";
     track.style.animationFillMode = "none";
+    // Negative delay resumes from progress point
+    const delay = progress * seconds;
+    track.style.animationDelay = `-${delay.toFixed(2)}s`;
+
+    track.dataset.refsDistance = String(distance);
   };
 
-  setAnimationVars();
+  // Initial and reactive sizing (debounced to avoid resets on address bar hide/show)
+  const schedule = (() => {
+    let rAF = 0;
+    return () => {
+      if (rAF) cancelAnimationFrame(rAF);
+      rAF = requestAnimationFrame(() => {
+        rAF = 0;
+        setAnimationVars();
+      });
+    };
+  })();
+
+  schedule();
   window.addEventListener("load", setAnimationVars, { once: true });
-  window.addEventListener("resize", setAnimationVars);
+  window.addEventListener("resize", schedule);
 
   // ---- helpers ----
   function renderLogo(item) {

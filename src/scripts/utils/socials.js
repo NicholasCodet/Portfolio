@@ -31,15 +31,15 @@ export function renderSocialIcon(s, { size = 20, className = "icon", ariaHidden 
   `;
 }
 
-export function renderSocialLink(s, { withLabel = false, size = 20 } = {}) {
+export function renderSocialLink(s, { withLabel = false, size = 20, className } = {}) {
   const label = s.ariaLabel || s.name || "Social link";
   const icon = renderSocialIcon(s, { size });
   const content = withLabel ? `${icon} ${escape(s.name)}` : icon;
   const aria = withLabel ? `` : ` aria-label="${escape(label)}"`;
-  return `<a href="${s.href}" target="_blank" rel="noopener"${aria}>${content}</a>`;
+  const cls = className ? ` class="${escape(className)}"` : "";
+  return `<a${cls} href="${s.href}" target="_blank" rel="noopener"${aria}>${content}</a>`;
 }
 
 export function renderSocialItem(s, opts) {
   return `<li>${renderSocialLink(s, opts)}</li>`;
 }
-

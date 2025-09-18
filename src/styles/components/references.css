@@ -37,16 +37,6 @@
 .references .refs-track {
   display: inline-flex;
   will-change: transform;
-  animation: refs-loop 10s linear infinite;
-}
-
-@keyframes refs-loop {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
 }
 
 .references .refs-marquee:hover .refs-track,

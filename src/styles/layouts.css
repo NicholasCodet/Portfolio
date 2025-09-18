@@ -2,12 +2,9 @@
   border-top: var(--size-1) solid var(--colour-slate-300);
 }
 
-/*
-.section:last-of-type,
-.section:first-of-type {
+.section.footer {
   border-top: none;
 }
-*/
 
 .container {
   max-width: 1000px;
@@ -24,6 +21,5 @@
 @media (min-width: 576px) {
   .container {
     padding: var(--space-128) clamp(var(--space-24), 5.6vw, var(--space-80));
-    /*Add clamp to vertical padding*/
   }
 }

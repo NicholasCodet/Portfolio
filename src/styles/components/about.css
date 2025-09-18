@@ -40,6 +40,10 @@
   min-width: 0;
 }
 
+.about-media {
+  position: relative;
+}
+
 .about-media img {
   width: 100%;
   height: 100%;
@@ -47,6 +51,16 @@
   display: block;
   rotate: -2deg;
   border-radius: var(--radius-xl);
+}
+
+.img-placeholder.d1 {
+  position: absolute;
+  inset: 0;
+  rotate: 2deg;
+  z-index: 0;
+  border-radius: var(--radius-xl);
+  background-color: var(--colour-black-t10);
+  border: none;
 }
 
 .about-meta {
@@ -67,7 +81,7 @@
   display: flex;
   justify-content: space-between;
   flex: 0 1 100%;
-  gap: var(--space-4);
+  gap: var(--space-8);
   align-items: center;
   margin-left: -10px;
 }

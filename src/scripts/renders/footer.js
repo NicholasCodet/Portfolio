@@ -4,6 +4,7 @@ import {
   fetchSocials,
   filterByIds,
   renderSocialItem,
+  renderSocialLink,
 } from "../utils/socials.js";
 import { inlineSpriteOnce } from "../utils/svg.js";
 import { showToast } from "../utils/toast.js";
@@ -46,7 +47,7 @@ export async function mountFooter({
 
   const projectsHTML = projects.map(toProjectLink).join("");
   const socialsHTML = socials
-    .map((s) => renderSocialItem(s, { withLabel: true, size: 20 }))
+    .map((s) => `<li>${renderSocialLink(s, { withLabel: true, size: 20, className: 'link' })}</li>`)
     .join("");
 
   container.innerHTML = `
@@ -174,7 +175,6 @@ export async function mountFooter({
 
   // helpers
   function pickSelected(list, limit) {
-    // Only include items explicitly marked as featured: true
     return list.filter((x) => x && x.featured === true).slice(0, limit);
   }
 
@@ -184,7 +184,7 @@ export async function mountFooter({
     const label = escape(p.title || "Untitled case");
     return `
       <li>
-        <a href="${url}">
+        <a class="link" href="${url}">
           <svg class="icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
             <use href="#icon-markerRight-bold"></use>
           </svg>

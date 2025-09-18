@@ -49,11 +49,13 @@ export async function mountAbout({
       <div class="about-col left">
         <section class="about-profile">
           <figure class="about-media">
+            <div class="img-placeholder d1" aria-hidden="true"></div>
             ${
               photoUrl
                 ? `<img src="${photoUrl}" alt="Portrait of Nicholas Codet" loading="lazy" decoding="async">`
-                : `<div class="img-placeholder" aria-hidden="true"></div>`
+                : ""
             }
+
           </figure>
 
           <div class="about-meta">
@@ -156,11 +158,9 @@ function svgTool(tool) {
   `;
 }
 
-/* (removed) Mobile autoloop rail — no longer used */
 function setupMobileAutoloop(list) {
   if (!list) return;
 
-  // snapshot de la liste originale pour pouvoir la restaurer en desktop
   if (!list.dataset.original) list.dataset.original = list.innerHTML;
 
   const mqMobile = window.matchMedia("(max-width: 63.999rem)");
@@ -220,6 +220,4 @@ function setupMobileAutoloop(list) {
     stop();
     start();
   });
-
-  // init disabled
 }
