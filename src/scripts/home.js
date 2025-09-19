@@ -10,10 +10,12 @@ import { mountTestimonials } from "./renders/testimonials.js";
 import { mountTestimony } from "./renders/testimony.js";
 import { mountWritings } from "./renders/writings.js";
 import { initPressFeedback } from "./utils/buttons.js";
+import { initClickSound } from "./utils/click-sound.js";
 import { onReady } from "./utils/ready.js";
 
 onReady(() => {
   initPressFeedback();
+  initClickSound();
   mountHero();
   mountReferences();
   mountCaseStudies();

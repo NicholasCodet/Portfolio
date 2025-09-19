@@ -9,6 +9,7 @@
 
 :root {
   /*Colours*/
+  --colour-white-t10: oklch(1 0 0 / 10%);
   --colour-white-t100: oklch(1 0 0 / 100%);
 
   --colour-black-t00: oklch(0 0 0 / 0%);

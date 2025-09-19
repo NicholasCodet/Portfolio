@@ -5,7 +5,7 @@ export async function mountTestimonials({
   selector = "section.testimonials",
   dataPath = "../../data/testimonials.json",
 
-  limit = 6,
+  limit = 3,
 } = {}) {
   const section = document.querySelector(selector);
   if (!section) return;

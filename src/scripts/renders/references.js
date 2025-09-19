@@ -88,21 +88,9 @@ export async function mountReferences({
     track.dataset.refsDistance = String(distance);
   };
 
-  // Initial and reactive sizing (debounced to avoid resets on address bar hide/show)
-  const schedule = (() => {
-    let rAF = 0;
-    return () => {
-      if (rAF) cancelAnimationFrame(rAF);
-      rAF = requestAnimationFrame(() => {
-        rAF = 0;
-        setAnimationVars();
-      });
-    };
-  })();
-
-  schedule();
+  // Compute once (logos have fixed width/height, so no layout shift)
+  setAnimationVars();
   window.addEventListener("load", setAnimationVars, { once: true });
-  window.addEventListener("resize", schedule);
 
   // ---- helpers ----
   function renderLogo(item) {
@@ -113,7 +101,7 @@ export async function mountReferences({
 
     return `
       <li class="refs-logo" role="listitem">
-        <img src="${src}" alt="${alt}" width="${w}" height="${h}" loading="lazy" decoding="async">
+        <img src="${src}" alt="${alt}" width="${w}" height="${h}" loading="eager" decoding="async">
       </li>`;
   }
 

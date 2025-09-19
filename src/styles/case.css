@@ -4,3 +4,14 @@
 @import url(./layouts.css);
 
 @import url(./components/footer.css);
+
+.aurora {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 900px;
+  pointer-events: none;
+  z-index: -10;
+  background: url("../assets/images/backgrounds/aurora.svg") no-repeat center
+    top / cover;
+}

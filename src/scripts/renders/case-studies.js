@@ -39,12 +39,13 @@ export async function mountCaseStudies({
       return `
       <a href="${link}">
         <article class="cs-card">
+          <div class="cs-media">
             ${
               src
-                ? `<img src="${src}" alt="${escape(it.title)} 
-                  preview" loading="lazy" decoding="async">`
+                ? `<img src="${src}" alt="${escape(it.title)} preview" loading="lazy" decoding="async">`
                 : `<div class="img-placeholder" aria-hidden="true"></div>`
             }
+          </div>
           <div class="cs-body">
               <h4 class="cs-title sub-heading-1">
                 ${escape(it.title)}

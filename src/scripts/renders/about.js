@@ -37,7 +37,13 @@ export async function mountAbout({
     (t) => t.id || t.label
   );
 
-  const photoUrl = resolve(photo);
+  // Load profile image URL from JSON (fallback to param `photo`)
+  let photoUrl = resolve(photo);
+  try {
+    const profUrl = new URL("../../data/profile.json", import.meta.url).href;
+    const prof = await fetchJSON(profUrl);
+    if (prof && prof.url) photoUrl = resolve(prof.url);
+  } catch {}
 
   container.innerHTML = `
     <header class="about-head" aria-labelledby="about-title">
