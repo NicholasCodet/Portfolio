@@ -1,0 +1,33 @@
+.case-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-16);
+  margin-bottom: var(--space-16);
+}
+
+.case-meta .sub-heading-2 {
+  color: var(--colour-slate-700);
+}
+
+.case-media img,
+.case-media .img-placeholder {
+  width: 100%;
+  border-radius: var(--radius-xl);
+}
+
+.case-media figcaption {
+  margin-top: var(--space-8);
+  color: var(--colour-slate-500);
+}
+.case-section {
+  margin-top: var(--space-16);
+}
+.case-paragraph {
+  max-width: 70ch;
+}
+
+@media (min-width: 576px) {
+  .case-meta {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

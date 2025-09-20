@@ -30,7 +30,7 @@ export async function mountCaseStudies({
 
   const cardsHTML = items
     .map((it) => {
-      const link = it.href ? it.href : it.slug ? `/case/${it.slug}.html` : "#";
+      const link = it.href ? it.href : it.slug ? `/cases/${it.slug}.html` : "#";
       const src =
         it.thumbnail && it.thumbnail.startsWith("/src/")
           ? new URL("../../" + it.thumbnail.slice(5), import.meta.url).href

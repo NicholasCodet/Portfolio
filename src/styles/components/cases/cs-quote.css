@@ -1,0 +1,41 @@
+.cquote-figure {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-16);
+}
+
+.cquote-quote {
+  text-align: center;
+}
+
+.cquote-author {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  gap: var(--space-8);
+}
+.cquote-avatar {
+  width: var(--size-44);
+  height: var(--size-44);
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+.cquote-meta { display: grid; justify-items: center; }
+.cquote-meta .name {
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-md);
+  color: var(--colour-slate-800);
+}
+.cquote-meta .role {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-md);
+  color: var(--colour-slate-600);
+}
+
+@media (min-width: 576px) {
+  .cquote-quote { margin: 0 var(--space-80) var(--space-16); }
+}

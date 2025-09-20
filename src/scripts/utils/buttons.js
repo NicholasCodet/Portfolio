@@ -16,7 +16,9 @@ function ensureIOSActive() {
   }
 }
 
-export function initPressFeedback({ selector = ".btn-primary, .btn-secondary" } = {}) {
+export function initPressFeedback({
+  selector = ".btn-primary, .btn-secondary",
+} = {}) {
   ensureIOSActive();
 
   const pressOn = (el) => el.classList.add("is-pressed");

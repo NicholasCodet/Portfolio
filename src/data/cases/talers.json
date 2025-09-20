@@ -1,0 +1,70 @@
+{
+  "title": "Where Stories Take Wing: The Making of Talers",
+  "summary": "Talers is a SaaS writing platform designed to simplify and centralise the creative process for authors. Writers often lose time juggling multiple tools for drafting, notes, and organisation. Over 38 weeks, I led the product design from research to delivery of an MVP, working closely with the founder to define priorities and ensure technical feasibility. The result was a unified writing app that improved user productivity, engagement, and confidence.",
+  "meta": [
+    { "label": "Role", "value": "Lead Designer" },
+    { "label": "Duration", "value": "38 Weeks" },
+    { "label": "Domain", "value": "SaaS" }
+  ],
+  "sections": [
+    {
+      "type": "image",
+      "src": "",
+      "alt": "Talers interface overview",
+      "caption": "App overview"
+    },
+    {
+      "type": "subheading",
+      "text": "The Landscape: ContentTech in Transition"
+    },
+    {
+      "type": "paragraph",
+      "text": "Talers is directly positioned in a maturing ContentTech market. The objective was to provide authors with a single, accessible platform to draft, organise, and prepare their work for publication."
+    },
+
+    { "type": "subheading", "text": "Problems" },
+    {
+      "type": "paragraph",
+      "text": "Writers relied on fragmented workflows, often switching across multiple apps for drafting, editing, and note‑taking. This created friction, distraction, and loss of momentum."
+    },
+
+    { "type": "subheading", "text": "Approach" },
+    {
+      "type": "paragraph",
+      "text": "Through interviews, competitor reviews, and ideation workshops with the founder and test users, we identified core needs and prioritised features. I designed wireframes, user flows and high‑fidelity prototypes to guide implementation."
+    },
+    {
+      "type": "image",
+      "src": "",
+      "alt": "Editor flow",
+      "caption": "Editor interface"
+    },
+
+    { "type": "heading", "text": "Solution" },
+    {
+      "type": "paragraph",
+      "text": "The MVP delivered a clean, distraction-free writing interface with integrated notes, project organisation, and progress tracking. Export options were included to support publishing workflows."
+    },
+
+    { "type": "heading", "text": "Impact" },
+    {
+      "type": "paragraph",
+      "text": "Usability tests showed a 30% task completion gain and improved writing consistency. Early adopters reported higher satisfaction and reduced context switching during drafting."
+    },
+    {
+      "type": "image",
+      "src": "",
+      "alt": "MVP Screens",
+      "caption": "Project results"
+    }
+  ],
+  "quote": {
+    "text": "Collaborating on Talers was seamless. The design process balanced speed with rigor, and the outcome exceeded expectations—clean UX, clear priorities, and a product our early writers loved.",
+    "author": "Matthieu Gindre",
+    "role": "Founder",
+    "company": "Talers",
+    "avatar": "/src/assets/images/avatars/matthieu-gindre.png",
+    "avatarW": 44,
+    "avatarH": 44
+  }
+}
