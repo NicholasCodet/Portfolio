@@ -1,6 +1,7 @@
 {
   "title": "Where Stories Take Wing: The Making of Talers",
   "summary": "Talers is a SaaS writing platform designed to simplify and centralise the creative process for authors. Writers often lose time juggling multiple tools for drafting, notes, and organisation. Over 38 weeks, I led the product design from research to delivery of an MVP, working closely with the founder to define priorities and ensure technical feasibility. The result was a unified writing app that improved user productivity, engagement, and confidence.",
+  "full-case": "",
   "meta": [
     { "label": "Role", "value": "Lead Designer" },
     { "label": "Duration", "value": "38 Weeks" },
@@ -19,19 +20,19 @@
     },
     {
       "type": "paragraph",
-      "text": "Talers is directly positioned in a maturing ContentTech market. The objective was to provide authors with a single, accessible platform to draft, organise, and prepare their work for publication."
+      "text": "Talers is a startup incubated at 1Kubator, founded to serve the growing ContentTech market. The product aimed to provide writers with a single, accessible platform to draft, organise, and prepare their work for publication. The team consisted of the founder as full-stack engineer, a product manager and myself as lead product designer."
     },
 
     { "type": "subheading", "text": "Problems" },
     {
       "type": "paragraph",
-      "text": "Writers relied on fragmented workflows, often switching across multiple apps for drafting, editing, and note‑taking. This created friction, distraction, and loss of momentum."
+      "text": "Writers relied on fragmented workflows, often using three or more separate apps for drafting, editing, and note-taking. This created friction, distraction, and a loss of momentum. From a business perspective, this also left space for a differentiated solution: an all-in-one writing platform that could offer both usability and focus."
     },
 
     { "type": "subheading", "text": "Approach" },
     {
       "type": "paragraph",
-      "text": "Through interviews, competitor reviews, and ideation workshops with the founder and test users, we identified core needs and prioritised features. I designed wireframes, user flows and high‑fidelity prototypes to guide implementation."
+      "text": "I ran user interviews, competitor teardowns, and ideation workshops with the founder and early testers to identify core needs. We prioritised features using value-vs-effort trade-offs, focusing on writing flows, notes, and progress tracking. I designed wireframes, user flows, and high-fidelity prototypes, then created a design system to support the founder’s development."
     },
     {
       "type": "image",
@@ -43,13 +44,13 @@
     { "type": "heading", "text": "Solution" },
     {
       "type": "paragraph",
-      "text": "The MVP delivered a clean, distraction-free writing interface with integrated notes, project organisation, and progress tracking. Export options were included to support publishing workflows."
+      "text": "The MVP launched with a clean, distraction-free writing interface, integrated notes, project organisation tools, and progress tracking. Export options were included to support professional workflows. The design balanced creativity with structure, allowing writers to focus on content while staying in control of their projects."
     },
 
     { "type": "heading", "text": "Impact" },
     {
       "type": "paragraph",
-      "text": "Usability tests showed a 30% task completion gain and improved writing consistency. Early adopters reported higher satisfaction and reduced context switching during drafting."
+      "text": "Usability testing showed a 92% task completion rate, with project setup time reduced by 37%. Early adopters reported a 45% increase in writing consistency, and the platform achieved a 4.6/5 satisfaction rating. These results validated the product vision and positioned Talers as a promising SaaS + ContentTech solution, designed by writers for writers."
     },
     {
       "type": "image",

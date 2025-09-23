@@ -1,9 +1,9 @@
 [
   {
-    "thumbnail": "/src/assets/images/shots/popotecolors.webp",
+    "thumbnail": "",
     "title": "Kaelis The Crypto Ring",
     "description": "Screenless wearable enabling secure, offline crypto payments through gestures.",
-    "href": "",
+    "href": "/cases/kaelis.html",
     "slug": "",
     "featured": true
   },

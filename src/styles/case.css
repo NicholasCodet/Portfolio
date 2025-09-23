@@ -3,12 +3,12 @@
 @import url(./base.css);
 @import url(./layouts.css);
 
-@import url(./components/footer.css);
-@import url(./components/cases/cs-body.css);
 @import url(./components/cases/cs-hero.css);
+@import url(./components/cases/cs-body.css);
 @import url(./components/cases/cs-quote.css);
 @import url(./components/cases/cs-more.css);
 @import url(./components/case-studies.css);
+@import url(./components/footer.css);
 
 .aurora {
   position: absolute;

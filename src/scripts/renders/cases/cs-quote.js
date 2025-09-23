@@ -23,7 +23,6 @@ export function mountCSQuote({
     return;
   }
 
-  // Avatar handling (supports /src/ absolute dev path like testimonials)
   const avatarPath = q.avatar || "";
   const avatarUrl = avatarPath.startsWith("/src/")
     ? new URL("../../../" + avatarPath.slice(5), import.meta.url).href

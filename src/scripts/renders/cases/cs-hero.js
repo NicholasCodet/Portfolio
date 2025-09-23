@@ -27,12 +27,5 @@ export async function mountCSHero({
       </a>
       <h1 class="heading-1">${title}</h1>
       <p class="text-md summary">${summary}</p>
-
-       <a class="btn-md btn-secondary is-disabled" href="#" role="button" aria-disabled="true" tabindex="-1">
-          <span class="shadow"></span>
-          <span class="edge"></span>
-          <span class="front">Read the full case study</span>
-        </a>
-      <p class="hint text-sm">${escape(note)}</p>
   `;
 }

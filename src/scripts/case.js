@@ -1,16 +1,18 @@
 console.log("Case Script Loaded");
 
-import { mountCSHero } from "./renders/cases/cs-hero.js";
 import { mountCSBody } from "./renders/cases/cs-body.js";
-import { mountFooter } from "./renders/footer.js";
-import { mountCSQuote } from "./renders/cases/cs-quote.js";
+import { mountCSHero } from "./renders/cases/cs-hero.js";
 import { mountCSMore } from "./renders/cases/cs-more.js";
+import { mountCSQuote } from "./renders/cases/cs-quote.js";
+import { mountFooter } from "./renders/footer.js";
 import { initPressFeedback } from "./utils/buttons.js";
+import { initClickSound } from "./utils/click-sound.js";
 import { fetchJSON } from "./utils/fetch-json.js";
 import { onReady } from "./utils/ready.js";
 
 onReady(async () => {
   await mountCaseSectionsFromData();
+  initClickSound();
   initPressFeedback();
   mountFooter();
 });
@@ -22,6 +24,13 @@ async function mountCaseSectionsFromData({
 } = {}) {
   const params = new URLSearchParams(location.search);
   let id = params.get(dataParam);
+
+  // Allow overriding via data attribute if set
+  if (!id) {
+    id = document.body.getAttribute("data-case-id") || id;
+  }
+
+  // Fallback to filename-based slug
   if (!id) {
     const last = (location.pathname.split("/").pop() || "").replace(
       /\.html?$/i,
@@ -34,5 +43,5 @@ async function mountCaseSectionsFromData({
   mountCSHero({ selector: ".section.case-hero", data });
   mountCSBody({ selector: ".section.case-body", data });
   mountCSQuote({ selector: ".section.case-quote", data });
-  await mountCSMore({ selector: ".section.more-projects", currentId: id });
+  mountCSMore({ selector: ".section.more-projects", currentId: id });
 }

@@ -42,7 +42,9 @@ export async function mountCaseStudies({
           <div class="cs-media">
             ${
               src
-                ? `<img src="${src}" alt="${escape(it.title)} preview" loading="lazy" decoding="async">`
+                ? `<img src="${src}" alt="${escape(
+                    it.title
+                  )} preview" loading="lazy" decoding="async">`
                 : `<div class="img-placeholder" aria-hidden="true"></div>`
             }
           </div>
