@@ -1,0 +1,6 @@
+/* Component-scoped focus safety; main styles live in src/styles/components/kpi.css */
+.kpi-list:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+

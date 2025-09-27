@@ -1,7 +1,8 @@
 export function initClickSound({
   src = "../../assets/sounds/arcade.m4a",
   volume = 0.35,
-  selector = 'button, [role="button"], .btn, .btn-md, .btn-primary, .btn-secondary',
+  // Cover generic buttons + our variants (present/future)
+  selector = 'button, [role="button"], .btn, .btn-md, .btn-sm, .btn-lg, .btn-primary, .btn-secondary',
 } = {}) {
   try {
     const audioUrl = new URL(src, import.meta.url).href;

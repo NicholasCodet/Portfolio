@@ -1,0 +1,22 @@
+/* UI Button: relies on global .btn-md/.btn-primary/.btn-secondary styles
+   Adds accessibility-friendly focus and neutralizes UA borders */
+
+.btn-md {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  background: transparent;
+}
+
+.btn-md:focus {
+  outline: none;
+}
+
+.btn-md:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+.btn-md .icon {
+  fill: currentColor;
+}

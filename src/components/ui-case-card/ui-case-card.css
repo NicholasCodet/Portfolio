@@ -1,0 +1,6 @@
+/* Case card relies on global styles in src/styles/components/case-studies.css */
+.cs-card-link:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+

@@ -1,0 +1,3 @@
+/* Minimal focus ring; main styles live in cs-hero.css and cs-body.css */
+.case-hero-wrap .back:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+

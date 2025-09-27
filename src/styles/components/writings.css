@@ -47,3 +47,15 @@
     text-overflow: clip;
   }
 }
+
+/* Dim sibling article cards on hover/focus within Thoughts */
+@media (hover: hover) {
+  .writings .w-card { transition: opacity 160ms ease; }
+
+  .writings .w-list:has(.w-item > a:hover) .w-card { opacity: 0.45; }
+  .writings .w-list .w-item > a:hover .w-card { opacity: 1; }
+
+  /* Keyboard focus support */
+  .writings .w-list:has(.w-item > a:focus-within) .w-card { opacity: 0.45; }
+  .writings .w-list .w-item > a:focus-within .w-card { opacity: 1; }
+}

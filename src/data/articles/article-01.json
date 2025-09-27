@@ -1,0 +1,16 @@
+{
+  "card": {
+    "title": "Best Part Yet to Come",
+    "published": "2025-07-28T08:00:00.000Z",
+    "minutes": 2,
+    "url": "https://medium.com/@your-handle/best-part-yet-xxxx",
+    "tags": ["Personal"],
+    "featured": true,
+    "priority": 1
+  },
+  "article": {
+    "title": "Best Part Yet to Come",
+    "summary": "",
+    "sections": []
+  }
+}

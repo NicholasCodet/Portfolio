@@ -1,0 +1,7 @@
+/* Minimal component-scoped tweaks; main styles in src/styles/components/hero.css */
+.hero-actions a:focus-visible,
+.hero-actions button:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+

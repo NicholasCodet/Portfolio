@@ -1,0 +1,3 @@
+/* Minimal focus styles; main layout/styles are in src/styles/components/cases/cs-more.css */
+.mp-layout a:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+

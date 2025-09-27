@@ -1,0 +1,6 @@
+/* Minimal component-scoped tweaks; main styling is in src/styles/components/writings.css */
+.w-root a:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+

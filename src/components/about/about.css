@@ -1,0 +1,9 @@
+/* Minimal focus helper; main styles remain in src/styles/components/about.css */
+.about-profile:focus-visible,
+.about-toolkit:focus-visible,
+.about-thought:focus-visible,
+.about-career:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+

@@ -1,0 +1,6 @@
+/* Minimal component-scoped tweaks; main styles live in src/styles/components/testimonials.css */
+.t-layout:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+

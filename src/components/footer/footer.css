@@ -1,0 +1,34 @@
+/* Minimal component-scoped tweaks. Main layout/styles come from src/styles/components/footer.css */
+/* Remove UA borders/outlines; keep accessible :focus-visible */
+.email-link,
+.copy-email {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  background: transparent;
+}
+.email-link::-moz-focus-inner,
+.copy-email::-moz-focus-inner {
+  border: 0;
+}
+
+.copy-email:focus,
+.email-link:focus {
+  outline: none;
+}
+.copy-email:focus-visible,
+.email-link:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+/* Ensure inline icons inherit text color */
+.ft-list .icon,
+.btn-md .icon {
+  fill: currentColor;
+}
+
+/* Remove decorative border on the copy button in footer */
+.copy-email .front {
+  box-shadow: none;
+}

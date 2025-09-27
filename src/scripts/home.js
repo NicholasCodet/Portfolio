@@ -1,28 +1,31 @@
 console.log("Home Script Loaded");
 
-import { mountCaseStudies } from "./renders/case-studies.js";
-import { mountFooter } from "./renders/footer.js";
-import { mountHero } from "./renders/hero.js";
-import { mountKPI } from "./renders/kpi.js";
-import { mountAbout } from "./renders/about.js";
-import { mountReferences } from "./renders/references.js";
-import { mountTestimonials } from "./renders/testimonials.js";
-import { mountTestimony } from "./renders/testimony.js";
-import { mountWritings } from "./renders/writings.js";
-import { initPressFeedback } from "./utils/buttons.js";
+import { mountCaseStudies as mountCaseStudiesComponent } from "../components/portfolio/portfolio.js";
+import { mountFooter as mountFooterComponent } from "../components/footer/footer.js";
+import { mountHero as mountHeroComponent } from "../components/hero/hero.js";
+import { mountKPI as mountKPIComponent } from "../components/kpi/kpi.js";
+import { mountThoughts as mountThoughtsComponent } from "../components/thoughts/thoughts.js";
+
+import { mountAbout as mountAboutComponent } from "../components/about/about.js";
+import { mountReferences as mountReferencesComponent } from "../components/references/references.js";
+import { mountTestimonials as mountTestimonialsComponent } from "../components/testimonials/testimonials.js";
+import { mountQuote as mountQuoteComponent } from "../components/quote/quote.js";
 import { initClickSound } from "./utils/click-sound.js";
+import { initPressFeedback } from "./utils/press-feedback.js";
 import { onReady } from "./utils/ready.js";
 
 onReady(() => {
   initPressFeedback();
   initClickSound();
-  mountHero();
-  mountReferences();
-  mountCaseStudies();
-  mountTestimony();
-  mountAbout();
-  mountTestimonials();
-  mountKPI();
-  mountWritings();
-  mountFooter();
+
+  mountReferencesComponent();
+  mountQuoteComponent();
+  mountAboutComponent();
+  mountTestimonialsComponent();
+
+  mountHeroComponent();
+  mountCaseStudiesComponent();
+  mountKPIComponent();
+  mountThoughtsComponent();
+  mountFooterComponent(".section.footer");
 });

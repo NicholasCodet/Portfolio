@@ -25,3 +25,18 @@ export async function inlineSpriteOnce(url, { rootId = "__sprite_inline" } = {})
   }
 }
 
+// Create an <svg><use href="#id"></use></svg> element
+export function createSvgUse(idOrHref, { size = 24, className = 'icon', viewBox = '0 0 24 24', ariaHidden = true } = {}) {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('width', String(size));
+  svg.setAttribute('height', String(size));
+  svg.setAttribute('viewBox', viewBox);
+  svg.setAttribute('focusable', 'false');
+  svg.setAttribute('aria-hidden', ariaHidden ? 'true' : 'false');
+  if (className) svg.setAttribute('class', className);
+  const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+  const href = String(idOrHref || '').startsWith('#') ? String(idOrHref) : `#${String(idOrHref)}`;
+  use.setAttribute('href', href);
+  svg.appendChild(use);
+  return svg;
+}

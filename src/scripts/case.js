@@ -1,11 +1,11 @@
 console.log("Case Script Loaded");
 
-import { mountCSBody } from "./renders/cases/cs-body.js";
-import { mountCSHero } from "./renders/cases/cs-hero.js";
-import { mountCSMore } from "./renders/cases/cs-more.js";
-import { mountCSQuote } from "./renders/cases/cs-quote.js";
-import { mountFooter } from "./renders/footer.js";
-import { initPressFeedback } from "./utils/buttons.js";
+import { mountCaseBody } from "../components/case-body/case-body.js";
+import { mountCaseHero } from "../components/case-hero/case-hero.js";
+import { mountRelatedProjects } from "../components/related-projects/related-projects.js";
+import { mountQuote as mountCaseQuote } from "../components/quote/quote.js";
+import { mountFooter } from "../components/footer/footer.js";
+import { initPressFeedback } from "./utils/press-feedback.js";
 import { initClickSound } from "./utils/click-sound.js";
 import { fetchJSON } from "./utils/fetch-json.js";
 import { onReady } from "./utils/ready.js";
@@ -14,7 +14,8 @@ onReady(async () => {
   await mountCaseSectionsFromData();
   initClickSound();
   initPressFeedback();
-  mountFooter();
+  // Mount footer component (footer tag on case pages)
+  mountFooter("footer.section.footer");
 });
 
 async function mountCaseSectionsFromData({
@@ -40,8 +41,15 @@ async function mountCaseSectionsFromData({
   }
   const url = new URL(`${dataPath}${id}.json`, import.meta.url).href;
   const data = (await fetchJSON(url)) || {};
-  mountCSHero({ selector: ".section.case-hero", data });
-  mountCSBody({ selector: ".section.case-body", data });
-  mountCSQuote({ selector: ".section.case-quote", data });
-  mountCSMore({ selector: ".section.more-projects", currentId: id });
+  const content = data && data.case ? data.case : data;
+  mountCaseHero({ selector: ".section.case-hero", data: content });
+  mountCaseBody({ selector: ".section.case-body", data: content });
+  const quoteObj = content && content.quote ? content.quote : null;
+  if (quoteObj) {
+    // Mount the new Quote component using the updated section class
+    // Use default 'testimony' class prefix for styling via testimony.css
+    mountCaseQuote({ selector: ".section.quote", data: [quoteObj], headlineClass: 'headline-2' });
+  }
+  // Mount Related Projects on the updated section class
+  mountRelatedProjects({ selector: ".section.related-projects" });
 }

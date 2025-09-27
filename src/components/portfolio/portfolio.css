@@ -1,0 +1,6 @@
+/* Minimal tweaks for focus; main layout/style remains in src/styles/components/case-studies.css */
+.cs-root a:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+

@@ -1,0 +1,11 @@
+/* Minimal helpers for carousels using scroll containers */
+[data-ui-carousel] {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+[data-ui-carousel].is-dragging {
+  scroll-behavior: auto; /* disable smooth during drag */
+  cursor: grabbing;
+}
+

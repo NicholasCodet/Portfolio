@@ -1,0 +1,6 @@
+/* Minimal focus styles; main layout/style is in src/styles/components/cases/cs-body.css */
+.case-body-root :is(a, button):focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+

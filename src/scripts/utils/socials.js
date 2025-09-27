@@ -1,5 +1,6 @@
 import { fetchJSON } from "./fetch-json.js";
 import { escape } from "./dom.js";
+import { sanitizeURL } from "./urls.js";
 
 export async function fetchSocials(url) {
   try {
@@ -37,7 +38,12 @@ export function renderSocialLink(s, { withLabel = false, size = 20, className } 
   const content = withLabel ? `${icon} ${escape(s.name)}` : icon;
   const aria = withLabel ? `` : ` aria-label="${escape(label)}"`;
   const cls = className ? ` class="${escape(className)}"` : "";
-  return `<a${cls} href="${s.href}" target="_blank" rel="noopener"${aria}>${content}</a>`;
+  const href = sanitizeURL(String(s.href || ""));
+  if (!href) {
+    // Render as a disabled anchor when URL is unsafe
+    return `<a${cls} aria-disabled="true" tabindex="-1"${aria}>${content}</a>`;
+  }
+  return `<a${cls} href="${escape(href)}" target="_blank" rel="noopener noreferrer"${aria}>${content}</a>`;
 }
 
 export function renderSocialItem(s, opts) {
