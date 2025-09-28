@@ -1,19 +1,44 @@
 // assets.js
+// Map all known assets at build time so we can resolve
+// JSON-provided paths ('/src/assets/...', 'src/assets/...', 'assets/...', '../assets/...')
+// to their final fingerprinted URL.
+const __ASSET_URLS__ = import.meta.glob('../../assets/**/*', { eager: true, import: 'default' });
+
+function lookupAssetFromRoot(relativeFromSrc) {
+  // Keys in __ASSET_URLS__ look like '../../assets/...'
+  const key = `../../${relativeFromSrc.replace(/^\/+/, '')}`; // ensure no leading slash
+  return __ASSET_URLS__[key] || null;
+}
+
 export function resolveAssetPath(p, baseModuleUrl) {
   if (!p || typeof p !== "string") return null;
-  // URL absolue (http, data) -> laisse tel quel
+  // Absolute (http, data) -> keep as is
   if (/^(https?:|data:)/i.test(p)) return p;
 
-  // Normaliser chemins typés '/src/...'(absolu) ou 'src/...'(relatif au root)
-  let path = p;
-  if (p.startsWith('/src/')) path = p.slice(5);
-  else if (p.startsWith('src/')) path = p.slice(4);
-
-  try {
-    // important : base = import.meta.url du MODULE qui consomme le JSON
-    const url = new URL(path, baseModuleUrl);
-    return url.href; // laisse Vite émettre un asset fingerprinté
-  } catch (_) {
-    return null;
+  // Handle common notations pointing under src/assets
+  // 1) '/src/...'
+  if (/^\/?src\//i.test(p)) {
+    const rel = p.replace(/^\/?src\//i, ''); // -> 'assets/...'
+    const url = lookupAssetFromRoot(rel);
+    if (url) return url;
   }
+
+  // 2) '../assets/...' or 'assets/...': interpret from project src/ root
+  if (/^(?:\.\.\/)+assets\//.test(p)) {
+    const rel = p.replace(/^(?:\.\.\/)+/, ''); // strip leading ../
+    const url = lookupAssetFromRoot(rel);
+    if (url) return url;
+  }
+  if (/^assets\//.test(p)) {
+    const url = lookupAssetFromRoot(p);
+    if (url) return url;
+  }
+
+  // 3) Fallback to module-relative URL if provided
+  if (baseModuleUrl) {
+    try {
+      return new URL(p, baseModuleUrl).href;
+    } catch {}
+  }
+  return null;
 }

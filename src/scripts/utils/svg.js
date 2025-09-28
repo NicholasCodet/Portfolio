@@ -26,17 +26,46 @@ export async function inlineSpriteOnce(url, { rootId = "__sprite_inline" } = {})
 }
 
 // Create an <svg><use href="#id"></use></svg> element
-export function createSvgUse(idOrHref, { size = 24, className = 'icon', viewBox = '0 0 24 24', ariaHidden = true } = {}) {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('width', String(size));
-  svg.setAttribute('height', String(size));
-  svg.setAttribute('viewBox', viewBox);
-  svg.setAttribute('focusable', 'false');
-  svg.setAttribute('aria-hidden', ariaHidden ? 'true' : 'false');
-  if (className) svg.setAttribute('class', className);
-  const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-  const href = String(idOrHref || '').startsWith('#') ? String(idOrHref) : `#${String(idOrHref)}`;
-  use.setAttribute('href', href);
+export function createSvgUse(
+  idOrHref,
+  {
+    size = 24,
+    className = "icon",
+    viewBox = "0 0 24 24",
+    ariaHidden = true,
+    autoVariantClass = true,
+  } = {}
+) {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("width", String(size));
+  svg.setAttribute("height", String(size));
+  svg.setAttribute("viewBox", viewBox);
+  svg.setAttribute("focusable", "false");
+  svg.setAttribute("aria-hidden", ariaHidden ? "true" : "false");
+
+  const classSet = new Set(
+    typeof className === "string"
+      ? className.split(/\s+/).filter(Boolean)
+      : Array.isArray(className)
+      ? className.flatMap((c) => String(c).split(/\s+/).filter(Boolean))
+      : []
+  );
+
+  if (autoVariantClass && idOrHref) {
+    const id = String(idOrHref).replace(/^#/, "");
+    const match = id.match(/-(bold|linear)$/i);
+    if (match) classSet.add(match[1].toLowerCase());
+  }
+
+  if (classSet.size > 0) {
+    svg.setAttribute("class", Array.from(classSet).join(" "));
+  }
+
+  const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+  const href = String(idOrHref || "").startsWith("#")
+    ? String(idOrHref)
+    : `#${String(idOrHref)}`;
+  use.setAttribute("href", href);
   svg.appendChild(use);
   return svg;
 }

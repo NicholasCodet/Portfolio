@@ -198,14 +198,6 @@
   --shadow-inner-sm: 0 1px 1px var(--colour-black-t05);
   --shadow-inner-md: inset 0 2px 4px var(--colour-black-t05);
 
-  /*Z-Index*/
-  --z-0: 0;
-  --z-10: 10;
-  --z-20: 20;
-  --z-30: 30;
-  --z-40: 40;
-  --z-50: 50;
-
   /*Breakpoints*/
   --breakpoint-sm: 576px;
   --breakpoint-md: 960px;

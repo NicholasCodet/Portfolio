@@ -1,6 +1,36 @@
-/* Component-scoped focus safety; main styles live in src/styles/components/kpi.css */
+.kpi .kpi-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-40);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
 .kpi-list:focus-visible {
   outline: 3px solid #93c5fd;
   outline-offset: 2px;
 }
 
+.kpi .kpi-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+@media (min-width: 576px) {
+  .kpi .container {
+    padding: var(--space-80) clamp(var(--space-24), 5.6vw, var(--space-80));
+  }
+
+  .kpi .kpi-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .kpi .kpi-item {
+    flex: 1 1 calc(33.333% - var(--space-40));
+    max-width: 260px;
+  }
+}

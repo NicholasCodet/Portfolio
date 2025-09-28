@@ -1,28 +1,50 @@
 // urls.js
 const ALLOWED_PROTOCOLS = new Set(["http:", "https:", "mailto:", "tel:"]);
+const FALLBACK_ORIGIN = "http://localhost";
+
+function getBaseOrigin() {
+  if (typeof window !== "undefined" && window.location?.origin) {
+    return window.location.origin;
+  }
+  return FALLBACK_ORIGIN;
+}
+
+function isAllowedRelative(value) {
+  return (
+    value.startsWith("#") ||
+    (value.startsWith("/") && !value.startsWith("//")) ||
+    value.startsWith("./") ||
+    value.startsWith("../")
+  );
+}
+
+export function sanitizeHref(raw, { allowRelative = true } = {}) {
+  if (typeof raw !== "string") return "";
+  const value = raw.trim();
+  if (!value) return "";
+
+  if (allowRelative && isAllowedRelative(value)) {
+    return value;
+  }
+
+  try {
+    const url = new URL(value, getBaseOrigin());
+    if (ALLOWED_PROTOCOLS.has(url.protocol)) {
+      return url.href;
+    }
+  } catch {
+    // ignore
+  }
+  return "";
+}
 
 export function sanitizeURL(raw) {
-  if (!raw || typeof raw !== "string") return null;
-  // autoriser ancres/relatives (#, /, ./, ../)
-  if (
-    raw.startsWith("#") ||
-    raw.startsWith("/") ||
-    raw.startsWith("./") ||
-    raw.startsWith("../")
-  ) {
-    return raw;
-  }
-  try {
-    const u = new URL(raw, window.location.origin);
-    if (ALLOWED_PROTOCOLS.has(u.protocol)) return u.toString();
-  } catch (_) {
-    /* noop */
-  }
-  return null; // rejette javascript:, data:, etc.
+  const href = sanitizeHref(raw);
+  return href || null;
 }
 
 export function bindSafeLink(a, rawHref, { target } = {}) {
-  const href = sanitizeURL(rawHref);
+  const href = sanitizeHref(rawHref);
   if (!href) {
     // désactive le lien dangereux
     a.removeAttribute("href");

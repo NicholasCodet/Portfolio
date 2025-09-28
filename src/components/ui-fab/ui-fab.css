@@ -1,0 +1,60 @@
+/* Floating Action Button (Back to top) */
+.ui-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 50;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--colour-slate-900);
+  color: var(--colour-white-t100);
+  box-shadow: 0 6px 16px rgba(2, 6, 23, 0.3);
+  cursor: pointer;
+  transform: translateY(16px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease, box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.ui-fab .icon {
+  stroke: currentColor;
+  fill: none;
+}
+
+.ui-fab.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ui-fab:hover {
+  box-shadow: 0 8px 20px rgba(2, 6, 23, 0.35);
+}
+.ui-fab:active {
+  transform: translateY(1px);
+}
+.ui-fab:focus {
+  outline: none;
+}
+.ui-fab:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+@media (min-width: 576px) {
+  .ui-fab {
+    right: 28px;
+    bottom: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-fab {
+    transition: none;
+  }
+}

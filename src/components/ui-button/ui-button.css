@@ -1,11 +1,21 @@
-/* UI Button: relies on global .btn-md/.btn-primary/.btn-secondary styles
-   Adds accessibility-friendly focus and neutralizes UA borders */
-
 .btn-md {
-  -webkit-appearance: none;
+  position: relative;
+  width: 100%;
+  padding: var(--space-0);
+  text-decoration: none;
   appearance: none;
   border: 0;
   background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-md);
 }
 
 .btn-md:focus {
@@ -13,10 +23,161 @@
 }
 
 .btn-md:focus-visible {
-  outline: 3px solid #93c5fd;
   outline-offset: 2px;
 }
 
-.btn-md .icon {
-  fill: currentColor;
+.btn-md .shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-xl);
+  background: var(--colour-black-t25);
+  will-change: transform;
+  transform: translateY(2px);
+  transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
+.btn-md .edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-xl);
+}
+
+.btn-md .front {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-10) var(--space-20);
+  border-radius: var(--radius-xl);
+  box-sizing: border-box;
+
+  will-change: transform;
+  transform: translateY(-4px);
+  transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
+.btn-md:hover .front {
+  transform: translateY(-6px);
+  transition: transform 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
+}
+
+.btn-md:active .front {
+  transform: translateY(-2px);
+  transition: transform 34ms;
+}
+
+.btn-md:hover .shadow {
+  transform: translateY(4px);
+  transition: transform 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
+}
+
+.btn-md:active .shadow {
+  transform: translateY(1px);
+  transition: transform 34ms;
+}
+
+.btn-primary .edge {
+  background: linear-gradient(
+    to left,
+    var(--colour-pink-900) 0%,
+    var(--colour-pink-700) 8%,
+    var(--colour-pink-700) 92%,
+    var(--colour-pink-900) 100%
+  );
+}
+
+.btn-secondary .edge {
+  background: linear-gradient(
+    to left,
+    var(--colour-slate-300) 0%,
+    var(--colour-slate-100) 8%,
+    var(--colour-slate-100) 92%,
+    var(--colour-slate-300) 100%
+  );
+}
+
+.btn-primary .front {
+  color: var(--colour-white-t100);
+  background: var(--colour-pink-600);
+}
+
+.btn-secondary .front {
+  color: var(--colour-slate-950);
+  background: var(--colour-white-t100);
+}
+
+.btn-secondary .front::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid var(--colour-slate-200);
+  pointer-events: none;
+}
+
+.btn-md.is-borderless .front {
+  border: 0;
+  box-shadow: none;
+}
+
+.btn-md.is-borderless .front::after {
+  display: none;
+}
+
+.btn-primary:hover {
+  filter: brightness(110%);
+}
+
+@media (hover: none) {
+  .btn-primary:hover:not(:active) .front,
+  .btn-secondary:hover:not(:active) .front {
+    transform: translateY(-4px);
+    transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  }
+
+  .btn-primary:hover:not(:active) .shadow,
+  .btn-secondary:hover:not(:active) .shadow {
+    transform: translateY(2px);
+    transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  }
+
+  .btn-primary:hover {
+    filter: none;
+  }
+
+  .btn-primary:active .front,
+  .btn-secondary:active .front {
+    transform: translateY(-4px);
+    transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  }
+
+  .btn-primary:active .shadow,
+  .btn-secondary:active .shadow {
+    transform: translateY(2px);
+    transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  }
+
+  .btn-primary.is-pressed .front,
+  .btn-secondary.is-pressed .front {
+    transform: translateY(-2px);
+    transition: transform 80ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  }
+  .btn-primary.is-pressed .shadow,
+  .btn-secondary.is-pressed .shadow {
+    transform: translateY(1px);
+    transition: transform 80ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  }
+}
+
+@media (min-width: 576px) {
+  .btn-md {
+    width: auto;
+  }
 }

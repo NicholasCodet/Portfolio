@@ -1,6 +1,65 @@
-/* Minimal focus outline for accessibility; main styles in testimony.css */
-.testimony-figure:focus-visible {
+.quote-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-40);
+}
+
+.quote-figure:focus-visible {
   outline: 3px solid #93c5fd;
   outline-offset: 2px;
 }
 
+.quote-text {
+  text-align: center;
+}
+
+.quote-text p::before {
+  content: "“";
+}
+
+.quote-text p::after {
+  content: "”";
+}
+
+.quote-author {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.quote-avatar {
+  width: var(--size-44);
+  height: var(--size-44);
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.quote-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.quote-meta .name {
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-md);
+  color: var(--colour-slate-800);
+}
+
+.quote-meta .role {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-md);
+  color: var(--colour-slate-600);
+}
+
+@media (min-width: 576px) {
+  .quote-text {
+    text-align: center;
+    margin: 0 var(--space-80);
+  }
+}

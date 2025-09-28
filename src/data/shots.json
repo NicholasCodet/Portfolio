@@ -10,13 +10,23 @@
     "url": "https://dribbble.com/shots/25233695-Popote-Colors"
   },
   {
-    "title": "Mobile calendar",
-    "image": "",
+    "title": "La Cocotte Solidaire",
+    "image": "/src/assets/images/shots/cocottesolidaire.webp",
     "url": "https://dribbble.com/shots/0000003"
   },
   {
-    "title": "Poster experiments",
-    "image": "",
+    "title": "Makidoo",
+    "image": "/src/assets/images/shots/makidoo.webp",
+    "url": "https://dribbble.com/shots/0000004"
+  },
+  {
+    "title": "Talers",
+    "image": "/src/assets/images/shots/talers.webp",
+    "url": "https://dribbble.com/shots/0000004"
+  },
+  {
+    "title": "Dans Ta Roue",
+    "image": "/src/assets/images/shots/danstaroue.webp",
     "url": "https://dribbble.com/shots/0000004"
   }
 ]

@@ -1,8 +1,9 @@
+import "./thoughts.css";
+import tplHTML from "./thoughts.html?raw";
+
 import { featuredArticles } from "../../scripts/utils/articles.js";
 import { createSvgUse, inlineSpriteOnce } from "../../scripts/utils/svg.js";
 import { bindSafeLink } from "../../scripts/utils/urls.js";
-import "./thoughts.css";
-import tplHTML from "./thoughts.html?raw";
 
 let __tpl;
 function getTemplate() {
@@ -57,7 +58,9 @@ export async function mountThoughts({
 
     const a = document.createElement("a");
     const isExternal = art.externalUrl && art.href === art.externalUrl;
-    bindSafeLink(a, art.href || "#", { target: isExternal ? "_blank" : undefined });
+    bindSafeLink(a, art.href || "#", {
+      target: isExternal ? "_blank" : undefined,
+    });
 
     const card = document.createElement("article");
     card.className = "w-card";

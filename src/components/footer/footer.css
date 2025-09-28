@@ -1,34 +1,99 @@
-/* Minimal component-scoped tweaks. Main layout/styles come from src/styles/components/footer.css */
-/* Remove UA borders/outlines; keep accessible :focus-visible */
-.email-link,
-.copy-email {
-  -webkit-appearance: none;
-  appearance: none;
-  border: 0;
-  background: transparent;
-}
-.email-link::-moz-focus-inner,
-.copy-email::-moz-focus-inner {
-  border: 0;
+.footer {
+  position: relative;
+  overflow: auto;
+  background-color: var(--colour-slate-50);
 }
 
-.copy-email:focus,
-.email-link:focus {
-  outline: none;
-}
-.copy-email:focus-visible,
-.email-link:focus-visible {
-  outline: 3px solid #93c5fd;
-  outline-offset: 2px;
+.footer .ft-about,
+.footer .block-actions,
+.ft-links {
+  margin-bottom: var(--space-80);
 }
 
-/* Ensure inline icons inherit text color */
-.ft-list .icon,
-.btn-md .icon {
+.footer .block-id,
+.footer .headline-1,
+.footer .heading-3 {
+  margin-bottom: var(--space-24);
+}
+
+.ft-wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.footer .name {
+  font-family: var(--font-primary);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-sm);
+  letter-spacing: var(--tracking-tight);
+
+  color: var(--colour-slate-900);
+}
+
+.footer .role {
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-semibold);
+
+  color: var(--colour-slate-700);
+}
+
+.footer .actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.ft-links {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-40);
+}
+
+.ft-list {
+  list-style: none;
+  display: grid;
+  gap: var(--space-12);
+}
+
+.ft-list.socials {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-12) var(--space-24);
+}
+
+.ft-list .link .icon {
+  stroke: none;
   fill: currentColor;
 }
 
-/* Remove decorative border on the copy button in footer */
+.ft-list .link:hover {
+  text-decoration: underline;
+  color: var(--colour-slate-950);
+}
+
+.ft-bottom {
+  text-align: center;
+}
+
+/* Make the copy action look borderless while keeping shared sizing */
 .copy-email .front {
-  box-shadow: none;
+  border: 0;
+}
+
+@media (min-width: 576px) {
+  .footer .block-id,
+  .footer .heading-3,
+  .footer .headline-1 {
+    margin-bottom: var(--space-40);
+  }
+
+  .ft-wrap {
+    grid-template-columns: 1fr 2fr;
+  }
+
+  .ft-links {
+    grid-template-columns: 1fr 1fr;
+  }
 }

@@ -1,6 +1,103 @@
-/* Minimal focus helper for references carousel */
+.references .refs-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  align-items: center;
+}
+
+.references .refs-title {
+  text-align: center;
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-sm);
+  letter-spacing: var(--tracking-tight);
+  color: var(--colour-slate-800);
+}
+
+.references .refs-marquee {
+  flex: 2;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    white 4%,
+    white 96%,
+    transparent
+  );
+
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    white 4%,
+    white 96%,
+    transparent
+  );
+}
+
 .refs-marquee:focus-visible {
   outline: 3px solid #93c5fd;
   outline-offset: 2px;
 }
 
+.references .refs-track {
+  display: inline-flex;
+  will-change: transform;
+}
+
+.references .refs-marquee:hover .refs-track,
+.references .refs-marquee:focus-within .refs-track {
+  animation-play-state: paused;
+}
+
+.references .refs-row {
+  list-style: none;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-40);
+  flex-wrap: nowrap;
+
+  flex: 0 0 auto;
+  min-width: max-content;
+  padding-inline-end: var(--space-40);
+}
+
+/* Gap constant entre les deux rangées pour une jonction sans saut */
+.references .refs-row + .refs-row {
+  margin-left: 0;
+}
+
+.references .refs-logo {
+  flex: 0 0 auto;
+  filter: grayscale(1);
+  opacity: 0.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .references .refs-track {
+    animation: none !important;
+  }
+}
+
+@media (min-width: 576px) {
+  .references .container {
+    padding: var(--space-80) clamp(var(--space-24), 5.6vw, var(--space-80));
+  }
+
+  .references .refs-layout {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .references .refs-title {
+    flex: 1;
+    text-align: left;
+  }
+
+  .references .refs-marquee {
+    flex: 2;
+  }
+}

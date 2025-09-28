@@ -27,7 +27,7 @@ export function mountUIStack(
     scaleStep = 0.98,
     maxVisible = 3,
     swipeThreshold = 40,
-    desktopDefaultDirection = "left", // 'left' | 'up'
+    desktopDefaultDirection = "left", // 'left' | 'right' | 'up' | 'down'
   } = {}
 ) {
   const root =
@@ -172,8 +172,15 @@ export function mountUIStack(
       } else {
         // Desktop default: swipe left or up; Mobile: simple tap advances forward (left)
         if (lastPointerType === "mouse") {
-          if (desktopDefaultDirection === "up") cycle(-1, "y");
-          else cycle(-1, "x");
+          const dir = (desktopDefaultDirection || "left").toLowerCase();
+          const mapping = {
+            left: { sign: -1, axis: "x" },
+            right: { sign: 1, axis: "x" },
+            up: { sign: 1, axis: "y" },
+            down: { sign: -1, axis: "y" },
+          };
+          const { sign, axis } = mapping[dir] || mapping.left;
+          cycle(sign, axis);
         } else {
           cycle(-1, "x");
         }

@@ -27,6 +27,10 @@
     </symbol>
 
 <!-- Linear -->
+    <symbol id="icon-arrowTop-linear" viewBox="0 0 24 24">
+        <path d="M19.92 15.05L13.4 8.53001C12.63 7.76001 11.37 7.76001 10.6 8.53001L4.07996 15.05" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
     <symbol id="icon-arrowLeft-linear" viewBox="0 0 24 24">
         <path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z" stroke="currentColour" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M13.2602 15.5297L9.74023 11.9997L13.2602 8.46973" stroke="currentColour" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

@@ -135,7 +135,11 @@ export function mountCarousel(rootOrSelector, options = {}) {
     if (!cfg.autoplay.enabled) return;
     // Animate the track using CSS keyframes transform from 0 to -distance
     // Assume the content is duplicated back-to-back for seamless loop
-    const distance = Math.max(1, Math.floor(track.scrollWidth / 2));
+    const firstChild = track.firstElementChild;
+    const childWidth = firstChild
+      ? firstChild.getBoundingClientRect().width
+      : track.scrollWidth / 2;
+    const distance = Math.max(1, childWidth);
     // Preserve progress
     let offsetPx = 0;
     try {

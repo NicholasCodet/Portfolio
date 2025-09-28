@@ -1,28 +1,29 @@
 import "./footer.css";
-import footerHTML from "./footer.html?raw";
+import tplHTML from "./footer.html?raw";
 
 import socialsDataRaw from "../../data/socials.json";
+
 import { featuredCases } from "../../scripts/utils/cases.js";
 import { filterByIds } from "../../scripts/utils/socials.js";
 import { createSvgUse, inlineSpriteOnce } from "../../scripts/utils/svg.js";
-import { bindSafeLink } from "../../scripts/utils/urls.js";
 import { showToast } from "../../scripts/utils/toast.js";
+import { bindSafeLink } from "../../scripts/utils/urls.js";
 import { createUIButton } from "../ui-button/ui-button.js";
 
-let __footerTemplate;
-
+/*=== Get Template ===*/ /*Should I comp?*/
+let __tpl;
 function getTemplate() {
-  if (!__footerTemplate) {
-    const doc = new DOMParser().parseFromString(footerHTML, "text/html");
-    const tpl = doc.querySelector("template");
-    if (!tpl) throw new Error("footer: <template> missing");
-    __footerTemplate = tpl;
+  if (!__tpl) {
+    const doc = new DOMParser().parseFromString(tplHTML, "text/html");
+    const t = doc.querySelector("template");
+    if (!t) throw new Error("footer: <template> missing");
+    __tpl = t;
   }
-  return __footerTemplate;
+  return __tpl;
 }
 
-// createSvgUse imported from utils/svg.js
-function createSocialIconFromPaths(s, { size = 20, className = "icon" } = {}) {
+/*=== Set Social Icons ===*/ /*Should I comp?*/
+function createSocialIconFromPaths(s, { size = 24, className = "icon" } = {}) {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("width", String(size));
   svg.setAttribute("height", String(size));
@@ -41,10 +42,11 @@ function createSocialIconFromPaths(s, { size = 20, className = "icon" } = {}) {
   return svg;
 }
 
-export async function mountFooter(selector = "section.footer", opts = {}) {
-  const root = document.querySelector(selector);
-  if (!root) return () => {};
-  const container = root.querySelector(".container");
+/*=== Set Component ===*/
+export function mountFooter(selector = "section.footer", opts = {}) {
+  const section = document.querySelector(selector);
+  if (!section) return () => {};
+  const container = section.querySelector(".container");
   if (!container) return () => {};
 
   const {
@@ -60,33 +62,42 @@ export async function mountFooter(selector = "section.footer", opts = {}) {
   // Resolve asset/data URLs relative to this module
   const base = new URL(".", import.meta.url);
   const spriteUrl = new URL(spritePath, base).href;
+
   // Use statically imported data to avoid fetch failures in dev/build
   const socialsAll = Array.isArray(socialsDataRaw) ? socialsDataRaw : [];
 
-  // Ensure sprite available (works with both internal and external <use href>)
+  // Ensure sprite available
   inlineSpriteOnce(spriteUrl).catch(() => {});
 
   // Prepare actions container where we will inject UI buttons
   const actions = frag.querySelector(".actions");
   const yearP = frag.querySelector(".copyright");
 
+  const cleanupFns = [];
+
   if (actions) {
     // clear previous children if any
     actions.textContent = "";
-    // Email button (anchor)
-    const { element: emailBtn } = createUIButton({
+    const defaultCopyLabel = email;
+    const copiedLabel = "Email copied ✓";
+
+    // Email button
+    const { element: emailBtn, cleanup: cleanupEmailBtn } = createUIButton({
       label: "Email me",
       variant: "primary",
-      className: "email",
+      className: "email-link",
+      kind: "email",
       email,
       icon: "icon-mail-bold",
       iconPosition: "left",
     });
+    if (typeof cleanupEmailBtn === "function") cleanupFns.push(cleanupEmailBtn);
 
     // Copy email button
     const { element: copyButton, cleanup: cleanupCopy } = createUIButton({
-      label: email,
+      label: defaultCopyLabel,
       variant: "secondary",
+      className: "copy-email",
       icon: "icon-copy-linear",
       iconPosition: "right",
       borderless: true,
@@ -98,16 +109,18 @@ export async function mountFooter(selector = "section.footer", opts = {}) {
           ) {
             await navigator.clipboard.writeText(email);
           }
-          showToast("Email copied!");
+          showToast(copiedLabel);
         } catch {
-          showToast("Copied!");
+          showToast("Email Copied ✓");
         }
       },
     });
+
     actions.appendChild(emailBtn);
     actions.appendChild(copyButton);
+
     // Track cleanup for the copy listener
-    // We return cleanup later (see below)
+    if (typeof cleanupCopy === "function") cleanupFns.push(cleanupCopy);
   }
 
   if (yearP) {
@@ -125,7 +138,7 @@ export async function mountFooter(selector = "section.footer", opts = {}) {
       a.className = "link";
       bindSafeLink(a, p.href || "#");
       const icon = createSvgUse("icon-markerRight-bold", {
-        size: 20,
+        size: 24,
         className: "icon",
       });
       a.appendChild(icon);
@@ -149,7 +162,7 @@ export async function mountFooter(selector = "section.footer", opts = {}) {
       bindSafeLink(a, s.href || "#", { target: "_blank" });
       a.setAttribute("aria-label", s.ariaLabel || s.name || "Social link");
       const icon = createSocialIconFromPaths(s, {
-        size: 20,
+        size: 24,
         className: "icon",
       });
       a.appendChild(icon);
@@ -164,7 +177,13 @@ export async function mountFooter(selector = "section.footer", opts = {}) {
   container.appendChild(frag);
 
   return function cleanup() {
-    // buttons created via createUIButton return their own cleanup if needed
+    cleanupFns.forEach((fn) => {
+      try {
+        if (typeof fn === "function") fn();
+      } catch {
+        // Ignore cleanup errors
+      }
+    });
   };
 }
 

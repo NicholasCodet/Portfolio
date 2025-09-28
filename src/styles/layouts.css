@@ -1,5 +1,5 @@
 .section {
-  border-top: var(--size-1) solid var(--colour-slate-300);
+  border-top: var(--size-1) solid var(--colour-slate-200);
 }
 
 .section.footer {
@@ -12,9 +12,9 @@
   margin: 0 auto;
   padding: var(--space-64) clamp(var(--space-24), 5.6vw, var(--space-80));
 
-  background: linear-gradient(var(--colour-slate-300), var(--colour-slate-300))
+  background: linear-gradient(var(--colour-slate-200), var(--colour-slate-200))
       left var(--space-8) top / var(--size-1) 100% no-repeat,
-    linear-gradient(var(--colour-slate-300), var(--colour-slate-300)) right
+    linear-gradient(var(--colour-slate-200), var(--colour-slate-200)) right
       var(--space-8) top / var(--size-1) 100% no-repeat;
 }
 

@@ -1,6 +1,75 @@
-/* Minimal component-scoped tweaks; main styling is in src/styles/components/writings.css */
 .w-root a:focus-visible {
   outline: 3px solid #93c5fd;
   outline-offset: 2px;
 }
 
+.w-root .w-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.w-root a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.w-root .w-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  padding: var(--space-16) 0;
+  align-items: center;
+}
+
+.w-root .w-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.w-root .w-title {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (hover: hover) {
+  .w-root .w-card {
+    transition: opacity 160ms ease;
+  }
+
+  .w-root .w-list:has(.w-item > a:hover) .w-card {
+    opacity: 0.45;
+  }
+  .w-root .w-list .w-item > a:hover .w-card {
+    opacity: 1;
+  }
+
+  /* Keyboard focus support */
+  .w-root .w-list:has(.w-item > a:focus-within) .w-card {
+    opacity: 0.45;
+  }
+  .w-root .w-list .w-item > a:focus-within .w-card {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 576px) {
+  .w-root .w-card {
+    grid-template-columns: 1fr auto;
+  }
+
+  .w-root .w-right {
+    justify-self: end;
+  }
+
+  .w-root .w-title {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+}

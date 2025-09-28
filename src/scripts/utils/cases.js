@@ -1,18 +1,5 @@
 // Utils for loading and normalizing case study data from src/data/cases/*.json
-
-function normalizeThumbnailPath(path, baseUrl) {
-  if (!path) return "";
-  // Convert "/src/..." to a file URL relative to this module so Vite serves it
-  if (path.startsWith("/src/")) {
-    try {
-      const rel = "../../" + path.slice(5); // remove leading /src/
-      return new URL(rel, baseUrl).href;
-    } catch {
-      return path;
-    }
-  }
-  return path;
-}
+import { resolveAssetPath } from './assets.js';
 
 export function loadAllCases() {
   // Eagerly import all case JSON files
@@ -32,7 +19,8 @@ export function loadAllCases() {
       const date = card && typeof card.date === 'string' ? card.date : '';
       const dev = import.meta.env && import.meta.env.DEV;
       const href = `${dev ? "/src/pages" : "/cases"}/${slug}.html`;
-      const thumbnailUrl = normalizeThumbnailPath(thumbnail, baseUrl);
+      // Try to resolve to a fingerprinted asset URL when possible
+      const thumbnailUrl = resolveAssetPath(thumbnail, baseUrl) || thumbnail;
 
       list.push({ slug, title, description, thumbnail, thumbnailUrl, featured, priority, href, tags, date, raw: data });
     } catch {

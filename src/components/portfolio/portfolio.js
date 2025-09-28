@@ -1,11 +1,12 @@
+import "./portfolio.css";
+import tplHTML from "./portfolio.html?raw";
+
 import { featuredCases } from "../../scripts/utils/cases.js";
 import { fetchJSON } from "../../scripts/utils/fetch-json.js";
 import { inlineSpriteOnce } from "../../scripts/utils/svg.js";
-import { createUICaseCard as createCaseCard } from "../ui-case-card/ui-case-card.js";
-import { createUIButton } from "../ui-button/ui-button.js";
 import { bindSafeLink } from "../../scripts/utils/urls.js";
-import "./portfolio.css";
-import tplHTML from "./portfolio.html?raw";
+import { createUIButton } from "../ui-button/ui-button.js";
+import { createUICaseCard as createCaseCard } from "../ui-case-card/ui-case-card.js";
 
 let __tpl;
 function getTemplate() {
@@ -154,11 +155,27 @@ export async function mountCaseStudies({
       rail.style.overflowX = "hidden";
 
       const originals = Array.from(rail.children);
-      const originalWidth = rail.scrollWidth; // measure after attach
+      const { width: cycleDistance } = (() => {
+        if (!originals.length) return { width: 0, gap: 0 };
+        const style = getComputedStyle(rail);
+        const gap = parseFloat(style.columnGap || style.gap || "0") || 0;
+        const width = originals.reduce(
+          (acc, node) => acc + node.getBoundingClientRect().width,
+          0
+        );
+        const innerGap = gap * Math.max(0, originals.length - 1);
+        const wrapGap = originals.length ? gap : 0;
+        return { width: width + innerGap + wrapGap, gap };
+      })();
+      const loopDistance = Math.max(1, cycleDistance);
 
       (function ensureOverflow() {
         let guard = 0;
-        while (rail.scrollWidth < originalWidth * 2 && guard < 4) {
+        const minWidth = Math.max(
+          loopDistance * 2,
+          rail.clientWidth + loopDistance
+        );
+        while (rail.scrollWidth < minWidth && guard < 6) {
           originals.forEach((child) => rail.appendChild(child.cloneNode(true)));
           guard++;
         }
@@ -166,9 +183,14 @@ export async function mountCaseStudies({
 
       let rafId = 0;
       let lastTs = 0;
-      const baseSpeed = 50; // px/s
+      const baseSpeed = 30; // px/s
       let curSpeed = baseSpeed;
       let targetSpeed = baseSpeed;
+
+      const setSpeed = (value, immediate = false) => {
+        targetSpeed = value;
+        if (immediate) curSpeed = value;
+      };
 
       const tick = (ts) => {
         if (!lastTs) lastTs = ts;
@@ -178,32 +200,47 @@ export async function mountCaseStudies({
         curSpeed += (targetSpeed - curSpeed) * Math.min(1, dt * smoothing);
 
         let nx = rail.scrollLeft + curSpeed * dt;
-        if (originalWidth > 0 && nx >= originalWidth - 1) nx -= originalWidth;
+        if (loopDistance > 0) {
+          const distance = loopDistance;
+          while (nx >= distance) nx -= distance;
+          while (nx < 0) nx += distance;
+        }
         rail.scrollLeft = nx;
         rafId = requestAnimationFrame(tick);
       };
       rafId = requestAnimationFrame(tick);
 
-      const onEnter = () => { targetSpeed = 0; };
-      const onLeave = () => { targetSpeed = baseSpeed; };
+      const onEnter = () => {
+        setSpeed(0);
+      };
+      const onLeave = () => {
+        setSpeed(baseSpeed, true);
+      };
       rail.addEventListener("mouseenter", onEnter);
       rail.addEventListener("mouseleave", onLeave);
 
-      const onVis = () => { targetSpeed = document.hidden ? 0 : baseSpeed; };
+      const onVis = () => {
+        setSpeed(document.hidden ? 0 : baseSpeed, !document.hidden);
+      };
       document.addEventListener("visibilitychange", onVis);
 
       let io;
       try {
-        io = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            targetSpeed = entry.isIntersecting ? baseSpeed : 0;
-          });
-        }, { threshold: 0.1 });
+        io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              setSpeed(entry.isIntersecting ? baseSpeed : 0, entry.isIntersecting);
+            });
+          },
+          { threshold: 0.1 }
+        );
         io.observe(rail);
       } catch {}
 
       shotsCleanup = () => {
-        try { cancelAnimationFrame(rafId); } catch {}
+        try {
+          cancelAnimationFrame(rafId);
+        } catch {}
         rail.removeEventListener("mouseenter", onEnter);
         rail.removeEventListener("mouseleave", onLeave);
         document.removeEventListener("visibilitychange", onVis);
@@ -217,25 +254,35 @@ export async function mountCaseStudies({
   if (initShotsMarqueeFn) requestAnimationFrame(() => initShotsMarqueeFn());
 
   // Equalize .cs-desc heights based on tallest description
-  const getDescs = () => Array.from(layout.querySelectorAll('.cs-desc'));
+  const getDescs = () => Array.from(layout.querySelectorAll(".cs-desc"));
   const computeAndSetMaxDesc = () => {
     if (!layout) return;
-    layout.style.removeProperty('--cs-desc-h');
+    layout.style.removeProperty("--cs-desc-h");
     const descs = getDescs();
     if (!descs.length) return;
-    const max = descs.reduce((acc, el) => Math.max(acc, el.getBoundingClientRect().height), 0);
-    if (max > 0) layout.style.setProperty('--cs-desc-h', `${Math.ceil(max)}px`);
+    const max = descs.reduce(
+      (acc, el) => Math.max(acc, el.getBoundingClientRect().height),
+      0
+    );
+    if (max > 0) layout.style.setProperty("--cs-desc-h", `${Math.ceil(max)}px`);
   };
   const ro = new ResizeObserver(() => computeAndSetMaxDesc());
   getDescs().forEach((el) => ro.observe(el));
   const onResize = () => computeAndSetMaxDesc();
-  window.addEventListener('resize', onResize, { passive: true });
+  window.addEventListener("resize", onResize, { passive: true });
   requestAnimationFrame(computeAndSetMaxDesc);
 
   return () => {
-    try { ro.disconnect(); } catch {}
-    window.removeEventListener('resize', onResize);
-    if (shotsCleanup) { try { shotsCleanup(); } catch {} shotsCleanup = null; }
+    try {
+      ro.disconnect();
+    } catch {}
+    window.removeEventListener("resize", onResize);
+    if (shotsCleanup) {
+      try {
+        shotsCleanup();
+      } catch {}
+      shotsCleanup = null;
+    }
   };
 }
 

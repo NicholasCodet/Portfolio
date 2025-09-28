@@ -1,6 +1,98 @@
-/* Minimal component-scoped tweaks; main styles live in src/styles/components/testimonials.css */
+.testimonials .t-layout {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 85%;
+  gap: var(--space-24);
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-snap-type: x mandatory; /*snap content*/
+  padding: 0 clamp(var(--space-12), 3.765vw, var(--space-24));
+  scroll-padding-left: var(--space-24);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  margin-inline: auto;
+}
+
 .t-layout:focus-visible {
   outline: 3px solid #93c5fd;
   outline-offset: 2px;
 }
 
+.testimonials .t-layout::-webkit-scrollbar {
+  display: none;
+}
+
+.testimonials .t-layout .t-item {
+  scroll-snap-align: start;
+}
+
+.t-figure {
+  display: grid;
+  justify-items: left;
+  gap: var(--space-24);
+}
+
+.t-quote {
+  height: var(--t-quote-h, auto);
+}
+
+.t-author {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.t-avatar {
+  width: var(--size-44);
+  height: var(--size-44);
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.t-meta {
+  display: grid;
+}
+
+.t-meta .name {
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-md);
+  color: var(--colour-slate-800);
+}
+
+.t-meta .role {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-md);
+  color: var(--colour-slate-600);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonials .t-layout {
+    scroll-behavior: auto;
+  }
+}
+
+@media (min-width: 576px) {
+  .testimonials .t-layout {
+    grid-auto-columns: 45%;
+  }
+}
+
+@media (min-width: 960px) {
+  .testimonials .t-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-80) var(--space-24);
+    justify-content: center;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .testimonials .t-layout .t-item {
+    flex: 0 0 calc((100% - (2 * var(--space-24))) / 3);
+  }
+}

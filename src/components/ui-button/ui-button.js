@@ -1,23 +1,22 @@
 import "./ui-button.css";
-import buttonHTML from "./ui-button.html?raw";
+import tplHTML from "./ui-button.html?raw";
 
 import { createSvgUse } from "../../scripts/utils/svg.js";
 import { bindSafeLink } from "../../scripts/utils/urls.js";
 
-let __buttonTemplate;
-
+/*=== Get Template ===*/ /*Should I comp?*/
+let __tpl;
 function getTemplate() {
-  if (!__buttonTemplate) {
-    const doc = new DOMParser().parseFromString(buttonHTML, "text/html");
-    const tpl = doc.querySelector("template");
-    if (!tpl) throw new Error("ui-button: <template> missing");
-    __buttonTemplate = tpl;
+  if (!__tpl) {
+    const doc = new DOMParser().parseFromString(tplHTML, "text/html");
+    const t = doc.querySelector("template");
+    if (!t) throw new Error("ui-button: <template> missing");
+    __tpl = t;
   }
-  return __buttonTemplate;
+  return __tpl;
 }
 
 // createSvgUse now imported from utils/svg.js
-
 export function createUIButton({
   label,
   variant = "primary", // 'primary' | 'secondary'
@@ -28,16 +27,16 @@ export function createUIButton({
   icon,
   iconPosition = "left", // 'left' | 'right'
   disabled = false,
-  borderless = false,
-  size = "md", // 'md' | 'sm' | 'lg' (future)
+  size = "md", // 'md' | 'sm' | 'lg'
   clickSound = true,
   pressFeedback = true,
+
   // Convenience semantics
-  kind, // e.g. 'email'
+  kind,
   email, // used when kind==='email' or extra class indicates email
   className, // extra classes to add (space-separated)
   attrs = {},
-  type = "button", // for <button>
+  type = "button", // for <button> | <a>
 } = {}) {
   const tpl = getTemplate();
   const frag = tpl.content.cloneNode(true);
@@ -71,7 +70,6 @@ export function createUIButton({
   // and add size modifier for future-specific styles.
   el.className = `btn-md btn-${variant}`;
   if (size && size !== "md") el.classList.add(`btn-${size}`);
-  if (borderless) el.classList.add("is-borderless");
   if (extraClass) {
     for (const c of extraClass.split(/\s+/).filter(Boolean))
       el.classList.add(c);

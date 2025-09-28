@@ -1,5 +1,5 @@
-import tplHTML from "./kpi.html?raw";
 import "./kpi.css";
+import tplHTML from "./kpi.html?raw";
 
 let __tpl;
 function getTemplate() {
@@ -12,7 +12,10 @@ function getTemplate() {
   return __tpl;
 }
 
-export function mountKPI(selector = "section.kpi", { items, duration = 1200, threshold = 0.25 } = {}) {
+export function mountKPI(
+  selector = "section.kpi",
+  { items, duration = 1200, threshold = 0.25 } = {}
+) {
   const section = document.querySelector(selector);
   if (!section) return () => {};
   const container = section.querySelector(".container");
@@ -53,7 +56,7 @@ export function mountKPI(selector = "section.kpi", { items, duration = 1200, thr
 
   const animateValue = (el) => {
     if (el.dataset.animated === "1") return;
-    const targetStr = el.dataset.target || (el.textContent || "0");
+    const targetStr = el.dataset.target || el.textContent || "0";
     const suffix = el.dataset.suffix || "";
     const end = parseFloat(targetStr) || 0;
     const decimals = (targetStr.split(".")[1] || "").length;
@@ -66,7 +69,7 @@ export function mountKPI(selector = "section.kpi", { items, duration = 1200, thr
     const tick = (now) => {
       const t = Math.min(1, (now - startTime) / d);
       const eased = easeOutCubic(t);
-      const val = (end) * eased;
+      const val = end * eased;
       el.textContent = `${val.toFixed(decimals)}${suffix}`;
       if (t < 1) requestAnimationFrame(tick);
       else el.textContent = `${end.toFixed(decimals)}${suffix}`;
@@ -74,15 +77,18 @@ export function mountKPI(selector = "section.kpi", { items, duration = 1200, thr
     requestAnimationFrame(tick);
   };
 
-  const io = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
-        values.forEach(animateValue);
-        io.disconnect();
-        break;
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          values.forEach(animateValue);
+          io.disconnect();
+          break;
+        }
       }
-    }
-  }, { threshold: threshold });
+    },
+    { threshold: threshold }
+  );
 
   io.observe(container);
 
