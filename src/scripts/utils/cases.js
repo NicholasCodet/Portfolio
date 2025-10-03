@@ -17,7 +17,7 @@ export function loadAllCases() {
       const priority = Number.isFinite(Number(card && card.priority)) ? Number(card.priority) : (Number.isFinite(Number(data && data.priority)) ? Number(data.priority) : 0);
       const tags = Array.isArray(card && card.tags) ? card.tags.map(String) : [];
       const date = card && typeof card.date === 'string' ? card.date : '';
-      const dev = import.meta.env && import.meta.env.DEV;
+      const dev = Boolean(import.meta.env && import.meta.env.DEV);
       const href = dev ? `/${slug}.html` : `./${slug}.html`;
       // Try to resolve to a fingerprinted asset URL when possible
       const thumbnailUrl = resolveAssetPath(thumbnail, baseUrl) || thumbnail;

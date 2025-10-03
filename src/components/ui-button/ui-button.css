@@ -83,6 +83,16 @@
   transition: transform 34ms;
 }
 
+.btn-md.is-pressed .front {
+  transform: translateY(-2px);
+  transition: transform 80ms cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
+.btn-md.is-pressed .shadow {
+  transform: translateY(1px);
+  transition: transform 80ms cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
 .btn-primary .edge {
   background: linear-gradient(
     to left,
@@ -154,23 +164,12 @@
 
   .btn-primary:active .front,
   .btn-secondary:active .front {
-    transform: translateY(-4px);
-    transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+    transform: translateY(-2px);
+    transition: transform 80ms cubic-bezier(0.3, 0.7, 0.4, 1);
   }
 
   .btn-primary:active .shadow,
   .btn-secondary:active .shadow {
-    transform: translateY(2px);
-    transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
-  }
-
-  .btn-primary.is-pressed .front,
-  .btn-secondary.is-pressed .front {
-    transform: translateY(-2px);
-    transition: transform 80ms cubic-bezier(0.3, 0.7, 0.4, 1);
-  }
-  .btn-primary.is-pressed .shadow,
-  .btn-secondary.is-pressed .shadow {
     transform: translateY(1px);
     transition: transform 80ms cubic-bezier(0.3, 0.7, 0.4, 1);
   }

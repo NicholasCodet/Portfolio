@@ -12,46 +12,116 @@ function ensureIOSActive() {
     );
     iosActivePatched = true;
   } catch {
-    // ignore
+    // ignore errors from older browsers
   }
 }
 
 export function initPressFeedback({
-  // Match present/future button classes
   selector = ".btn, .btn-md, .btn-primary, .btn-secondary",
 } = {}) {
   ensureIOSActive();
 
   const pressOn = (el) => el.classList.add("is-pressed");
   const pressOff = (el) => el.classList.remove("is-pressed");
-  const getBtn = (t) => {
-    const el = t instanceof Element ? t.closest(selector) : null;
+  const getBtn = (target) => {
+    if (!(target instanceof Element)) return null;
+    const el = target.closest(selector);
     if (!el) return null;
     if (el.dataset && el.dataset.noPressFeedback === "true") return null;
     return el;
   };
 
-  const onDown = (e) => {
-    const btn = getBtn(e.target);
-    if (btn) pressOn(btn);
+  const downByPointer = new Map();
+  const downByKey = new Set();
+
+  const markPressed = (btn, key) => {
+    if (!btn) return;
+    pressOn(btn);
+    if (key) {
+      downByKey.add(btn);
+    }
   };
-  const onUp = (e) => {
-    const btn = getBtn(e.target);
+
+  const releasePressed = (btn) => {
+    if (!btn) return;
+    pressOff(btn);
+    downByKey.delete(btn);
+  };
+
+  const onPointerDown = (event) => {
+    const btn = getBtn(event.target);
+    if (!btn) return;
+    const id = event.pointerId ?? "mouse";
+    downByPointer.set(id, btn);
+    pressOn(btn);
+  };
+
+  const onPointerUp = (event) => {
+    const id = event.pointerId ?? "mouse";
+    const btn = downByPointer.get(id) || getBtn(event.target);
     if (btn) pressOff(btn);
+    downByPointer.delete(id);
   };
-  const onCancel = onUp;
-  const onLeave = onUp;
 
-  document.addEventListener("pointerdown", onDown, { passive: true });
-  document.addEventListener("pointerup", onUp, { passive: true });
-  document.addEventListener("pointercancel", onCancel, { passive: true });
-  document.addEventListener("pointerleave", onLeave, { passive: true });
+  const onPointerCancel = (event) => {
+    const id = event.pointerId ?? "mouse";
+    const btn = downByPointer.get(id);
+    if (btn) pressOff(btn);
+    downByPointer.delete(id);
+  };
 
-  // Return cleanup to remove listeners if needed later
+  const onKeyDown = (event) => {
+    if (event.key !== " " && event.key !== "Enter") return;
+    const btn = getBtn(event.target);
+    if (!btn || downByKey.has(btn)) return;
+    markPressed(btn, true);
+  };
+
+  const onKeyUp = (event) => {
+    if (event.key !== " " && event.key !== "Enter") return;
+    const btn = getBtn(event.target);
+    releasePressed(btn);
+  };
+
+  const flushAll = () => {
+    downByPointer.forEach((btn) => pressOff(btn));
+    downByPointer.clear();
+    downByKey.forEach((btn) => pressOff(btn));
+    downByKey.clear();
+  };
+
+  const onWindowBlur = () => flushAll();
+  const onElementBlur = (event) => {
+    const btn = getBtn(event.target);
+    if (btn) releasePressed(btn);
+  };
+
+  document.addEventListener("pointerdown", onPointerDown, {
+    passive: true,
+    capture: true,
+  });
+  document.addEventListener("pointerup", onPointerUp, {
+    passive: true,
+    capture: true,
+  });
+  document.addEventListener("pointercancel", onPointerCancel, {
+    passive: true,
+    capture: true,
+  });
+
+  document.addEventListener("keydown", onKeyDown, true);
+  document.addEventListener("keyup", onKeyUp, true);
+  document.addEventListener("blur", onElementBlur, true);
+  window.addEventListener("blur", onWindowBlur);
+
   return () => {
-    document.removeEventListener("pointerdown", onDown);
-    document.removeEventListener("pointerup", onUp);
-    document.removeEventListener("pointercancel", onCancel);
-    document.removeEventListener("pointerleave", onLeave);
+    document.removeEventListener("pointerdown", onPointerDown, true);
+    document.removeEventListener("pointerup", onPointerUp, true);
+    document.removeEventListener("pointercancel", onPointerCancel, true);
+    document.removeEventListener("keydown", onKeyDown, true);
+    document.removeEventListener("keyup", onKeyUp, true);
+    document.removeEventListener("blur", onElementBlur, true);
+    window.removeEventListener("blur", onWindowBlur);
+    flushAll();
   };
 }

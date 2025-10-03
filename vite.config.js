@@ -3,9 +3,9 @@ import { defineConfig } from "vite";
 
 const rootDir = resolve(__dirname, "src/pages");
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   root: rootDir,
-  base: "./",
+  base: command === "build" ? "./" : "/",
   publicDir: resolve(__dirname, "public"),
   build: {
     outDir: resolve(__dirname, "dist"),
@@ -27,4 +27,4 @@ export default defineConfig({
     open: "/index.html",
     strictPort: true,
   },
-});
+}));
