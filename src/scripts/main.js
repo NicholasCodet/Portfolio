@@ -1,10 +1,15 @@
-import { onReady } from './utils/ready.js';
-import { mountUIFab } from '../components/ui-fab/ui-fab.js';
+import { onReady } from "./utils/ready.js";
+import { mountUIFab } from "../components/ui-fab/ui-fab.js";
+
+const styleModules = import.meta.glob("../styles/*.css");
+const scriptModules = import.meta.glob("./*.js");
 
 const page = document.body.dataset.page;
 if (page) {
-  import(`../styles/${page}.css`);
-  import(`../scripts/${page}.js`);
+  const styleImport = styleModules[`../styles/${page}.css`];
+  const scriptImport = scriptModules[`./${page}.js`];
+  styleImport?.();
+  scriptImport?.();
 }
 
 onReady(() => {
