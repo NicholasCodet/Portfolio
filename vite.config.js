@@ -5,6 +5,7 @@ const rootDir = resolve(__dirname, "src/pages");
 
 export default defineConfig({
   root: rootDir,
+  base: "./",
   publicDir: resolve(__dirname, "public"),
   build: {
     outDir: resolve(__dirname, "dist"),
