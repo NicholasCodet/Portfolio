@@ -27,6 +27,14 @@ export function sanitizeHref(raw, { allowRelative = true } = {}) {
     return value;
   }
 
+  if (
+    allowRelative &&
+    !value.startsWith('//') &&
+    !/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(value)
+  ) {
+    return `/${value.replace(/^\/+/, '')}`;
+  }
+
   try {
     const url = new URL(value, getBaseOrigin());
     if (ALLOWED_PROTOCOLS.has(url.protocol)) {

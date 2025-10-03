@@ -1,13 +1,77 @@
 {
   "card": {
-    "thumbnail": "/src/assets/images/profile/B.png",
-    "title": "Kaelis The Crypto Ring",
+    "thumbnail": "../../assets/images/cs-kaelis/kaelis-thumbnail.webp",
+    "title": "Kælis The Crypto Ring",
     "description": "Screenless wearable enabling secure, offline crypto payments through gestures.",
     "date": "",
     "tag": [""],
     "featured": true,
     "priority": 4
   },
-  "case": {},
+  "case": {
+    "title": "A Tap Away from Freedom: The Design Behind Kælis",
+    "summary": "Traditional crypto wallets rely on screens, seed phrases, and connectivity—making them slow, stressful, and impractical in high-risk environments. Kælis reimagined this experience as a discreet wearable ring that enables secure, offline payments and decentralised identity through simple gestures. I led the end-to-end design, from research to prototyping, building a proof-of-concept that blends security with usability. The result: a screenless, ambient interaction model where users complete payments and recover wallets faster, with less cognitive strain.",
+    "meta": [
+      { "label": "Role", "value": "Project Owner" },
+      { "label": "Duration", "value": "34 Weeks" },
+      { "label": "Domain", "value": "Web3 + IoT" }
+    ],
+
+    "context": {
+      "title": "Context",
+      "text": "Kælis was developed as an independent initiative exploring the intersection of Web3 and IoT wearables. The project targeted urban, privacy-conscious users and individuals operating in high-risk or low-connectivity environments.The objective was to validate whether cold-wallet-grade security could be achieved in a form factor as discreet and intuitive as a ring."
+    },
+
+    "problems": {
+      "title": "Problems",
+      "text": "Existing crypto wallets are cumbersome: they demand technical fluency, constant network access, and reliance on seed phrases. Users reported frustration with complexity and anxiety over coercion or loss of access. The challenge was to design a product that felt as effortless as tapping a metro card, while meeting strict privacy and security standards."
+    },
+
+    "approach": {
+      "title": "Approach",
+      "text": "I conducted 15 in-depth interviews across three user archetypes to map trust triggers, mental models, and threat scenarios. From this, I modelled the ring's behaviour as a finite-state machine, mapping gestures (tap, triple-tap, sequences) to system states. I prototyped with Arduino rigs, capacitive sensors, and 3D-printed rings to test gesture reliability, latency, and haptic feedback. I also designed a companion app for setup and recovery, abstracting blockchain complexity into clear, fiat-like flows."
+    },
+
+    "solution": {
+      "title": "Solution",
+      "text": "Kælis delivered a gesture-driven wearable and a minimal companion app that together enabled offline payments, seedless recovery, and coercion resistance. The ring used a Secure Element to sign transactions locally, while gestures triggered states like Ghost Mode or Wipe. The app supported initial setup, backup to a trusted device, and transparent state reflection—without ever exposing seed phrases or raw keys. This combination balanced security, usability, and resilience, showing that crypto tools can be both human-centred and tamper-resistant."
+    },
+
+    "media": {
+      "title": "",
+      "items": [
+        {
+          "src": "",
+          "alt": "",
+          "caption": ""
+        },
+        {
+          "src": "",
+          "alt": "",
+          "caption": ""
+        },
+        {
+          "src": "",
+          "alt": "",
+          "caption": ""
+        }
+      ]
+    },
+
+    "impact": {
+      "title": "Result",
+      "text": "",
+      "kpi": {
+        "items": [
+          { "number": "63%", "text": "reduction in cognitive load" },
+          {
+            "number": "45%",
+            "text": "faster task completion compared to standard wallets"
+          },
+          { "number": "100%", "text": "flow success rate" }
+        ]
+      }
+    }
+  },
   "full-case": {}
 }

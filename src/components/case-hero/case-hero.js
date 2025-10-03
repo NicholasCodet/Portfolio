@@ -1,6 +1,8 @@
-import { inlineSpriteOnce } from "../../scripts/utils/svg.js";
 import "./case-hero.css";
 import tplHTML from "./case-hero.html?raw";
+
+import { createSvgUse, inlineSpriteOnce } from "../../scripts/utils/svg.js";
+import { bindSafeLink } from "../../scripts/utils/urls.js";
 
 let __tpl;
 function getTemplate() {
@@ -25,18 +27,37 @@ export async function mountCaseHero({
 
   const tpl = getTemplate();
   const frag = tpl.content.cloneNode(true);
+  const rootEl = frag.querySelector(".case-hero-root");
   const titleEl = frag.querySelector(".case-title");
   const sumEl = frag.querySelector(".summary");
   const metaEl = frag.querySelector(".case-meta");
-  const backIconUse = frag.querySelector(".back-icon");
 
   // Inline sprite for back icon
   try {
     const spriteUrl = new URL(spritePath, import.meta.url).href;
     await inlineSpriteOnce(spriteUrl);
-    if (backIconUse)
-      backIconUse.setAttribute("href", `${spriteUrl}#icon-arrowLeft-linear`);
   } catch {}
+
+  const base = (import.meta.env && import.meta.env.BASE_URL) || "/";
+  const trimmedBase = base.endsWith("/") ? base.slice(0, -1) : base;
+  const homeHref = `${trimmedBase}/src/pages/index.html`;
+
+  if (rootEl) {
+    const backLink = document.createElement("a");
+    backLink.className = "link back";
+    backLink.setAttribute("aria-label", "Back home");
+    bindSafeLink(backLink, homeHref);
+
+    const icon = createSvgUse("icon-arrowLeft-linear", {
+      size: 24,
+      className: "icon linear",
+    });
+    const label = document.createElement("span");
+    label.textContent = "Back home";
+
+    backLink.append(icon, label);
+    rootEl.insertBefore(backLink, rootEl.firstChild);
+  }
 
   const title = String(
     data["case-title"] || data.title || "Untitled case study"
@@ -59,7 +80,7 @@ export async function mountCaseHero({
       const item = document.createElement("div");
       item.className = "case-meta-item";
       const lab = document.createElement("p");
-      lab.className = "text-sm sub-heading-2";
+      lab.className = "sub-heading-2";
       lab.textContent = String((m && m.label) || "-");
       const val = document.createElement("p");
       val.className = "text-md";
@@ -72,27 +93,10 @@ export async function mountCaseHero({
     metaEl.remove();
   }
 
-  // Back link: always go to home page to avoid back-looping
-  const back = frag.querySelector(".back");
-  let onBackClick = null;
-  if (back) {
-    onBackClick = (e) => {
-      e.preventDefault();
-      const base = (import.meta.env && import.meta.env.BASE_URL) || "/";
-      const home =
-        (base.endsWith("/") ? base.slice(0, -1) : base) +
-        "/src/pages/index.html";
-      window.location.assign(home);
-    };
-    back.addEventListener("click", onBackClick);
-  }
-
   container.textContent = "";
   container.appendChild(frag);
 
-  return () => {
-    if (back && onBackClick) back.removeEventListener("click", onBackClick);
-  };
+  return () => {};
 }
 
 if (typeof window !== "undefined") {

@@ -23,7 +23,7 @@ export function mountUIStack(
   rootOrSelector,
   {
     images = [],
-    rotations = [0, -2, 5],
+    rotations = [-2, -4, 3],
     scaleStep = 0.98,
     maxVisible = 3,
     swipeThreshold = 40,

@@ -3,22 +3,47 @@
 let __spriteInlined = false;
 
 export async function inlineSpriteOnce(url, { rootId = "__sprite_inline" } = {}) {
+  if (typeof window === "undefined" || typeof document === "undefined") return;
   if (__spriteInlined || document.getElementById(rootId)) return;
+
+  let resolvedHref;
   try {
-    const res = await fetch(url);
+    resolvedHref = new URL(url, window.location?.href || document.baseURI || "");
+  } catch {
+    return;
+  }
+
+  if (resolvedHref.origin !== window.location.origin) {
+    console.warn("[inlineSpriteOnce] blocked cross-origin sprite", resolvedHref.href);
+    return;
+  }
+
+  try {
+    const res = await fetch(resolvedHref.href);
     if (!res.ok) return;
+    const contentType = res.headers.get("content-type") || "";
+    if (contentType && !/image\/svg\+xml/i.test(contentType)) return;
+
     const text = await res.text();
-    const div = document.createElement("div");
-    div.innerHTML = text.trim();
-    const svg = div.querySelector("svg");
+    if (!text.trim()) return;
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, "image/svg+xml");
+    const svg = doc.querySelector("svg");
     if (!svg) return;
-    svg.id = rootId;
-    svg.setAttribute("aria-hidden", "true");
-    svg.style.position = "absolute";
-    svg.style.width = "0";
-    svg.style.height = "0";
-    svg.style.overflow = "hidden";
-    document.body.prepend(svg);
+    if (doc.querySelector("script")) {
+      console.warn("[inlineSpriteOnce] rejected sprite containing script tags");
+      return;
+    }
+
+    const imported = document.importNode(svg, true);
+    imported.id = rootId;
+    imported.setAttribute("aria-hidden", "true");
+    imported.style.position = "absolute";
+    imported.style.width = "0";
+    imported.style.height = "0";
+    imported.style.overflow = "hidden";
+    document.body.prepend(imported);
     __spriteInlined = true;
   } catch {
     // ignore fetch/inject errors

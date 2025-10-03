@@ -1,16 +1,17 @@
 {
   "card": {
-    "title": "Best Part Yet to Come",
-    "published": "2025-07-28T08:00:00.000Z",
-    "minutes": 2,
-    "url": "https://medium.com/@your-handle/best-part-yet-xxxx",
-    "tags": ["Personal"],
-    "featured": true,
-    "priority": 1
+    "title": "Designing with AI: How to Work Smarter Without Losing Your Edge",
+    "published": "2025-09-29T18:00:00.000Z",
+    "minutes": 4,
+    "url": "https://medium.com/p/2da095ee3226",
+    "tags": [
+      "Artificial Intelligence",
+      "AI Tools",
+      "Design",
+      "Design Thinking",
+      "Product Design"
+    ],
+    "featured": true
   },
-  "article": {
-    "title": "Best Part Yet to Come",
-    "summary": "",
-    "sections": []
-  }
+  "article": {}
 }

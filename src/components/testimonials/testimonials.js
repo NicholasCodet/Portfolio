@@ -20,7 +20,7 @@ const baseUrl = import.meta.url;
 
 export function mountTestimonials({
   selector = "section.testimonials",
-  limit = 6,
+  limit = 3,
 } = {}) {
   const section = document.querySelector(selector);
   if (!section) return () => {};

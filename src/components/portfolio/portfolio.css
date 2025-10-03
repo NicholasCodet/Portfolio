@@ -5,7 +5,7 @@
 
 .cs-root .cs-layout {
   display: grid;
-  gap: var(--space-80);
+  gap: var(--space-40);
   margin-bottom: var(--space-80);
 }
 
@@ -20,17 +20,17 @@
 }
 
 .explore-rail {
-  display: flex;
-  gap: var(--space-24);
-  overflow-x: auto;
-  overflow-y: visible;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  position: relative;
+  overflow: hidden;
 }
 
-.explore-rail::-webkit-scrollbar {
-  display: none;
+.explore-track {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-24);
+  width: max-content;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
 }
 
 .explore-card {

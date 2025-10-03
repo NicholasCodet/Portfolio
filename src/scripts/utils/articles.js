@@ -31,9 +31,6 @@ export function loadAllArticles() {
         externalUrl ||
         `${dev ? "/src/pages/articles" : "/articles"}/${slug}.html`;
       const featured = Boolean(card && card.featured);
-      const priority = Number.isFinite(Number(card && card.priority))
-        ? Number(card.priority)
-        : 0;
 
       list.push({
         slug,
@@ -45,7 +42,6 @@ export function loadAllArticles() {
         href,
         externalUrl,
         featured,
-        priority,
         raw: data,
       });
     } catch {
@@ -73,9 +69,6 @@ export function featuredArticles(limit = 3) {
   let items = all.filter((a) => a && a.featured === true);
   if (items.length === 0) items = all; // fallback if none marked featured
   items.sort((a, b) => {
-    const pa = Number.isFinite(a.priority) ? a.priority : 0;
-    const pb = Number.isFinite(b.priority) ? b.priority : 0;
-    if (pb !== pa) return pb - pa; // priority desc
     const da = a.published ? Date.parse(a.published) : 0;
     const db = b.published ? Date.parse(b.published) : 0;
     if (db !== da) return db - da; // newest first

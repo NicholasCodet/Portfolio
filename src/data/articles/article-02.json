@@ -1,16 +1,17 @@
 {
   "card": {
-    "title": "On Figma's IPO Day, A Personal Thank You",
-    "published": "2025-07-22T08:00:00.000Z",
+    "title": "Why Spatial Computing Will Change The Way We Design Digital Products",
+    "published": "2025-03-17T08:00:00.000Z",
     "minutes": 4,
-    "url": "https://medium.com/@your-handle/figma-ipo-thanks-xxxx",
-    "tags": ["Design"],
-    "featured": true,
-    "priority": 2
+    "url": "https://medium.com/antaeus-ar/why-spatial-computing-will-change-the-way-we-design-digital-products-1398700e9a5b",
+    "tags": [
+      "Augmented Reality",
+      "Virtual Reality",
+      "Spatial Computing",
+      "Design",
+      "Immersive"
+    ],
+    "featured": true
   },
-  "article": {
-    "title": "On Figma's IPO Day, A Personal Thank You",
-    "summary": "",
-    "sections": []
-  }
+  "article": {}
 }

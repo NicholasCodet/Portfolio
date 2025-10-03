@@ -19,23 +19,22 @@ function getTemplate() {
   return __tpl;
 }
 
-async function fetchDribbbleShots({ token, perPage = 10 } = {}) {
-  if (!token) return null;
-  const url = `https://api.dribbble.com/v2/user/shots?per_page=${perPage}`;
+const MODULE_ORIGIN = (() => {
   try {
-    const res = await fetch(url, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    if (!Array.isArray(data)) return [];
-    return data.map((s) => ({
-      url: s.html_url || "#",
-      image:
-        (s.images && (s.images.hidpi || s.images.two_x || s.images.normal)) ||
-        "",
-      title: s.title || "Dribbble Shot",
-    }));
+    return new URL(import.meta.url).origin;
+  } catch {
+    return null;
+  }
+})();
+
+function resolveLocalShotsUrl(path) {
+  try {
+    const resolved = new URL(path, import.meta.url);
+    if (MODULE_ORIGIN && resolved.origin !== MODULE_ORIGIN) {
+      console.warn("[mountCaseStudies] blocked cross-origin shots url", resolved.href);
+      return null;
+    }
+    return resolved.href;
   } catch {
     return null;
   }
@@ -46,8 +45,6 @@ export async function mountCaseStudies({
   spritePath = "../../assets/icons/sprite.svg",
   caseLimit = 4,
   dribbbleProfile = "nicholascodet",
-  dribbbleToken = (import.meta.env && import.meta.env.VITE_DRIBBBLE_TOKEN) ||
-    "",
   shotsPath = "../../data/shots.json",
   shotsLimit = 10,
 } = {}) {
@@ -92,15 +89,11 @@ export async function mountCaseStudies({
     rel: "noopener",
   });
 
-  // Shots: try Dribbble API, else fallback to local JSON
-  let shots =
-    (await fetchDribbbleShots({ token: dribbbleToken, perPage: shotsLimit })) ||
-    [];
-  if (!shots.length) {
-    const fbUrl = new URL(shotsPath, import.meta.url).href;
+  let shots = [];
+  const fbUrl = resolveLocalShotsUrl(shotsPath);
+  if (fbUrl) {
     shots = (await fetchJSON(fbUrl)) || [];
     if (!Array.isArray(shots)) shots = [];
-    // Show newest-last entries first: take last N then reverse
     shots =
       shotsLimit > 0
         ? shots.slice(-shotsLimit).reverse()
@@ -112,6 +105,10 @@ export async function mountCaseStudies({
   } else {
     // Render shots
     rail.innerHTML = "";
+    const track = document.createElement("div");
+    track.className = "explore-track";
+    rail.appendChild(track);
+
     for (const s of shots) {
       const a = document.createElement("a");
       a.className = "explore-card";
@@ -131,7 +128,7 @@ export async function mountCaseStudies({
         ph.setAttribute("aria-hidden", "true");
         a.appendChild(ph);
       }
-      rail.appendChild(a);
+      track.appendChild(a);
     }
 
     // Position CTA: top for desktop, bottom for mobile
@@ -150,42 +147,48 @@ export async function mountCaseStudies({
 
     // Prepare marquee init to run after fragment is attached to DOM
     initShotsMarqueeFn = () => {
-      // Continuous marquee with smooth hover slowdown
-      rail.style.scrollSnapType = "none";
-      rail.style.overflowX = "hidden";
+      const originals = Array.from(track.children);
+      if (!originals.length) return;
 
-      const originals = Array.from(rail.children);
-      const { width: cycleDistance } = (() => {
-        if (!originals.length) return { width: 0, gap: 0 };
-        const style = getComputedStyle(rail);
-        const gap = parseFloat(style.columnGap || style.gap || "0") || 0;
+      const style = getComputedStyle(track);
+      const gap = parseFloat(style.gap || "0") || 0;
+      const cycleDistance = (() => {
         const width = originals.reduce(
           (acc, node) => acc + node.getBoundingClientRect().width,
           0
         );
-        const innerGap = gap * Math.max(0, originals.length - 1);
-        const wrapGap = originals.length ? gap : 0;
-        return { width: width + innerGap + wrapGap, gap };
+        return width + gap * originals.length;
       })();
-      const loopDistance = Math.max(1, cycleDistance);
+
+      if (cycleDistance <= 0) return;
 
       (function ensureOverflow() {
         let guard = 0;
         const minWidth = Math.max(
-          loopDistance * 2,
-          rail.clientWidth + loopDistance
+          cycleDistance * 2,
+          rail.clientWidth + cycleDistance
         );
-        while (rail.scrollWidth < minWidth && guard < 6) {
-          originals.forEach((child) => rail.appendChild(child.cloneNode(true)));
+        while (track.scrollWidth < minWidth && guard < 6) {
+          originals.forEach((child) => {
+            const clone = child.cloneNode(true);
+            clone.setAttribute("aria-hidden", "true");
+            clone.setAttribute("tabindex", "-1");
+            clone.querySelectorAll("img").forEach((img) => {
+              img.setAttribute("loading", "eager");
+              img.setAttribute("decoding", "sync");
+            });
+            track.appendChild(clone);
+          });
           guard++;
         }
       })();
 
-      let rafId = 0;
-      let lastTs = 0;
       const baseSpeed = 30; // px/s
       let curSpeed = baseSpeed;
       let targetSpeed = baseSpeed;
+      let offset = 0;
+      let rafId = 0;
+      let lastTs = 0;
 
       const setSpeed = (value, immediate = false) => {
         targetSpeed = value;
@@ -196,32 +199,40 @@ export async function mountCaseStudies({
         if (!lastTs) lastTs = ts;
         const dt = Math.max(0, (ts - lastTs) / 1000);
         lastTs = ts;
-        const smoothing = 4; // per-second approach rate
+        const smoothing = 4;
         curSpeed += (targetSpeed - curSpeed) * Math.min(1, dt * smoothing);
-
-        let nx = rail.scrollLeft + curSpeed * dt;
-        if (loopDistance > 0) {
-          const distance = loopDistance;
-          while (nx >= distance) nx -= distance;
-          while (nx < 0) nx += distance;
+        offset += curSpeed * dt;
+        if (cycleDistance > 0) {
+          while (offset >= cycleDistance) offset -= cycleDistance;
+          while (offset < 0) offset += cycleDistance;
         }
-        rail.scrollLeft = nx;
+        track.style.transform = `translate3d(${-offset}px, 0, 0)`;
         rafId = requestAnimationFrame(tick);
       };
       rafId = requestAnimationFrame(tick);
 
+      let isHovering = false;
+      let isIntersecting = true;
+
+      const updateState = ({ immediate = false } = {}) => {
+        const shouldRun = !document.hidden && isIntersecting && !isHovering;
+        setSpeed(shouldRun ? baseSpeed : 0, immediate);
+      };
+
       const onEnter = () => {
-        setSpeed(0);
+        isHovering = true;
+        updateState();
       };
       const onLeave = () => {
-        setSpeed(baseSpeed, true);
+        isHovering = false;
+        updateState({ immediate: true });
       };
       rail.addEventListener("mouseenter", onEnter);
       rail.addEventListener("mouseleave", onLeave);
+      rail.addEventListener("focusin", onEnter);
+      rail.addEventListener("focusout", onLeave);
 
-      const onVis = () => {
-        setSpeed(document.hidden ? 0 : baseSpeed, !document.hidden);
-      };
+      const onVis = () => updateState({ immediate: !document.hidden });
       document.addEventListener("visibilitychange", onVis);
 
       let io;
@@ -229,13 +240,18 @@ export async function mountCaseStudies({
         io = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
-              setSpeed(entry.isIntersecting ? baseSpeed : 0, entry.isIntersecting);
+              if (entry.target === rail) {
+                isIntersecting = entry.isIntersecting;
+              }
             });
+            updateState({ immediate: isIntersecting });
           },
           { threshold: 0.1 }
         );
         io.observe(rail);
       } catch {}
+
+      updateState({ immediate: true });
 
       shotsCleanup = () => {
         try {
@@ -243,8 +259,11 @@ export async function mountCaseStudies({
         } catch {}
         rail.removeEventListener("mouseenter", onEnter);
         rail.removeEventListener("mouseleave", onLeave);
+        rail.removeEventListener("focusin", onEnter);
+        rail.removeEventListener("focusout", onLeave);
         document.removeEventListener("visibilitychange", onVis);
         if (io) io.disconnect();
+        track.style.transform = "";
       };
     };
   }
@@ -255,9 +274,12 @@ export async function mountCaseStudies({
 
   // Equalize .cs-desc heights based on tallest description
   const getDescs = () => Array.from(layout.querySelectorAll(".cs-desc"));
+  const mq = window.matchMedia("(min-width: 576px)");
+
   const computeAndSetMaxDesc = () => {
     if (!layout) return;
     layout.style.removeProperty("--cs-desc-h");
+    if (!mq.matches) return; // skip equalisation on mobile
     const descs = getDescs();
     if (!descs.length) return;
     const max = descs.reduce(
@@ -270,6 +292,7 @@ export async function mountCaseStudies({
   getDescs().forEach((el) => ro.observe(el));
   const onResize = () => computeAndSetMaxDesc();
   window.addEventListener("resize", onResize, { passive: true });
+  mq.addEventListener?.("change", computeAndSetMaxDesc);
   requestAnimationFrame(computeAndSetMaxDesc);
 
   return () => {
@@ -277,6 +300,7 @@ export async function mountCaseStudies({
       ro.disconnect();
     } catch {}
     window.removeEventListener("resize", onResize);
+    mq.removeEventListener?.("change", computeAndSetMaxDesc);
     if (shotsCleanup) {
       try {
         shotsCleanup();
