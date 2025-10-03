@@ -1,6 +1,7 @@
 import "./thoughts.css";
 import tplHTML from "./thoughts.html?raw";
 
+import spriteHref from "../../assets/icons/sprite.svg?url";
 import { featuredArticles } from "../../scripts/utils/articles.js";
 import { createSvgUse, inlineSpriteOnce } from "../../scripts/utils/svg.js";
 import { bindSafeLink } from "../../scripts/utils/urls.js";
@@ -31,7 +32,7 @@ function formatDate(iso) {
 
 export async function mountThoughts({
   selector = "section.writings",
-  spritePath = "../../assets/icons/sprite.svg",
+  spritePath = spriteHref,
   limit = 4,
 } = {}) {
   const section = document.querySelector(selector);

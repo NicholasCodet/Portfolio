@@ -18,7 +18,8 @@ export function loadAllCases() {
       const tags = Array.isArray(card && card.tags) ? card.tags.map(String) : [];
       const date = card && typeof card.date === 'string' ? card.date : '';
       const dev = import.meta.env && import.meta.env.DEV;
-      const href = `${dev ? "/src/pages" : "/cases"}/${slug}.html`;
+      const baseHref = dev ? "/src/pages" : "";
+      const href = `${baseHref}/${slug}.html`;
       // Try to resolve to a fingerprinted asset URL when possible
       const thumbnailUrl = resolveAssetPath(thumbnail, baseUrl) || thumbnail;
 

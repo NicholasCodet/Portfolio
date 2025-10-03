@@ -1,6 +1,7 @@
 import "./related-projects.css";
 import tplHTML from "./related-projects.html?raw";
 
+import spriteHref from "../../assets/icons/sprite.svg?url";
 import { featuredCases } from "../../scripts/utils/cases.js";
 import { inlineSpriteOnce } from "../../scripts/utils/svg.js";
 import { createUICaseCard } from "../ui-case-card/ui-case-card.js";
@@ -18,7 +19,7 @@ function getTemplate() {
 
 export async function mountRelatedProjects({
   selector = "section.related-projects",
-  spritePath = "../../assets/icons/sprite.svg",
+  spritePath = spriteHref,
   limit = 2,
 } = {}) {
   const section = document.querySelector(selector);

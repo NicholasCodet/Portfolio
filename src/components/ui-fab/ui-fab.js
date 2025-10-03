@@ -1,6 +1,7 @@
 import "./ui-fab.css";
 import tplHTML from "./ui-fab.html?raw";
 
+import spriteHref from "../../assets/icons/sprite.svg?url";
 import { inlineSpriteOnce } from "../../scripts/utils/svg.js";
 
 let __tpl;
@@ -15,7 +16,7 @@ function getTemplate() {
 }
 
 export async function mountUIFab({
-  spritePath = "../../assets/icons/sprite.svg",
+  spritePath = spriteHref,
   iconId = "icon-arrowTop-linear",
   threshold = 200,
 } = {}) {

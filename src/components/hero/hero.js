@@ -1,4 +1,5 @@
 import socialsData from "../../data/socials.json";
+import spriteHref from "../../assets/icons/sprite.svg?url";
 import { filterByIds } from "../../scripts/utils/socials.js";
 import { inlineSpriteOnce } from "../../scripts/utils/svg.js";
 import { createUIButton } from "../ui-button/ui-button.js";
@@ -39,7 +40,7 @@ function createSocialIconFromPaths(s, { size = 24, className = "icon" } = {}) {
 export async function mountHero({
   selector = "section.hero",
   email = "hello@nicholascodet.com",
-  spritePath = "../../assets/icons/sprite.svg",
+  spritePath = spriteHref,
   socialIds = ["LinkedIn", "Dribbble", "Medium", "GitHub"],
 } = {}) {
   const section = document.querySelector(selector);

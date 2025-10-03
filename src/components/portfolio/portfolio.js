@@ -1,8 +1,10 @@
 import "./portfolio.css";
 import tplHTML from "./portfolio.html?raw";
 
+import spriteHref from "../../assets/icons/sprite.svg?url";
+import fallbackShots from "../../data/shots.json?json";
 import { featuredCases } from "../../scripts/utils/cases.js";
-import { fetchJSON } from "../../scripts/utils/fetch-json.js";
+import { resolveAssetPath } from "../../scripts/utils/assets.js";
 import { inlineSpriteOnce } from "../../scripts/utils/svg.js";
 import { bindSafeLink } from "../../scripts/utils/urls.js";
 import { createUIButton } from "../ui-button/ui-button.js";
@@ -19,33 +21,12 @@ function getTemplate() {
   return __tpl;
 }
 
-const MODULE_ORIGIN = (() => {
-  try {
-    return new URL(import.meta.url).origin;
-  } catch {
-    return null;
-  }
-})();
-
-function resolveLocalShotsUrl(path) {
-  try {
-    const resolved = new URL(path, import.meta.url);
-    if (MODULE_ORIGIN && resolved.origin !== MODULE_ORIGIN) {
-      console.warn("[mountCaseStudies] blocked cross-origin shots url", resolved.href);
-      return null;
-    }
-    return resolved.href;
-  } catch {
-    return null;
-  }
-}
-
 export async function mountCaseStudies({
   selector = "section.case-studies",
-  spritePath = "../../assets/icons/sprite.svg",
+  spritePath = spriteHref,
   caseLimit = 4,
   dribbbleProfile = "nicholascodet",
-  shotsPath = "../../data/shots.json",
+  shotsData = fallbackShots,
   shotsLimit = 10,
 } = {}) {
   const section = document.querySelector(selector);
@@ -89,18 +70,19 @@ export async function mountCaseStudies({
     rel: "noopener",
   });
 
-  let shots = [];
-  const fbUrl = resolveLocalShotsUrl(shotsPath);
-  if (fbUrl) {
-    shots = (await fetchJSON(fbUrl)) || [];
-    if (!Array.isArray(shots)) shots = [];
-    shots =
-      shotsLimit > 0
-        ? shots.slice(-shotsLimit).reverse()
-        : shots.slice().reverse();
-  }
+  let shots = Array.isArray(shotsData) ? shotsData.slice() : [];
+  shots =
+    shotsLimit > 0
+      ? shots.slice(-shotsLimit).reverse()
+      : shots.slice().reverse();
 
-  if (!shots.length) {
+  const resolvedShots = shots.map((item) => {
+    if (!item || typeof item !== "object") return item;
+    const image = resolveAssetPath(item.image || item.thumbnail || "", import.meta.url) || item.image || "";
+    return { ...item, image };
+  });
+
+  if (!resolvedShots.length) {
     explore.hidden = true;
   } else {
     // Render shots
@@ -109,7 +91,7 @@ export async function mountCaseStudies({
     track.className = "explore-track";
     rail.appendChild(track);
 
-    for (const s of shots) {
+    for (const s of resolvedShots) {
       const a = document.createElement("a");
       a.className = "explore-card";
       bindSafeLink(a, s.url || "#", { target: "_blank" });

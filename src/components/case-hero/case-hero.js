@@ -1,6 +1,7 @@
 import "./case-hero.css";
 import tplHTML from "./case-hero.html?raw";
 
+import spriteHref from "../../assets/icons/sprite.svg?url";
 import { createSvgUse, inlineSpriteOnce } from "../../scripts/utils/svg.js";
 import { bindSafeLink } from "../../scripts/utils/urls.js";
 
@@ -18,7 +19,7 @@ function getTemplate() {
 export async function mountCaseHero({
   selector = ".section.case-hero",
   data = {},
-  spritePath = "../../assets/icons/sprite.svg",
+  spritePath = spriteHref,
 } = {}) {
   const section = document.querySelector(selector);
   if (!section) return () => {};
@@ -39,8 +40,8 @@ export async function mountCaseHero({
   } catch {}
 
   const base = (import.meta.env && import.meta.env.BASE_URL) || "/";
-  const trimmedBase = base.endsWith("/") ? base.slice(0, -1) : base;
-  const homeHref = `${trimmedBase}/src/pages/index.html`;
+  const normalizedBase = base.endsWith("/") ? base : `${base}/`;
+  const homeHref = `${normalizedBase}index.html`;
 
   if (rootEl) {
     const backLink = document.createElement("a");

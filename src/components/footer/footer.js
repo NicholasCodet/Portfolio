@@ -1,6 +1,7 @@
 import "./footer.css";
 import tplHTML from "./footer.html?raw";
 
+import spriteHref from "../../assets/icons/sprite.svg?url";
 import socialsDataRaw from "../../data/socials.json";
 
 import { featuredCases } from "../../scripts/utils/cases.js";
@@ -51,7 +52,7 @@ export function mountFooter(selector = "section.footer", opts = {}) {
 
   const {
     email = "hello@nicholascodet.com",
-    spritePath = "../../assets/icons/sprite.svg",
+    spritePath = spriteHref,
     socialIds = ["LinkedIn", "Dribbble", "Medium", "GitHub"],
     projectsLimit = 4,
   } = opts;
