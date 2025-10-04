@@ -46,9 +46,21 @@ async function mountCaseSectionsFromData({
   }
 
   const safeId = resolveCaseSlug(id, defaultId);
-  const url = new URL(`${dataPath}${safeId}.json`, import.meta.url).href;
-  const data = (await fetchJSON(url)) || {};
-  const content = data && data.case ? data.case : data;
+
+  let content = null;
+  const cached = getCaseBySlug(safeId);
+  if (cached && cached.raw) {
+    const raw = cached.raw;
+    content = raw && raw.case ? raw.case : raw;
+  }
+
+  if (!content) {
+    const url = new URL(`${dataPath}${safeId}.json`, import.meta.url).href;
+    const data = (await fetchJSON(url)) || {};
+    content = data && data.case ? data.case : data;
+  }
+
+  if (!content || typeof content !== "object") content = {};
 
   mountCaseHero({ selector: ".section.case-hero", data: content });
   mountCaseBody({ selector: ".section.case-body", data: content });

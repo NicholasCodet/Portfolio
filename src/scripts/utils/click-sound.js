@@ -6,22 +6,21 @@ export function initClickSound({
 } = {}) {
   if (typeof window === "undefined") return () => {};
 
-  const useCapture = true;
-
-  let baseAudio;
+  let audioUrl;
   try {
-    const audioUrl = new URL(src, import.meta.url).href;
-    baseAudio = new Audio(audioUrl);
-    baseAudio.preload = "auto";
-    baseAudio.volume = volume;
+    audioUrl = new URL(src, import.meta.url).href;
   } catch {
     return () => {};
   }
 
   const play = () => {
-    const instance = baseAudio.cloneNode();
-    instance.volume = volume;
-    instance.play?.().catch(() => {});
+    try {
+      const instance = new Audio(audioUrl);
+      instance.volume = volume;
+      instance.play?.().catch(() => {});
+    } catch {
+      // ignore playback errors (autoplay policies, etc.)
+    }
   };
 
   const onClick = (event) => {
@@ -42,10 +41,10 @@ export function initClickSound({
   let listening = false;
   const setListening = (next) => {
     if (next && !listening) {
-      document.addEventListener("click", onClick, useCapture);
+      document.addEventListener("click", onClick, true);
       listening = true;
     } else if (!next && listening) {
-      document.removeEventListener("click", onClick, useCapture);
+      document.removeEventListener("click", onClick, true);
       listening = false;
     }
   };
