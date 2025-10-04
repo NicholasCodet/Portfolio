@@ -29,6 +29,10 @@ export function initClickSound({
   const ensureUnlocked = () => {
     if (unlocked) return;
     try {
+      const previousMuted = baseAudio.muted;
+      const previousVolume = baseAudio.volume;
+      baseAudio.muted = true;
+      baseAudio.volume = 0;
       const promise = baseAudio.play();
       if (promise && typeof promise.then === "function") {
         promise
@@ -37,11 +41,17 @@ export function initClickSound({
             try {
               baseAudio.currentTime = 0;
             } catch {}
+            baseAudio.muted = previousMuted;
+            baseAudio.volume = previousVolume;
             unlocked = true;
+            removeUnlockListeners();
           })
           .catch(() => {});
       } else {
         unlocked = true;
+        baseAudio.muted = previousMuted;
+        baseAudio.volume = previousVolume;
+        removeUnlockListeners();
       }
     } catch {
       // ignore unlock errors
