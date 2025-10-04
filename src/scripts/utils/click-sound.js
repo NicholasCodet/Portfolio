@@ -13,11 +13,28 @@ export function initClickSound({
     return () => {};
   }
 
+  const pool = [];
+  const getInstance = () => {
+    const available = pool.find((audio) => audio.paused);
+    if (available) return available;
+    const instance = pool.length === 0 ? new Audio(audioUrl) : pool[0].cloneNode(true);
+    instance.preload = "auto";
+    pool.push(instance);
+    return instance;
+  };
+
   const play = () => {
     try {
-      const instance = new Audio(audioUrl);
-      instance.volume = volume;
-      instance.play?.().catch(() => {});
+      const audio = getInstance();
+      audio.src = audioUrl;
+      audio.volume = volume;
+      try {
+        audio.currentTime = 0;
+      } catch {}
+      const promise = audio.play();
+      if (promise && typeof promise.catch === "function") {
+        promise.catch(() => {});
+      }
     } catch {
       // ignore playback errors (autoplay policies, etc.)
     }
