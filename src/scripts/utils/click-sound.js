@@ -1,5 +1,7 @@
+import defaultSoundUrl from "../../assets/sounds/arcade.m4a?url";
+
 export function initClickSound({
-  src = "../../assets/sounds/arcade.m4a",
+  src = defaultSoundUrl,
   volume = 0.35,
   selector = 'button, [role="button"], .btn, .btn-md, .btn-sm, .btn-lg, .btn-primary, .btn-secondary',
   respectUserPreference = true,
@@ -8,7 +10,11 @@ export function initClickSound({
 
   let audioUrl;
   try {
-    audioUrl = new URL(src, import.meta.url).href;
+    if (src === defaultSoundUrl || /^(?:https?:|data:)/i.test(src)) {
+      audioUrl = src;
+    } else {
+      audioUrl = new URL(src, import.meta.url).href;
+    }
   } catch {
     return () => {};
   }
@@ -122,8 +128,15 @@ export function initClickSound({
 
   const onUserGesture = () => ensureUnlocked();
   const unlockOptions = { once: true, passive: true, capture: true };
-  document.addEventListener("pointerdown", onUserGesture, unlockOptions);
-  document.addEventListener("keydown", onUserGesture, unlockOptions);
+  const addUnlockListeners = () => {
+    document.addEventListener("pointerdown", onUserGesture, unlockOptions);
+    document.addEventListener("keydown", onUserGesture, unlockOptions);
+  };
+  const removeUnlockListeners = () => {
+    document.removeEventListener("pointerdown", onUserGesture, true);
+    document.removeEventListener("keydown", onUserGesture, true);
+  };
+  addUnlockListeners();
 
   let cleaned = false;
   return () => {
@@ -131,5 +144,6 @@ export function initClickSound({
     cleaned = true;
     setListening(false);
     removePreferenceListener();
+    removeUnlockListeners();
   };
 }
