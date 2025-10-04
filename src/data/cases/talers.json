@@ -61,7 +61,7 @@
 
     "impact": {
       "title": "Result",
-      "text": "The MVP proved both usable and valuable: usability tests showed high task completion and early adopters reported significant efficiency gains",
+      "text": "",
       "kpi": {
         "items": [
           { "number": "92%", "text": "task completion during usability tests" },
