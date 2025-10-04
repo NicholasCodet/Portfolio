@@ -91,6 +91,9 @@ export function createSvgUse(
     ? String(idOrHref)
     : `#${String(idOrHref)}`;
   use.setAttribute("href", href);
+  try {
+    use.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", href);
+  } catch {}
   svg.appendChild(use);
   return svg;
 }

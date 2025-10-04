@@ -1,5 +1,5 @@
 export function initClickSound({
-  src = "../../assets/sounds/arcade.m4a",
+  src = "../../assets/sounds/uwu.mp3",
   volume = 0.35,
   selector = 'button, [role="button"], .btn, .btn-md, .btn-sm, .btn-lg, .btn-primary, .btn-secondary',
   respectUserPreference = true,

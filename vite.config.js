@@ -1,10 +1,11 @@
 import { resolve } from "path";
 import { defineConfig } from "vite";
 
-const rootDir = resolve(__dirname, "src/pages");
+const pagesDir = resolve(__dirname, "src/pages");
+const casesDir = resolve(pagesDir, "cases");
 
 export default defineConfig(({ command }) => ({
-  root: rootDir,
+  root: pagesDir,
   base: command === "build" ? "./" : "/",
   publicDir: resolve(__dirname, "public"),
   build: {
@@ -16,9 +17,9 @@ export default defineConfig(({ command }) => ({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        index: resolve(rootDir, "index.html"),
-        kaelis: resolve(rootDir, "kaelis.html"),
-        talers: resolve(rootDir, "talers.html"),
+        index: resolve(pagesDir, "index.html"),
+        kaelis: resolve(casesDir, "kaelis.html"),
+        talers: resolve(casesDir, "talers.html"),
       },
       output: { manualChunks: undefined },
     },

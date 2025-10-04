@@ -5,7 +5,7 @@
 
 .cs-root .cs-layout {
   display: grid;
-  gap: var(--space-40);
+  gap: var(--space-80);
   margin-bottom: var(--space-80);
 }
 
