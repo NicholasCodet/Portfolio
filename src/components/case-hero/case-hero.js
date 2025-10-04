@@ -39,9 +39,7 @@ export async function mountCaseHero({
     await inlineSpriteOnce(spriteUrl);
   } catch {}
 
-  const base = (import.meta.env && import.meta.env.BASE_URL) || "/";
-  const normalizedBase = base.endsWith("/") ? base : `${base}/`;
-  const homeHref = `${normalizedBase}index.html`;
+  const homeHref = "../index.html";
 
   if (rootEl) {
     const backLink = document.createElement("a");

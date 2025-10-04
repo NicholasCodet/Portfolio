@@ -1,5 +1,5 @@
 export function initClickSound({
-  src = "../../assets/sounds/uwu.mp3",
+  src = "../../assets/sounds/arcade.m4a",
   volume = 0.35,
   selector = 'button, [role="button"], .btn, .btn-md, .btn-sm, .btn-lg, .btn-primary, .btn-secondary',
   respectUserPreference = true,
@@ -13,20 +13,48 @@ export function initClickSound({
     return () => {};
   }
 
-  const pool = [];
+  const baseAudio = new Audio(audioUrl);
+  baseAudio.preload = "auto";
+  baseAudio.crossOrigin = "anonymous";
+
+  const pool = [baseAudio];
+  let unlocked = false;
+
+  const ensureUnlocked = () => {
+    if (unlocked) return;
+    try {
+      const promise = baseAudio.play();
+      if (promise && typeof promise.then === "function") {
+        promise
+          .then(() => {
+            baseAudio.pause();
+            try {
+              baseAudio.currentTime = 0;
+            } catch {}
+            unlocked = true;
+          })
+          .catch(() => {});
+      } else {
+        unlocked = true;
+      }
+    } catch {
+      // ignore unlock errors
+    }
+  };
+
   const getInstance = () => {
     const available = pool.find((audio) => audio.paused);
     if (available) return available;
-    const instance = pool.length === 0 ? new Audio(audioUrl) : pool[0].cloneNode(true);
+    const instance = baseAudio.cloneNode(true);
     instance.preload = "auto";
     pool.push(instance);
     return instance;
   };
 
   const play = () => {
+    ensureUnlocked();
     try {
       const audio = getInstance();
-      audio.src = audioUrl;
       audio.volume = volume;
       try {
         audio.currentTime = 0;
@@ -91,6 +119,11 @@ export function initClickSound({
   };
 
   addPreferenceListener();
+
+  const onUserGesture = () => ensureUnlocked();
+  const unlockOptions = { once: true, passive: true, capture: true };
+  document.addEventListener("pointerdown", onUserGesture, unlockOptions);
+  document.addEventListener("keydown", onUserGesture, unlockOptions);
 
   let cleaned = false;
   return () => {

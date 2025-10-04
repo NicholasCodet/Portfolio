@@ -19,6 +19,19 @@
   margin-bottom: var(--space-40);
 }
 
+.cs-explore-cta-top,
+.cs-explore-cta-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  align-items: center;
+}
+
+.cs-explore-cta-top > *,
+.cs-explore-cta-bottom > * {
+  flex: 0 0 auto;
+}
+
 .explore-rail {
   position: relative;
   overflow: hidden;
