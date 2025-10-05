@@ -1,0 +1,9 @@
+# robots.txt
+
+User-agent: *
+Allow: /
+
+Disallow: /assets/
+Disallow: /node_modules/
+
+Sitemap: https://nicholascodet.com/sitemap.xml
