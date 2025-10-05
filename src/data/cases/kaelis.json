@@ -41,9 +41,9 @@
       "title": "",
       "items": [
         {
-          "src": "",
-          "alt": "",
-          "caption": ""
+          "src": "../../assets/images/cs-kaelis/kaelis-screens.webp",
+          "alt": "Kaelis Screens",
+          "caption": "Core app screens for setup, recovery, and state feedback—clarity without crypto jargon."
         },
         {
           "src": "../../assets/images/cs-kaelis/kaelis-ring.webp",
