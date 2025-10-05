@@ -46,14 +46,14 @@
           "caption": ""
         },
         {
-          "src": "",
-          "alt": "",
-          "caption": ""
+          "src": "../../assets/images/cs-kaelis/kaelis-ring.webp",
+          "alt": "Kaelis Ring",
+          "caption": "Kaelis ring with Secure Element, NFC, and touch sensors for offline gesture control."
         },
         {
-          "src": "",
-          "alt": "",
-          "caption": ""
+          "src": "../../assets/images/cs-kaelis/kaelis-dashboard.webp",
+          "alt": "Ring Pairing",
+          "caption": "Seedless onboarding through secure ring pairing—simple, clear, and stress-free."
         }
       ]
     },
