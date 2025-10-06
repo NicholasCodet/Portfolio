@@ -38,6 +38,7 @@ export function mountCaseBody({
     data &&
     (data.context ||
       data.problems ||
+      data.process ||
       data.approach ||
       data.solution ||
       data.impact)
@@ -125,38 +126,144 @@ export function mountCaseBody({
     return `<div class="case-kpis case-section">${cards}</div>`;
   };
 
+  const normaliseBreaks = (text) =>
+    String(text)
+      .replace(/\r\n?/g, "\n")
+      .replace(/<\/?br\s*\/?\s*>/gi, "\n");
+
+  const toParagraphInner = (text) => {
+    if (!text) return "";
+    const value = normaliseBreaks(text).trim();
+    if (!value) return "";
+    return escape(value).replace(/\n/g, "<br />");
+  };
+
+  const renderParagraphContent = (
+    content,
+    { paragraphClass = "text-lg case-paragraph" } = {}
+  ) => {
+    const wrapParagraph = (value, { raw = false } = {}) => {
+      if (raw) {
+        const html = String(value || "").trim();
+        if (!html) return "";
+        return `<p class="${paragraphClass}">${html}</p>`;
+      }
+
+      const inner = toParagraphInner(value);
+      if (!inner) return "";
+      return `<p class="${paragraphClass}">${inner}</p>`;
+    };
+
+    const paragraphs = [];
+
+    const collect = (value) => {
+      if (value === undefined || value === null) return;
+      if (Array.isArray(value)) {
+        for (const entry of value) collect(entry);
+        return;
+      }
+      if (typeof value === "object") {
+        if ("html" in value) {
+          const p = wrapParagraph(value.html, { raw: true });
+          if (p) paragraphs.push(p);
+          return;
+        }
+        if ("text" in value || "content" in value) {
+          collect(value.text ?? value.content);
+        }
+        return;
+      }
+      const p = wrapParagraph(value);
+      if (p) paragraphs.push(p);
+    };
+
+    collect(content);
+
+    if (!paragraphs.length) return "";
+
+    return `<div class="case-paragraphs">${paragraphs.join("")}</div>`;
+  };
+
+  const renderProcess = (process) => {
+    if (!process) return "";
+    const title = escape(process.title || "");
+    const stepsRaw = Array.isArray(process.content) ? process.content : [];
+    const steps = stepsRaw
+      .map((step) => {
+        if (!step || typeof step !== "object") return "";
+        const subtitle = escape(step.subtitle || step.title || "");
+        const body = renderParagraphContent(step.text ?? step.content);
+        if (!subtitle && !body) return "";
+        return `
+          <div class="case-process-step case-text">
+            ${subtitle ? `<h4 class="heading-4">${subtitle}</h4>` : ""}
+            ${body}
+          </div>
+        `;
+      })
+      .filter(Boolean)
+      .join("");
+
+    if (!title && !steps) return "";
+
+    return `
+      <div class="case-process case-section">
+        ${title ? `<h3 class="heading-3">${title}</h3>` : ""}
+        ${steps ? `<div class="case-process-steps">${steps}</div>` : ""}
+      </div>
+    `;
+  };
+
+  const block = (section, extra = "") => {
+    if (!section) return "";
+    const title = escape(section.title || "");
+    const body = renderParagraphContent(
+      section.content !== undefined ? section.content : section.text
+    );
+    if (!title && !body && !extra) return "";
+    return `
+      <div class="case-text case-section">
+        ${title ? `<h3 class="heading-3">${title}</h3>` : ""}
+        ${body}
+        ${extra}
+      </div>
+    `;
+  };
+
   if (!hasStructured) {
     // Legacy path: extract content from flat `sections` list
     const firstImage = sections.find((s) => s.type === "image") || null;
 
     const iLandscape = idx((s) => s.type === "subheading");
     const titleLandscape = escape(sections[iLandscape]?.text || "");
-    const textLandscape = escape(after(iLandscape, "paragraph")?.text || "");
+    const textLandscape = renderParagraphContent(
+      after(iLandscape, "paragraph")
+    );
 
     const iProblems = idx(
       (s) => s.type === "subheading" && /problems/i.test(s.text || "")
     );
     const titleProblems = escape(sections[iProblems]?.text || "");
-    const textProblems = escape(after(iProblems, "paragraph")?.text || "");
+    const textProblems = renderParagraphContent(after(iProblems, "paragraph"));
 
     const iApproach = idx(
       (s) => s.type === "subheading" && /approach/i.test(s.text || "")
     );
     const titleApproach = escape(sections[iApproach]?.text || "");
-    const textApproach = escape(after(iApproach, "paragraph")?.text || "");
+    const textApproach = renderParagraphContent(after(iApproach, "paragraph"));
     const secondImage = nextOfTypeAfter(iApproach, "image");
 
     const iSolution = idx(
       (s) => s.type === "heading" && /solution/i.test(s.text || "")
     );
     const titleSolution = escape(sections[iSolution]?.text || "");
-    const textSolution = escape(after(iSolution, "paragraph")?.text || "");
+    const textSolution = renderParagraphContent(after(iSolution, "paragraph"));
 
     const iImpact = idx(
       (s) => s.type === "heading" && /impact/i.test(s.text || "")
     );
     const titleImpact = escape(sections[iImpact]?.text || "");
-    const textImpact = escape(after(iImpact, "paragraph")?.text || "");
+    const textImpact = renderParagraphContent(after(iImpact, "paragraph"));
     const thirdImage = nextOfTypeAfter(iImpact, "image");
 
     root.innerHTML = `
@@ -166,33 +273,21 @@ export function mountCaseBody({
           ? `<h3 class=\"heading-3 case-section\">${titleLandscape}</h3>`
           : ""
       }
-      ${
-        textLandscape
-          ? `<p class=\"text-md case-paragraph\">${textLandscape}</p>`
-          : ""
-      }
+      ${textLandscape ? `${textLandscape}` : ""}
 
       ${
         titleProblems
           ? `<h3 class=\"heading-3 case-section\">${titleProblems}</h3>`
           : ""
       }
-      ${
-        textProblems
-          ? `<p class=\"text-md case-paragraph\">${textProblems}</p>`
-          : ""
-      }
+      ${textProblems ? `${textProblems}` : ""}
 
       ${
         titleApproach
           ? `<h3 class=\"heading-3 case-section\">${titleApproach}</h3>`
           : ""
       }
-      ${
-        textApproach
-          ? `<p class=\"text-md case-paragraph\">${textApproach}</p>`
-          : ""
-      }
+      ${textApproach ? `${textApproach}` : ""}
       ${renderImage(secondImage)}
 
       ${
@@ -200,57 +295,54 @@ export function mountCaseBody({
           ? `<h3 class=\"heading-3 case-section\">${titleSolution}</h3>`
           : ""
       }
-      ${
-        textSolution
-          ? `<p class=\"text-md case-paragraph\">${textSolution}</p>`
-          : ""
-      }
+      ${textSolution ? `${textSolution}` : ""}
 
       ${
         titleImpact
           ? `<h3 class=\"heading-3 case-section\">${titleImpact}</h3>`
           : ""
       }
-      ${
-        textImpact
-          ? `<p class=\"text-md case-paragraph\">${textImpact}</p>`
-          : ""
-      }
+      ${textImpact ? `${textImpact}` : ""}
       ${renderImage(thirdImage)}
     `;
   } else {
     // Structured path
     const ctx = data.context || {};
     const prb = data.problems || {};
+    const pro = data.process || {};
     const apr = data.approach || {};
     const sol = data.solution || {};
+    const out = data.outcome || {};
+    const res = data.results || {};
     const media = data.media || {};
     const imp = data.impact || {};
+    const learn = data.learnings || data.learning || {};
 
-    const block = (title, text, extra = "") => {
-      const tt = escape(title || "");
-      const tx = escape(text || "");
-      if (!tt && !tx && !extra) return "";
-      return `
-        <div class="case-text case-section">
-          ${tt ? `<h3 class=\"heading-3\">${tt}</h3>` : ""}
-          ${tx ? `<p class=\"text-md case-paragraph\">${tx}</p>` : ""}
-          ${extra}
-        </div>
-      `;
+    const kpiExtras = (section) =>
+      renderKpis(section?.kpi || section?.kpis || section?.metrics);
+
+    const append = (value) => {
+      if (value) parts.push(value);
     };
 
     const parts = [];
-    parts.push(renderImage(ctx.image));
-    parts.push(block(ctx.title, ctx.text));
-    parts.push(block(prb.title, prb.text));
-    parts.push(block(apr.title, apr.text));
-    parts.push(renderImage(apr.image));
-    parts.push(block(sol.title, sol.text));
-    parts.push(renderMediaGallery(media));
-    const impactExtras = renderKpis(imp.kpi);
-    parts.push(block(imp.title, imp.text, impactExtras));
-    parts.push(renderImage(imp.image));
+    append(renderImage(ctx.image));
+    append(block(ctx));
+    append(block(prb));
+    append(renderProcess(pro));
+    append(block(apr));
+    append(renderImage(apr.image));
+    append(block(sol));
+    append(renderImage(sol.image));
+    append(renderMediaGallery(media));
+    append(block(out, kpiExtras(out)));
+    append(renderImage(out.image));
+    append(block(res, kpiExtras(res)));
+    append(renderImage(res.image));
+    append(block(imp, kpiExtras(imp)));
+    append(renderImage(imp.image));
+    append(block(learn, kpiExtras(learn)));
+    append(renderImage(learn.image));
 
     root.innerHTML = parts.filter(Boolean).join("");
   }

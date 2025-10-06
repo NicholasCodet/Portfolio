@@ -34,5 +34,6 @@
 @media (min-width: 576px) {
   .case-meta {
     flex-wrap: nowrap;
+    margin-top: var(--space-80);
   }
 }

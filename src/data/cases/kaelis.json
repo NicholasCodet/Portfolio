@@ -10,7 +10,7 @@
   },
   "case": {
     "title": "A Tap Away from Freedom: The Design Behind Kælis",
-    "summary": "Traditional crypto wallets rely on screens, seed phrases, and connectivity—making them slow, stressful, and impractical in high-risk environments. Kælis reimagined this experience as a discreet wearable ring that enables secure, offline payments and decentralised identity through simple gestures. I led the end-to-end design, from research to prototyping, building a proof-of-concept that blends security with usability. The result: a screenless, ambient interaction model where users complete payments and recover wallets faster, with less cognitive strain.",
+    "summary": "Kaelis is a discreet wearable that enables secure, offline crypto payments and decentralised identity through simple gestures. As Product Owner, I led the full project from research to functional prototyping bridging UX, hardware, and Web3 logic. The goal was to make cold-wallet-grade security accessible and stress-proof, even under pressure or without connectivity.",
     "meta": [
       { "label": "Role", "value": "Project Owner" },
       { "label": "Duration", "value": "34 Weeks" },
@@ -19,22 +19,32 @@
 
     "context": {
       "title": "Context",
-      "text": "Kælis was developed as an independent initiative exploring the intersection of Web3 and IoT wearables. The project targeted urban, privacy-conscious users and individuals operating in high-risk or low-connectivity environments.The objective was to validate whether cold-wallet-grade security could be achieved in a form factor as discreet and intuitive as a ring."
+      "content": [
+        {
+          "text": "The project began as an independent exploration of Web3 and IoT convergence, addressing the growing need for privacy-preserving payment devices that function without network reliance. Most crypto wallets depend on screens, seed phrases, and cloud backups processes that alienate mainstream users and fail in low-connectivity or coercive contexts."
+        },
+        {
+          "text": "As a solo designer, I led research, product strategy, and prototyping, collaborating with crypto and hardware engineers for technical validation. The challenge was to design a screenless, gesture-driven payment device that remains secure, comprehensible, and recoverable, even offline."
+        }
+      ]
     },
 
-    "problems": {
-      "title": "Problems",
-      "text": "Existing crypto wallets are cumbersome: they demand technical fluency, constant network access, and reliance on seed phrases. Users reported frustration with complexity and anxiety over coercion or loss of access. The challenge was to design a product that felt as effortless as tapping a metro card, while meeting strict privacy and security standards."
-    },
-
-    "approach": {
-      "title": "Approach",
-      "text": "I conducted 15 in-depth interviews across three user archetypes to map trust triggers, mental models, and threat scenarios. From this, I modelled the ring's behaviour as a finite-state machine, mapping gestures (tap, triple-tap, sequences) to system states. I prototyped with Arduino rigs, capacitive sensors, and 3D-printed rings to test gesture reliability, latency, and haptic feedback. I also designed a companion app for setup and recovery, abstracting blockchain complexity into clear, fiat-like flows."
-    },
-
-    "solution": {
-      "title": "Solution",
-      "text": "Kælis delivered a gesture-driven wearable and a minimal companion app that together enabled offline payments, seedless recovery, and coercion resistance. The ring used a Secure Element to sign transactions locally, while gestures triggered states like Ghost Mode or Wipe. The app supported initial setup, backup to a trusted device, and transparent state reflection—without ever exposing seed phrases or raw keys. This combination balanced security, usability, and resilience, showing that crypto tools can be both human-centred and tamper-resistant."
+    "process": {
+      "title": "Process",
+      "content": [
+        {
+          "subtitle": "Research & Insight",
+          "text": "I interviewed 15 users across three archetypes: crypto-natives, sovereignty-driven users, and cautious newcomers, to uncover trust triggers and threat models. Findings revealed that users trust physical control and simplicity over transparency or complexity. These insights defined how every interaction would feel and respond."
+        },
+        {
+          "subtitle": "Ideation & Prototyping",
+          "text": "I translated behavioural insights into a finite-state model defining how gestures (tap, triple tap, long press, custom sequence) map to system states like “Paired”, “Ghost Mode”, or “Wiped”. Rapid prototyping with Arduino Nano, capacitive sensors, and 3D-printed rings allowed real-world testing of gesture reliability and haptic feedback under stress."
+        },
+        {
+          "subtitle": "Interface & Systems Design",
+          "text": "I built a companion app focused on setup, recovery, and transparency. No seed phrases, no blockchain jargon. The design system prioritised clarity under stress: high contrast, explicit state feedback, and friction where safety mattered. This work bridged physical and digital experiences into a single, resilient ecosystem."
+        }
+      ]
     },
 
     "media": {
@@ -42,33 +52,41 @@
       "items": [
         {
           "src": "../../assets/images/cs-kaelis/kaelis-screens.webp",
-          "alt": "Kaelis Screens",
-          "caption": "Core app screens for setup, recovery, and state feedback—clarity without crypto jargon."
+          "alt": "Kaelis dashboard overview",
+          "caption": "Core app screens for setup, recovery, and state feedback-clarity without crypto jargon."
         },
         {
           "src": "../../assets/images/cs-kaelis/kaelis-ring.webp",
-          "alt": "Kaelis Ring",
+          "alt": "Kaelis ring technology",
           "caption": "Kaelis ring with Secure Element, NFC, and touch sensors for offline gesture control."
         },
         {
           "src": "../../assets/images/cs-kaelis/kaelis-dashboard.webp",
-          "alt": "Ring Pairing",
-          "caption": "Seedless onboarding through secure ring pairing—simple, clear, and stress-free."
+          "alt": "Kaelis ring pairing",
+          "caption": "Seedless onboarding through secure ring pairing-simple, clear, and stress-free."
         }
       ]
     },
 
-    "impact": {
-      "title": "Result",
-      "text": "",
+    "outcome": {
+      "title": "Outcomes",
+      "content": {
+        "text": "Kaelis emerged as a validated proof-of-concept combining cold-wallet security with human-centred UX. The wearable and companion app operated entirely offline, with delegated signing, seedless onboarding, and gesture-based state control. Testing proved that people could trust and understand crypto interactions without screens or biometrics."
+      },
       "kpi": {
         "items": [
-          { "number": "63%", "text": "reduction in cognitive load" },
+          {
+            "number": "63%",
+            "text": "Reduction in cognitive load during stress scenarios."
+          },
           {
             "number": "45%",
-            "text": "faster task completion compared to standard wallets"
+            "text": "Faster task completion compared to standard wallets"
           },
-          { "number": "100%", "text": "flow success rate" }
+          {
+            "number": "100%",
+            "text": "Flow success rate achieved after one guided walkthrough"
+          }
         ]
       }
     }

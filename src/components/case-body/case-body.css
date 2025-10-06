@@ -1,7 +1,7 @@
 .case-body-root {
   display: flex;
   flex-direction: column;
-  gap: var(--space-40);
+  gap: var(--space-80);
 }
 
 .case-body-root :is(a, button):focus-visible {
@@ -9,17 +9,26 @@
   outline-offset: 2px;
 }
 
+.case-text,
+.case-process {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.case-paragraphs,
+.case-process-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-40);
+}
+
+.case-process-step {
+  gap: var(--space-12);
+}
+
 .case-paragraph {
-  margin-top: var(--space-24);
-}
-
-.case-text {
-  display: grid;
-  gap: var(--space-16);
-}
-
-.case-text .case-paragraph {
-  margin-top: 0;
+  margin: 0;
 }
 
 .case-text .case-kpis {
@@ -121,5 +130,9 @@
 
   .case-kpis {
     gap: var(--space-24);
+  }
+
+  .case-process-steps {
+    gap: var(--space-32);
   }
 }

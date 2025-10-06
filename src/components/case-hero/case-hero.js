@@ -82,7 +82,7 @@ export async function mountCaseHero({
       lab.className = "sub-heading-2";
       lab.textContent = String((m && m.label) || "-");
       const val = document.createElement("p");
-      val.className = "text-md";
+      val.className = "text-lg";
       val.textContent = String((m && m.value) || "—");
       item.appendChild(lab);
       item.appendChild(val);
