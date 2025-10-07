@@ -192,7 +192,7 @@ article:hover {
   position: absolute;
   left: 0;
   right: 0;
-  height: 900px;
+  min-height: 100vh;
   pointer-events: none;
   z-index: -10;
   background: url("../assets/images/backgrounds/aurora.svg") no-repeat center
@@ -204,7 +204,7 @@ article:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 900px;
+  min-height: 100vh;
   transform: rotate(180deg);
   transform-origin: center;
   pointer-events: none;

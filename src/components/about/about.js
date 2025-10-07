@@ -46,7 +46,7 @@ export function mountAbout({
   thoughtTitle = null,
   thought = null,
   role = null,
-  photo = "/src/assets/images/profile/profile.png",
+  photo = "/src/assets/images/profile/profile.webp",
   socialIds = ["LinkedIn", "Dribbble", "Medium", "GitHub"],
   toolIds = [],
 } = {}) {

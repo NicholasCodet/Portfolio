@@ -27,5 +27,5 @@ onReady(() => {
   mountCaseStudiesComponent();
   mountKPIComponent();
   mountThoughtsComponent();
-  mountFooterComponent(".section.footer");
+  mountFooterComponent();
 });

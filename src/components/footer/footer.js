@@ -44,7 +44,7 @@ function createSocialIconFromPaths(s, { size = 24, className = "icon" } = {}) {
 }
 
 /*=== Set Component ===*/
-export function mountFooter(selector = "section.footer", opts = {}) {
+export function mountFooter(selector = ".section.footer", opts = {}) {
   const section = document.querySelector(selector);
   if (!section) return () => {};
   const container = section.querySelector(".container");
