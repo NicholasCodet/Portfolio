@@ -3,7 +3,9 @@
 }
 
 .section.footer {
+  position: relative;
   border-top: none;
+  overflow: hidden;
 }
 
 .container {
