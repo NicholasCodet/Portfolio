@@ -21,9 +21,6 @@ export function createCaseCard({
   description,
   href,
   imageUrl,
-  imageWidth,
-  imageHeight,
-  imageFetchPriority,
   spriteInline = true,
 } = {}) {
   const tpl = getTemplate();
@@ -54,17 +51,6 @@ export function createCaseCard({
       img.setAttribute("alt", `${title || ""} preview`);
       img.setAttribute("loading", "lazy");
       img.setAttribute("decoding", "async");
-      const w = Number(imageWidth);
-      const h = Number(imageHeight);
-      if (Number.isFinite(w) && w > 0) {
-        img.setAttribute("width", String(Math.round(w)));
-      }
-      if (Number.isFinite(h) && h > 0) {
-        img.setAttribute("height", String(Math.round(h)));
-      }
-      if (imageFetchPriority) {
-        img.setAttribute("fetchpriority", imageFetchPriority);
-      }
       media.appendChild(img);
     } else {
       const placeholder = document.createElement("div");

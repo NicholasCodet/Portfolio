@@ -13,10 +13,6 @@ export function loadAllCases() {
       const title = card && card.title ? String(card.title) : (data && data.title ? String(data.title) : "Untitled case");
       const description = card && card.description ? String(card.description) : (data && (data.description || data.summary) ? String(data.description || data.summary) : "");
       const thumbnail = card && card.thumbnail ? String(card.thumbnail) : (data && data.thumbnail ? String(data.thumbnail) : "");
-      const thumbnailWidthRaw = card && card.thumbnailWidth !== undefined ? card.thumbnailWidth : data && data.thumbnailWidth;
-      const thumbnailHeightRaw = card && card.thumbnailHeight !== undefined ? card.thumbnailHeight : data && data.thumbnailHeight;
-      const thumbnailWidth = Number.isFinite(Number(thumbnailWidthRaw)) ? Number(thumbnailWidthRaw) : null;
-      const thumbnailHeight = Number.isFinite(Number(thumbnailHeightRaw)) ? Number(thumbnailHeightRaw) : null;
       const featured = card && Object.prototype.hasOwnProperty.call(card, 'featured') ? Boolean(card.featured) : Boolean(data && data.featured);
       const priority = Number.isFinite(Number(card && card.priority)) ? Number(card.priority) : (Number.isFinite(Number(data && data.priority)) ? Number(data.priority) : 0);
       const tags = Array.isArray(card && card.tags) ? card.tags.map(String) : [];
@@ -25,7 +21,7 @@ export function loadAllCases() {
       // Try to resolve to a fingerprinted asset URL when possible
       const thumbnailUrl = resolveAssetPath(thumbnail, baseUrl) || thumbnail;
 
-      list.push({ slug, title, description, thumbnail, thumbnailUrl, thumbnailWidth, thumbnailHeight, featured, priority, href, tags, date, raw: data });
+      list.push({ slug, title, description, thumbnail, thumbnailUrl, featured, priority, href, tags, date, raw: data });
     } catch {
       // ignore malformed entries
     }

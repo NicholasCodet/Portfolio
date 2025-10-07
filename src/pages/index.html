@@ -49,133 +49,11 @@
 
     <link
       rel="preload"
-      href="../assets/fonts/inter/Inter-VariableFont_opsz-wght.woff2"
+      href="/fonts/Inter.var.woff2"
       as="font"
       type="font/woff2"
       crossorigin
-      fetchpriority="high"
     />
-    <link
-      rel="preload"
-      href="../assets/images/backgrounds/aurora.svg"
-      as="image"
-      type="image/svg+xml"
-    />
-
-    <style data-critical>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-      }
-      body {
-        margin: 0;
-        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
-          "Segoe UI", sans-serif;
-        background: #f8fafc;
-        color: #1f2937;
-        min-height: 100vh;
-      }
-      header,
-      main,
-      footer,
-      section {
-        display: block;
-      }
-      .section .container {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 4rem 1.5rem;
-      }
-      .hero .container {
-        padding-top: 5rem;
-        padding-bottom: 4rem;
-      }
-      .hero .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.35rem 0.85rem;
-        border-radius: 9999px;
-        background: rgba(255, 255, 255, 0.7);
-        color: #0f172a;
-        font-size: 0.75rem;
-        font-weight: 600;
-      }
-      .hero .status-badge .dot {
-        width: 0.5rem;
-        height: 0.5rem;
-        border-radius: 999px;
-        background: #16a34a;
-        position: relative;
-      }
-      .hero .status-badge .dot::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        background: #16a34a;
-        opacity: 0.35;
-      }
-      .hero .heading-1 {
-        margin: 1.75rem 0 1rem;
-        font-size: clamp(2.4rem, 5vw, 3.1rem);
-        line-height: 1.05;
-        letter-spacing: -0.02em;
-        color: #0f172a;
-      }
-      .hero .headline-1 {
-        font-size: clamp(1.35rem, 2.6vw, 1.7rem);
-        line-height: 1.35;
-        color: #1f2937;
-        margin-bottom: 0.75rem;
-      }
-      .hero p {
-        font-size: 1.05rem;
-        line-height: 1.6;
-      }
-      .hero-actions {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 1rem;
-        margin-top: 2rem;
-      }
-      .hero-actions .or {
-        display: none;
-      }
-      .hero-actions ul {
-        list-style: none;
-        display: flex;
-        gap: 0.5rem;
-        padding: 0;
-        margin: 0;
-      }
-      .hero-actions li {
-        display: flex;
-      }
-      .hero-actions a,
-      .hero-actions span.social-label {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.75rem;
-        height: 2.75rem;
-        border-radius: 9999px;
-        background: rgba(15, 23, 42, 0.08);
-        color: #0f172a;
-        text-decoration: none;
-        font-weight: 600;
-      }
-      @media (min-width: 576px) {
-        .hero-actions .or {
-          display: inline-flex;
-          font-weight: 600;
-          color: #475569;
-          letter-spacing: 0.08em;
-        }
-      }
-    </style>
 
     <script type="module">
       import "../scripts/main.js";
@@ -189,35 +67,7 @@
     <main>
       <!-- Hero -->
       <section class="section hero">
-        <div class="container">
-          <div class="hero-wrap" data-prerendered="true">
-            <span class="status-badge">
-              <span class="dot" aria-hidden="true"></span>
-              <span class="label">Available now</span>
-            </span>
-            <div class="hero-head">
-              <h1 class="heading-1">
-                Hey, I'm Nicholas Codet — Product Designer for SaaS and Deeptech.
-              </h1>
-              <p class="headline-1">
-                I help ambitious companies turn complex ideas into digital experiences people love.
-              </p>
-              <p>
-                At the crossroads of product strategy, emerging technologies and human storytelling, I craft experiences that scale, connect and endure.
-              </p>
-            </div>
-            <div class="hero-actions">
-              <a class="hero-email" href="mailto:hello@nicholascodet.com">Email me</a>
-              <span class="or" aria-hidden="true">OR</span>
-              <ul class="hero-list socials" aria-label="Social links">
-                <li><span class="social-label" aria-hidden="true">in</span></li>
-                <li><span class="social-label" aria-hidden="true">Dr</span></li>
-                <li><span class="social-label" aria-hidden="true">Me</span></li>
-                <li><span class="social-label" aria-hidden="true">GH</span></li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <div class="container"></div>
       </section>
 
       <!-- References -->
@@ -249,11 +99,12 @@
       <section class="section kpi">
         <div class="container"></div>
       </section>
-      <!-- Writing -->
-      <section class="section writings">
-        <div class="container"></div>
-      </section>
     </main>
+
+    <!-- Writing -->
+    <section class="section writings">
+      <div class="container"></div>
+    </section>
 
     <!-- Footer -->
     <footer class="section footer">

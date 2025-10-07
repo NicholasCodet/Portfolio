@@ -80,17 +80,7 @@ export function mountAbout({
       imgs = [photo].filter(Boolean);
     }
     if (!imgs.length) imgs = [photo];
-    const stackImages = imgs
-      .map((src) => ({
-        src,
-        width: 800,
-        height: 600,
-      }))
-      .filter((img) => img.src);
-    mountUIStack(media, {
-      images: stackImages,
-      desktopDefaultDirection: "up",
-    });
+    mountUIStack(media, { images: imgs, desktopDefaultDirection: "up" });
   }
 
   // Socials

@@ -50,18 +50,15 @@ export async function mountCaseStudies({
 
   // Render case cards
   const items = featuredCases(caseLimit);
-  items.forEach((it, idx) => {
+  for (const it of items) {
     const { element } = createCaseCard({
       title: it.title,
       description: it.description,
       href: it.href,
       imageUrl: it.thumbnailUrl || it.thumbnail || "",
-      imageWidth: it.thumbnailWidth,
-      imageHeight: it.thumbnailHeight,
-      imageFetchPriority: idx === 0 ? "high" : undefined,
     });
     layout.appendChild(element);
-  });
+  }
 
   // Build Dribbble CTA once, movable
   const dribbbleHref = `https://dribbble.com/${dribbbleProfile}`;
@@ -82,14 +79,7 @@ export async function mountCaseStudies({
   const resolvedShots = shots.map((item) => {
     if (!item || typeof item !== "object") return item;
     const image = resolveAssetPath(item.image || item.thumbnail || "", import.meta.url) || item.image || "";
-    const width = Number(item.width);
-    const height = Number(item.height);
-    return {
-      ...item,
-      image,
-      width: Number.isFinite(width) && width > 0 ? width : null,
-      height: Number.isFinite(height) && height > 0 ? height : null,
-    };
+    return { ...item, image };
   });
 
   if (!resolvedShots.length) {
@@ -113,12 +103,6 @@ export async function mountCaseStudies({
         img.setAttribute("alt", s.title || "Dribbble Shot");
         img.setAttribute("loading", "lazy");
         img.setAttribute("decoding", "async");
-        if (Number.isFinite(s.width) && s.width > 0) {
-          img.setAttribute("width", String(Math.round(s.width)));
-        }
-        if (Number.isFinite(s.height) && s.height > 0) {
-          img.setAttribute("height", String(Math.round(s.height)));
-        }
         a.appendChild(img);
       } else {
         const ph = document.createElement("div");

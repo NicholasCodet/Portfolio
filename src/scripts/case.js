@@ -1,19 +1,18 @@
+console.log("Case Script Loaded");
+
+import { mountCaseBody } from "../components/case-body/case-body.js";
+import { mountCaseHero } from "../components/case-hero/case-hero.js";
+import { mountFooter } from "../components/footer/footer.js";
+import { mountQuote as mountCaseQuote } from "../components/quote/quote.js";
+import { mountRelatedProjects } from "../components/related-projects/related-projects.js";
+
+import { initClickSound } from "./utils/click-sound.js";
 import { fetchJSON } from "./utils/fetch-json.js";
 import { getCaseBySlug } from "./utils/cases.js";
+import { initPressFeedback } from "./utils/press-feedback.js";
 import { onReady } from "./utils/ready.js";
 
 const CASE_ID_PATTERN = /^[a-z0-9-]+$/;
-
-const ric = typeof window !== "undefined" ? window.requestIdleCallback : null;
-
-function runWhenIdle(task) {
-  if (typeof task !== "function") return;
-  if (typeof ric === "function") {
-    ric(() => task());
-  } else {
-    setTimeout(task, 1);
-  }
-}
 
 function resolveCaseSlug(value, fallback) {
   const fallbackSlug = sanitizeCaseSlug(fallback) || "talers";
@@ -63,41 +62,20 @@ async function mountCaseSectionsFromData({
 
   if (!content || typeof content !== "object") content = {};
 
-  const [{ mountCaseHero }, { mountCaseBody }, { mountRelatedProjects }] =
-    await Promise.all([
-      import("../components/case-hero/case-hero.js"),
-      import("../components/case-body/case-body.js"),
-      import("../components/related-projects/related-projects.js"),
-    ]);
-
   mountCaseHero({ selector: ".section.case-hero", data: content });
   mountCaseBody({ selector: ".section.case-body", data: content });
-  mountRelatedProjects({ selector: ".section.related-projects" });
 
   const quoteObj = content && content.quote ? content.quote : null;
   if (quoteObj) {
-    try {
-      const { mountQuote } = await import("../components/quote/quote.js");
-      mountQuote({ data: [quoteObj] });
-    } catch {
-      // ignore quote errors
-    }
+    mountCaseQuote({ data: [quoteObj] });
   }
+
+  mountRelatedProjects({ selector: ".section.related-projects" });
 }
 
 onReady(async () => {
   await mountCaseSectionsFromData();
-  runWhenIdle(() => {
-    Promise.all([
-      import("./utils/click-sound.js").then(({ initClickSound }) =>
-        initClickSound()
-      ),
-      import("./utils/press-feedback.js").then(({ initPressFeedback }) =>
-        initPressFeedback()
-      ),
-      import("../components/footer/footer.js").then(({ mountFooter }) =>
-        mountFooter("footer.section.footer")
-      ),
-    ]).catch(() => {});
-  });
+  initClickSound();
+  initPressFeedback();
+  mountFooter("footer.section.footer");
 });

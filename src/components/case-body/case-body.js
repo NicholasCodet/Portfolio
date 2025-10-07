@@ -61,12 +61,8 @@ export function mountCaseBody({
     const alt = escape(img.alt || "");
     const caption = escape(img.caption || "");
     const src = resolveAssetPath(img.src || "", baseUrl) || "";
-    const width = Number(img.width ?? img.w ?? img.pixelWidth);
-    const height = Number(img.height ?? img.h ?? img.pixelHeight);
-    const widthAttr = Number.isFinite(width) && width > 0 ? ` width=\"${Math.round(width)}\"` : "";
-    const heightAttr = Number.isFinite(height) && height > 0 ? ` height=\"${Math.round(height)}\"` : "";
     const mediaInner = src
-      ? `<img src="${escape(src)}" alt="${alt}" loading="lazy" decoding="async"${widthAttr}${heightAttr} />`
+      ? `<img src="${escape(src)}" alt="${alt}" loading="lazy" />`
       : `<div class="img-placeholder" role="img" aria-label="${alt}"></div>`;
     return `
       <figure class="${figureClass}">
