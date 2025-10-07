@@ -18,6 +18,13 @@
     ],
 
     "context": {
+      "items": [
+        {
+          "src": "../../assets/images/cs-kaelis/kaelis-thumbnail.webp",
+          "alt": "Kaelis thumbnail",
+          "caption": "Core app screens for setup, recovery, and state feedback-clarity without crypto jargon."
+        }
+      ],
       "title": "Context",
       "content": [
         {

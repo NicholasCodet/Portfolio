@@ -35,6 +35,7 @@
 .explore-rail {
   position: relative;
   overflow: hidden;
+  min-height: clamp(180px, 18vw, 210px);
 }
 
 .explore-track {
@@ -91,10 +92,10 @@
   }
 
   /* Keyboard focus support */
-  .case-studies .cs-layout:has(.cs-card-link:focus-within) .cs-card {
+  .case-studies .cs-layout:has(.cs-card-link:focus-visible) .cs-card {
     opacity: 0.45;
   }
-  .case-studies .cs-layout .cs-card-link:focus-within .cs-card {
+  .case-studies .cs-layout .cs-card-link:focus-visible .cs-card {
     opacity: 1;
   }
 }

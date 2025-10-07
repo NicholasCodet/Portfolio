@@ -49,6 +49,8 @@ export function createCaseCard({
       const img = document.createElement("img");
       img.setAttribute("src", resolved);
       img.setAttribute("alt", `${title || ""} preview`);
+      img.setAttribute("width", "1200");
+      img.setAttribute("height", "900");
       img.setAttribute("loading", "lazy");
       img.setAttribute("decoding", "async");
       media.appendChild(img);

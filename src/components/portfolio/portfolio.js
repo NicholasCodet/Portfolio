@@ -37,27 +37,45 @@ export async function mountCaseStudies({
   const spriteUrl = new URL(spritePath, import.meta.url).href;
   await inlineSpriteOnce(spriteUrl);
 
-  const tpl = getTemplate();
-  const frag = tpl.content.cloneNode(true);
-  const layout = frag.querySelector(".cs-layout");
-  const explore = frag.querySelector(".cs-explore");
-  const rail = frag.querySelector(".explore-rail");
-  const ctaTop = frag.querySelector(".cs-explore-cta-top");
-  const ctaBottom = frag.querySelector(".cs-explore-cta-bottom");
+  const existingRoot = container.querySelector(".cs-root");
+  const tpl = existingRoot ? null : getTemplate();
+  const frag = tpl ? tpl.content.cloneNode(true) : null;
+  const root = existingRoot || (frag ? frag.querySelector(".cs-root") : null);
+  if (!root) return () => {};
+
+  const layout = root.querySelector(".cs-layout");
+  const explore = root.querySelector(".cs-explore");
+  const rail = root.querySelector(".explore-rail");
+  const ctaTop = root.querySelector(".cs-explore-cta-top");
+  const ctaBottom = root.querySelector(".cs-explore-cta-bottom");
+  if (!layout || !explore || !rail || !ctaTop || !ctaBottom) return () => {};
+  const wasPrerendered = existingRoot?.hasAttribute("data-prerendered") ?? false;
+
   // Deferred initializer + cleanup for shots marquee
   let initShotsMarqueeFn = null;
   let shotsCleanup = null;
 
   // Render case cards
   const items = featuredCases(caseLimit);
-  for (const it of items) {
+  const existingLinks = Array.from(layout.querySelectorAll(".cs-card-link"));
+  items.forEach((it, index) => {
     const { element } = createCaseCard({
       title: it.title,
       description: it.description,
       href: it.href,
       imageUrl: it.thumbnailUrl || it.thumbnail || "",
     });
-    layout.appendChild(element);
+    const current = existingLinks[index];
+    if (current) {
+      current.replaceWith(element);
+    } else {
+      layout.appendChild(element);
+    }
+  });
+  if (existingLinks.length > items.length) {
+    for (let i = items.length; i < existingLinks.length; i += 1) {
+      existingLinks[i].remove();
+    }
   }
 
   // Build Dribbble CTA once, movable
@@ -85,6 +103,7 @@ export async function mountCaseStudies({
   if (!resolvedShots.length) {
     explore.hidden = true;
   } else {
+    explore.hidden = false;
     // Render shots
     rail.innerHTML = "";
     const track = document.createElement("div");
@@ -250,8 +269,12 @@ export async function mountCaseStudies({
     };
   }
 
-  container.textContent = "";
-  container.appendChild(frag);
+  if (frag) {
+    container.textContent = "";
+    container.appendChild(frag);
+  } else if (wasPrerendered) {
+    existingRoot.removeAttribute("data-prerendered");
+  }
   if (initShotsMarqueeFn) requestAnimationFrame(() => initShotsMarqueeFn());
 
   // Equalize .cs-desc heights based on tallest description
