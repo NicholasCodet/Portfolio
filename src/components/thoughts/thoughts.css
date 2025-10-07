@@ -50,10 +50,10 @@
   }
 
   /* Keyboard focus support */
-  .w-root .w-list:has(.w-item > a:focus-visible) .w-card {
+  .w-root .w-list:has(.w-item > a:focus-within) .w-card {
     opacity: 0.45;
   }
-  .w-root .w-list .w-item > a:focus-visible .w-card {
+  .w-root .w-list .w-item > a:focus-within .w-card {
     opacity: 1;
   }
 }
