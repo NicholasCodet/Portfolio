@@ -2,31 +2,43 @@
   {
     "title": "The Neo Festival 2021",
     "image": "/src/assets/images/shots/neofestival.webp",
-    "url": "https://dribbble.com/shots/25213617-The-Neo-Festival-2021-Rebranding-Creative-Direction"
+    "url": "https://dribbble.com/shots/25213617-The-Neo-Festival-2021-Rebranding-Creative-Direction",
+    "width": 1504,
+    "height": 1128
   },
   {
     "title": "Popote Colors",
     "image": "/src/assets/images/shots/popotecolors.webp",
-    "url": "https://dribbble.com/shots/25233695-Popote-Colors"
+    "url": "https://dribbble.com/shots/25233695-Popote-Colors",
+    "width": 2048,
+    "height": 1536
   },
   {
     "title": "La Cocotte Solidaire",
     "image": "/src/assets/images/shots/cocottesolidaire.webp",
-    "url": "https://dribbble.com/shots/25233703-La-Cocotte-Solidaire"
+    "url": "https://dribbble.com/shots/25233703-La-Cocotte-Solidaire",
+    "width": 2048,
+    "height": 1536
   },
   {
     "title": "Makidoo",
     "image": "/src/assets/images/shots/makidoo.webp",
-    "url": "https://dribbble.com/shots/25233710-Makidoo-App"
+    "url": "https://dribbble.com/shots/25233710-Makidoo-App",
+    "width": 2048,
+    "height": 1536
   },
   {
     "title": "Talers",
     "image": "/src/assets/images/shots/talers.webp",
-    "url": "https://dribbble.com/shots/25233719-Talers"
+    "url": "https://dribbble.com/shots/25233719-Talers",
+    "width": 2048,
+    "height": 1536
   },
   {
     "title": "Dans Ta Roue",
     "image": "/src/assets/images/shots/danstaroue.webp",
-    "url": "https://dribbble.com/shots/25233797-Dans-ta-Roue"
+    "url": "https://dribbble.com/shots/25233797-Dans-ta-Roue",
+    "width": 2048,
+    "height": 1536
   }
 ]

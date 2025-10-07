@@ -43,15 +43,44 @@ export function mountUIStack(
   root.appendChild(frag);
 
   const items = [];
-  const srcs = images.map((s) => resolveSrc(s)).filter(Boolean);
-  for (const src of srcs) {
+  const normalised = images
+    .map((entry) => {
+      if (!entry) return null;
+      if (typeof entry === "string") {
+        return { src: resolveSrc(entry) };
+      }
+      if (typeof entry === "object") {
+        const rawSrc = entry.src || entry.url || entry.href || "";
+        const src = resolveSrc(rawSrc);
+        if (!src) return null;
+        const width = Number(entry.width ?? entry.w ?? entry.pixelWidth);
+        const height = Number(entry.height ?? entry.h ?? entry.pixelHeight);
+        const alt = typeof entry.alt === "string" ? entry.alt : "";
+        return {
+          src,
+          width: Number.isFinite(width) && width > 0 ? width : null,
+          height: Number.isFinite(height) && height > 0 ? height : null,
+          alt,
+        };
+      }
+      return null;
+    })
+    .filter((item) => item && item.src);
+
+  for (const meta of normalised) {
     const item = document.createElement("div");
     item.className = "ui-stack-item";
     const img = document.createElement("img");
-    img.src = src;
-    img.alt = "";
+    img.src = meta.src;
+    img.alt = meta.alt || "";
     img.loading = "lazy";
     img.decoding = "async";
+    if (Number.isFinite(meta.width) && meta.width > 0) {
+      img.setAttribute("width", String(Math.round(meta.width)));
+    }
+    if (Number.isFinite(meta.height) && meta.height > 0) {
+      img.setAttribute("height", String(Math.round(meta.height)));
+    }
     item.appendChild(img);
     stack.appendChild(item);
     items.push(item);

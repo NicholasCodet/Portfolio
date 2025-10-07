@@ -1,6 +1,8 @@
 {
   "card": {
     "thumbnail": "../../assets/images/cs-talers/talers-thumbnail.webp",
+    "thumbnailWidth": 1200,
+    "thumbnailHeight": 900,
     "title": "Talers The Writing App",
     "description": "Platform centralising drafting, notes, and publishing into one unified writing experience.",
     "date": "",
@@ -54,17 +56,23 @@
         {
           "src": "../../assets/images/cs-talers/talers-file.webp",
           "alt": "Talers dashboard overview",
-          "caption": "Progress tracking and goal reminders help sustain a daily writing habit."
+          "caption": "Progress tracking and goal reminders help sustain a daily writing habit.",
+          "width": 1600,
+          "height": 1212
         },
         {
           "src": "../../assets/images/cs-talers/talers-detail.webp",
           "alt": "Talers mobile writing flow",
-          "caption": "Adaptive layouts keep the writing experience consistent on the go."
+          "caption": "Adaptive layouts keep the writing experience consistent on the go.",
+          "width": 1600,
+          "height": 1200
         },
         {
           "src": "../../assets/images/cs-talers/talers-system.webp",
           "alt": "Talers system design",
-          "caption": "A unified component library keeps writing tools clear and cohesive."
+          "caption": "A unified component library keeps writing tools clear and cohesive.",
+          "width": 1200,
+          "height": 900
         }
       ]
     },

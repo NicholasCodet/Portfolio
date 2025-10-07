@@ -1,6 +1,8 @@
 {
   "card": {
     "thumbnail": "../../assets/images/cs-kaelis/kaelis-thumbnail.webp",
+    "thumbnailWidth": 1200,
+    "thumbnailHeight": 900,
     "title": "Kælis The Crypto Ring",
     "description": "Screenless wearable enabling secure, offline crypto payments through gestures.",
     "date": "",
@@ -53,17 +55,23 @@
         {
           "src": "../../assets/images/cs-kaelis/kaelis-screens.webp",
           "alt": "Kaelis dashboard overview",
-          "caption": "Core app screens for setup, recovery, and state feedback-clarity without crypto jargon."
+          "caption": "Core app screens for setup, recovery, and state feedback-clarity without crypto jargon.",
+          "width": 1200,
+          "height": 900
         },
         {
           "src": "../../assets/images/cs-kaelis/kaelis-ring.webp",
           "alt": "Kaelis ring technology",
-          "caption": "Kaelis ring with Secure Element, NFC, and touch sensors for offline gesture control."
+          "caption": "Kaelis ring with Secure Element, NFC, and touch sensors for offline gesture control.",
+          "width": 1200,
+          "height": 900
         },
         {
           "src": "../../assets/images/cs-kaelis/kaelis-dashboard.webp",
           "alt": "Kaelis ring pairing",
-          "caption": "Seedless onboarding through secure ring pairing-simple, clear, and stress-free."
+          "caption": "Seedless onboarding through secure ring pairing-simple, clear, and stress-free.",
+          "width": 1200,
+          "height": 900
         }
       ]
     },
