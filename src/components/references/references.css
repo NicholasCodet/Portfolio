@@ -1,3 +1,8 @@
+.section.references {
+  min-height: 200px;
+  overflow: hidden;
+}
+
 .references .refs-layout {
   display: flex;
   flex-direction: column;
@@ -18,6 +23,7 @@
 .references .refs-marquee {
   flex: 2;
   width: 100%;
+  min-height: 50px;
   position: relative;
   overflow: hidden;
   -webkit-mask-image: linear-gradient(
