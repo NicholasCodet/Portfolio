@@ -73,6 +73,40 @@ export function mountCaseBody({
       </figure>`;
   };
 
+  const renderSectionMedia = (section) => {
+    if (!section || typeof section !== "object") return "";
+
+    const items = [];
+    const seen = new Set();
+    const pushItem = (value) => {
+      if (!value) return;
+      if (Array.isArray(value)) {
+        for (const entry of value) pushItem(entry);
+        return;
+      }
+      if (typeof value !== "object") return;
+      const key = `${value.src || ""}:::${value.alt || ""}:::${value.caption || ""}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      items.push(value);
+    };
+
+    pushItem(section.image);
+    pushItem(section.images);
+    pushItem(section.items);
+
+    if (!items.length) return "";
+    if (items.length === 1) {
+      return renderImage(items[0]);
+    }
+    const figures = items
+      .map((img) => renderImage(img, { figureClass: "case-media" }))
+      .filter(Boolean)
+      .join("");
+    if (!figures) return "";
+    return `<div class="case-media-grid case-section">${figures}</div>`;
+  };
+
   const renderMediaGallery = (media) => {
     if (!media) return "";
     const title = escape(media.title || "");
@@ -326,23 +360,23 @@ export function mountCaseBody({
     };
 
     const parts = [];
-    append(renderImage(ctx.image));
+    append(renderSectionMedia(ctx));
     append(block(ctx));
     append(block(prb));
     append(renderProcess(pro));
     append(block(apr));
-    append(renderImage(apr.image));
+    append(renderSectionMedia(apr));
     append(block(sol));
-    append(renderImage(sol.image));
+    append(renderSectionMedia(sol));
     append(renderMediaGallery(media));
     append(block(out, kpiExtras(out)));
-    append(renderImage(out.image));
+    append(renderSectionMedia(out));
     append(block(res, kpiExtras(res)));
-    append(renderImage(res.image));
+    append(renderSectionMedia(res));
     append(block(imp, kpiExtras(imp)));
-    append(renderImage(imp.image));
+    append(renderSectionMedia(imp));
     append(block(learn, kpiExtras(learn)));
-    append(renderImage(learn.image));
+    append(renderSectionMedia(learn));
 
     root.innerHTML = parts.filter(Boolean).join("");
   }

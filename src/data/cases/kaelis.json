@@ -18,6 +18,13 @@
     ],
 
     "context": {
+      "items": [
+        {
+          "src": "../../assets/images/cs-kaelis/kaelis-thumbnail.webp",
+          "alt": "Kaelis dashboard overview",
+          "caption": "Core app screens for setup, recovery, and state feedback-clarity without crypto jargon."
+        }
+      ],
       "title": "Context",
       "content": [
         {
@@ -33,15 +40,15 @@
       "title": "Process",
       "content": [
         {
-          "subtitle": "Research & Insight",
+          "title": "Research & Insight",
           "text": "I interviewed 15 users across three archetypes: crypto-natives, sovereignty-driven users, and cautious newcomers, to uncover trust triggers and threat models. Findings revealed that users trust physical control and simplicity over transparency or complexity. These insights defined how every interaction would feel and respond."
         },
         {
-          "subtitle": "Ideation & Prototyping",
+          "title": "Ideation & Prototyping",
           "text": "I translated behavioural insights into a finite-state model defining how gestures (tap, triple tap, long press, custom sequence) map to system states like “Paired”, “Ghost Mode”, or “Wiped”. Rapid prototyping with Arduino Nano, capacitive sensors, and 3D-printed rings allowed real-world testing of gesture reliability and haptic feedback under stress."
         },
         {
-          "subtitle": "Interface & Systems Design",
+          "title": "Interface & Systems Design",
           "text": "I built a companion app focused on setup, recovery, and transparency. No seed phrases, no blockchain jargon. The design system prioritised clarity under stress: high contrast, explicit state feedback, and friction where safety mattered. This work bridged physical and digital experiences into a single, resilient ecosystem."
         }
       ]

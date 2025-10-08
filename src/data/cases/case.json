@@ -1,0 +1,59 @@
+{
+  "card": {
+    "thumbnail": "",
+    "title": "",
+    "description": "",
+    "date": "",
+    "tag": [],
+    "featured": false,
+    "priority": 1
+  },
+
+  "case": {
+    "title": "",
+    "summary": "",
+    "meta": [
+      { "label": "Role", "value": "" },
+      { "label": "Duration", "value": "" },
+      { "label": "Domain", "value": "" }
+    ],
+
+    "context": {
+      "items": { "src": "", "alt": "", "caption": "" },
+      "title": "Context",
+      "content": [{ "text": "" }, { "text": "" }]
+    },
+
+    "process": {
+      "title": "Process",
+      "content": [
+        { "title": "", "text": "" },
+        { "title": "", "text": "" },
+        { "title": "", "text": "" }
+      ]
+    },
+
+    "media": {
+      "title": "",
+      "items": [
+        { "src": "", "alt": "", "caption": "" },
+        { "src": "", "alt": "", "caption": "" },
+        { "src": "", "alt": "", "caption": "" }
+      ]
+    },
+
+    "outcome": {
+      "title": "Outcome",
+      "content": { "text": "" },
+      "kpi": {
+        "items": [
+          { "number": "", "text": "" },
+          { "number": "", "text": "" },
+          { "number": "", "text": "" }
+        ]
+      }
+    }
+  },
+
+  "full-case": {}
+}
