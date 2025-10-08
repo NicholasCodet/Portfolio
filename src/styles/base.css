@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 body {
   font-family: var(--font-primary);
   font-size-adjust: 0.5;
@@ -189,32 +194,30 @@ article:hover {
   transform: translateX(-50%) translateY(0);
 }
 
-.aurora {
-  position: absolute;
-  left: 0;
-  right: 0;
-  width: 100%;
-  min-height: 100vh;
-  pointer-events: none;
-  z-index: -10;
-  background: url("../assets/images/backgrounds/aurora.svg") no-repeat center
-    top / cover;
-}
-
+.aurora,
 .ft-aurora {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
+  top: 0;
   width: 100%;
-  min-height: 100vh;
-  transform: rotate(180deg);
-  transform-origin: center;
+  height: 100vh;
   pointer-events: none;
-  z-index: 0;
-  opacity: 0.4;
+  overflow: hidden;
+  z-index: -1;
   background: url("../assets/images/backgrounds/aurora.svg") no-repeat center
     top / cover;
+  transform: none;
+  will-change: transform;
+}
+
+.ft-aurora {
+  bottom: 0;
+  top: auto;
+  z-index: 0;
+  transform: rotate(180deg);
+  transform-origin: center;
+  opacity: 0.4;
 }
 
 @media (min-width: 576px) {

@@ -64,7 +64,20 @@
     />
     <noscript><link rel="stylesheet" href="../styles/base.css" /></noscript>
 
-    <script defer type="module" src="../scripts/main.js"></script>
+    <link rel="preload" href="/assets/style-BnxZ1Yg7.css" as="style" />
+    <link
+      rel="stylesheet"
+      href="/assets/style-BnxZ1Yg7.css"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript
+      ><link rel="stylesheet" href="/assets/style-BnxZ1Yg7.css"
+    /></noscript>
+
+    <script defer type="module">
+      import "../scripts/main.js";
+    </script>
   </head>
   <body data-page="home">
     <div class="aurora" aria-hidden="true"></div>
