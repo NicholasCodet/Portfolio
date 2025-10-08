@@ -13,6 +13,10 @@ export default defineConfig(({ command }) => ({
     assetsDir: "assets",
     sourcemap: false,
     cssMinify: true,
+    //-
+    cssCodeSplit: false, // regroupe tous les CSS en un seul fichier
+    minify: "esbuild",
+    //-
     assetsInlineLimit: 0,
     emptyOutDir: true,
     rollupOptions: {
