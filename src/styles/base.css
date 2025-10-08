@@ -6,6 +6,7 @@
 
 body {
   font-family: var(--font-primary);
+  font-size-adjust: 0.5;
 }
 
 p,
@@ -192,6 +193,7 @@ article:hover {
   position: absolute;
   left: 0;
   right: 0;
+  width: 100%;
   min-height: 100vh;
   pointer-events: none;
   z-index: -10;
@@ -204,6 +206,7 @@ article:hover {
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
   min-height: 100vh;
   transform: rotate(180deg);
   transform-origin: center;
