@@ -48,6 +48,72 @@
       "width": 167,
       "height": 44,
       "alt": "Groupama"
+    },
+    {
+      "name": "La French Tech",
+      "src": "/src/assets/images/logos/la-french-tech.svg",
+      "width": 131,
+      "height": 44,
+      "alt": "La French Tech"
+    }
+  ],
+
+  "startups": [
+    {
+      "name": "Capitaine Study",
+      "src": "/src/assets/images/logos/capitaine-study.svg",
+      "width": 111,
+      "height": 44,
+      "alt": "Capitaine Study"
+    },
+    {
+      "name": "Mains d'Argent",
+      "src": "/src/assets/images/logos/mains-d'argent.svg",
+      "width": 112,
+      "height": 44,
+      "alt": "Mains d'Argent"
+    },
+    {
+      "name": "Ochy",
+      "src": "/src/assets/images/logos/ochy.svg",
+      "width": 147,
+      "height": 44,
+      "alt": "Ochy"
+    },
+    {
+      "name": "SAWA",
+      "src": "/src/assets/images/logos/sawa.svg",
+      "width": 120,
+      "height": 44,
+      "alt": "SAWA"
+    },
+    {
+      "name": "Stimul'in",
+      "src": "/src/assets/images/logos/stimulin.svg",
+      "width": 135,
+      "height": 44,
+      "alt": "Stimul'in"
+    },
+    {
+      "name": "Umains",
+      "src": "/src/assets/images/logos/umains.svg",
+      "width": 124,
+      "height": 44,
+      "alt": "Umains"
+    },
+    {
+      "name": "VO2 Fast",
+      "src": "/src/assets/images/logos/vo2-fast.svg",
+      "width": 124,
+      "height": 44,
+      "alt": "VO2 Fast"
+    },
+    {
+      "name": "Xm Bauble",
+      "src": "/src/assets/images/logos/xm-bauble.svg",
+      "width": 161,
+      "height": 44,
+      "alt": "Xm Bauble"
     }
   ]
 }

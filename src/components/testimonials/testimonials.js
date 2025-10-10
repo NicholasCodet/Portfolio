@@ -2,8 +2,10 @@ import "./testimonials.css";
 import tplHTML from "./testimonials.html?raw";
 
 import testimonialsData from "../../data/testimonials.json";
+import refsData from "../../data/references.json";
 
 import { resolveAssetPath } from "../../scripts/utils/assets.js";
+import { mountCarousel } from "../ui-carousel/ui-carousel.js";
 
 let __tpl;
 function getTemplate() {
@@ -21,6 +23,8 @@ const baseUrl = import.meta.url;
 export function mountTestimonials({
   selector = "section.testimonials",
   limit = 3,
+  startupsMinItems = 6,
+  startupsPxPerSec = 20,
 } = {}) {
   const section = document.querySelector(selector);
   if (!section) return () => {};
@@ -37,6 +41,9 @@ export function mountTestimonials({
   const tpl = getTemplate();
   const frag = tpl.content.cloneNode(true);
   const layout = frag.querySelector(".t-layout");
+  const startupsRoot = frag.querySelector(".t-startups");
+  const startupsTrack = startupsRoot?.querySelector(".t-startups-track");
+  let hasStartupsCarousel = false;
 
   for (const t of cards) {
     const item = document.createElement("div");
@@ -86,8 +93,85 @@ export function mountTestimonials({
     layout.appendChild(item);
   }
 
+  if (startupsRoot && startupsTrack) {
+    const rawStartups = Array.isArray(refsData?.startups) ? refsData.startups : [];
+    const resolvedStartups = rawStartups
+      .filter((it) => it && (it.file || it.src))
+      .map((it) => {
+        const rel = it.file
+          ? `../../assets/images/logos/${it.file}`
+          : it.src || "";
+        const src = resolveAssetPath(rel, baseUrl) || "";
+        if (!src) return null;
+        return { ...it, _src: src };
+      })
+      .filter(Boolean);
+
+    if (!resolvedStartups.length) {
+      startupsRoot.remove();
+    } else {
+      const rows = Array.from(
+        startupsTrack.querySelectorAll(".t-startups-row")
+      );
+      if (!rows.length) {
+        startupsRoot.remove();
+      } else {
+        const minLogos = Math.max(1, Number(startupsMinItems) || 1);
+        let rowItems = resolvedStartups.slice();
+        while (rowItems.length < minLogos)
+          rowItems = rowItems.concat(resolvedStartups);
+
+        const renderRow = (ul) => {
+          ul.textContent = "";
+          for (const it of rowItems) {
+            const li = document.createElement("li");
+            li.className = "t-startups-logo";
+            li.setAttribute("role", "listitem");
+            const img = document.createElement("img");
+            img.className = "t-startups-img";
+            img.setAttribute("src", it._src);
+            img.setAttribute("alt", it.alt || it.name || "Logo");
+            const w = Number(it.width) || 160;
+            const h = Number(it.height) || Math.round(w * 0.24);
+            img.setAttribute("width", String(w));
+            img.setAttribute("height", String(h));
+            img.setAttribute("loading", "eager");
+            img.setAttribute("decoding", "async");
+            li.appendChild(img);
+            ul.appendChild(li);
+          }
+        };
+
+        rows.forEach((row) => renderRow(row));
+        hasStartupsCarousel = rows.some((row) => row.children.length > 0);
+        if (!hasStartupsCarousel) {
+          startupsRoot.remove();
+        }
+      }
+    }
+  }
+
   container.textContent = "";
   container.appendChild(frag);
+
+  let startupsCarouselInstance = null;
+  if (hasStartupsCarousel) {
+    const track = container.querySelector(".t-startups-track");
+    if (track) {
+      startupsCarouselInstance = mountCarousel(track, {
+        autoplay: {
+          enabled: true,
+          mode: "marquee",
+          speed: Number(startupsPxPerSec) || 20,
+          pauseOnHover: false,
+          pauseOnVisibility: true,
+        },
+        draggable: false,
+        keyboard: false,
+        loop: true,
+      });
+    }
+  }
 
   // Equalize quote heights
   const getQuotes = () => Array.from(container.querySelectorAll(".t-quote"));
@@ -114,6 +198,11 @@ export function mountTestimonials({
       ro.disconnect();
     } catch {}
     window.removeEventListener("resize", onResize);
+    if (startupsCarouselInstance && typeof startupsCarouselInstance.destroy === "function") {
+      try {
+        startupsCarouselInstance.destroy();
+      } catch {}
+    }
   };
 }
 
