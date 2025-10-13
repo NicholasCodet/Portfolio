@@ -22,11 +22,18 @@ export function mountKPI(
   if (!container) return () => {};
 
   const tpl = getTemplate();
-  const frag = tpl.content.cloneNode(true);
-  const list = frag.querySelector(".kpi-list");
+  let list = container.querySelector(".kpi-list");
+  if (!list) {
+    const frag = tpl.content.cloneNode(true);
+    container.textContent = "";
+    container.appendChild(frag);
+    list = container.querySelector(".kpi-list");
+  }
+  if (!list) return () => {};
 
   // If template already contains items, keep them; else build from options
-  if (!list.children.length && Array.isArray(items)) {
+  if (Array.isArray(items) && items.length) {
+    list.textContent = "";
     for (const it of items) {
       const li = document.createElement("li");
       li.className = "kpi-item";
@@ -48,11 +55,8 @@ export function mountKPI(
     }
   }
 
-  container.textContent = "";
-  container.appendChild(frag);
-
   // Animate on intersection
-  const values = Array.from(container.querySelectorAll(".kpi-value"));
+  const values = Array.from(list.querySelectorAll(".kpi-value"));
 
   const animateValue = (el) => {
     if (el.dataset.animated === "1") return;
@@ -90,7 +94,7 @@ export function mountKPI(
     { threshold: threshold }
   );
 
-  io.observe(container);
+  io.observe(list);
 
   return () => io.disconnect();
 }

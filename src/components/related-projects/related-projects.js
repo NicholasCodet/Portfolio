@@ -40,13 +40,21 @@ export async function mountRelatedProjects({
   );
 
   const tpl = getTemplate();
-  const frag = tpl.content.cloneNode(true);
-  const layout = frag.querySelector(".rp-layout");
+  let layout = container.querySelector(".rp-layout");
+  if (!layout) {
+    const frag = tpl.content.cloneNode(true);
+    container.textContent = "";
+    container.appendChild(frag);
+    layout = container.querySelector(".rp-layout");
+  }
+  if (!layout) return () => {};
 
   // Load featured cases, exclude current
   const items = featuredCases(0)
     .filter((x) => x && x.slug !== pathSlug)
     .slice(0, limit);
+
+  layout.textContent = "";
 
   for (const it of items) {
     const { element } = createUICaseCard({
@@ -76,9 +84,6 @@ export async function mountRelatedProjects({
     card.appendChild(media);
     layout.appendChild(card);
   }
-
-  container.textContent = "";
-  container.appendChild(frag);
 
   return () => {};
 }

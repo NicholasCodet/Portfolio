@@ -52,13 +52,29 @@ export async function mountHero({
   await inlineSpriteOnce(spriteUrl);
 
   const tpl = getTemplate();
-  const frag = tpl.content.cloneNode(true);
-  const actions = frag.querySelector(".hero-actions");
-  const list = frag.querySelector(".hero-list.socials");
-  const orEl = frag.querySelector(".hero-actions .or");
+  let root = container.querySelector(".hero-wrap");
+  let isHydrating = false;
 
-  // Build email button via ui-button preset
-  if (actions) {
+  if (!root) {
+    const frag = tpl.content.cloneNode(true);
+    container.textContent = "";
+    container.appendChild(frag);
+    root = container.querySelector(".hero-wrap");
+  } else {
+    isHydrating = true;
+  }
+
+  if (!root) return () => {};
+
+  const actions = root.querySelector(".hero-actions");
+  const list = root.querySelector(".hero-list.socials");
+  const orEl = root.querySelector(".hero-actions .or");
+
+  // Build email button via ui-button preset.
+  if (actions && !actions.dataset.heroHydrated) {
+    if (isHydrating) {
+      Array.from(actions.querySelectorAll(".btn-md")).forEach((el) => el.remove());
+    }
     const { element: emailBtn } = createUIButton({
       label: "Email me",
       variant: "primary",
@@ -67,19 +83,25 @@ export async function mountHero({
       icon: "icon-mail-bold",
       iconPosition: "left",
     });
-    actions.insertBefore(emailBtn, list);
-    if (orEl && list) {
-      // Ensure order: [email button] [OR] [socials]
+    const beforeNode = list || orEl || null;
+    if (beforeNode) {
+      actions.insertBefore(emailBtn, beforeNode);
+    } else {
+      actions.appendChild(emailBtn);
+    }
+    if (orEl && list && orEl.nextSibling !== list) {
       actions.insertBefore(orEl, list);
     }
+    actions.dataset.heroHydrated = "true";
   }
 
-  const socials = filterByIds(
-    Array.isArray(socialsData) ? socialsData : [],
-    socialIds,
-    (s) => s.name || s.id
-  );
-  if (list) {
+  if (list && !list.dataset.heroHydrated) {
+    if (isHydrating) list.textContent = "";
+    const socials = filterByIds(
+      Array.isArray(socialsData) ? socialsData : [],
+      socialIds,
+      (s) => s.name || s.id
+    );
     for (const s of socials) {
       const li = document.createElement("li");
       const a = document.createElement("a");
@@ -93,10 +115,8 @@ export async function mountHero({
       li.appendChild(a);
       list.appendChild(li);
     }
+    list.dataset.heroHydrated = "true";
   }
-
-  container.textContent = "";
-  container.appendChild(frag);
 
   return () => {};
 }

@@ -38,37 +38,87 @@ export async function mountCaseStudies({
   await inlineSpriteOnce(spriteUrl);
 
   const tpl = getTemplate();
-  const frag = tpl.content.cloneNode(true);
-  const layout = frag.querySelector(".cs-layout");
-  const explore = frag.querySelector(".cs-explore");
-  const rail = frag.querySelector(".explore-rail");
-  const ctaTop = frag.querySelector(".cs-explore-cta-top");
-  const ctaBottom = frag.querySelector(".cs-explore-cta-bottom");
-  // Deferred initializer + cleanup for shots marquee
-  let initShotsMarqueeFn = null;
+  let root = container.querySelector(".cs-root");
+  let isHydrating = false;
+  if (!root) {
+    const frag = tpl.content.cloneNode(true);
+    container.textContent = "";
+    container.appendChild(frag);
+    root = container.querySelector(".cs-root");
+  } else {
+    isHydrating = true;
+  }
+  if (!root) return () => {};
+
+  const layout = root.querySelector(".cs-layout");
+  const explore = root.querySelector(".cs-explore");
+  const rail = root.querySelector(".explore-rail");
+  const ctaTop = root.querySelector(".cs-explore-cta-top");
+  const ctaBottom = root.querySelector(".cs-explore-cta-bottom");
+
+  const cleanupFns = [];
   let shotsCleanup = null;
 
-  // Render case cards
   const items = featuredCases(caseLimit);
-  for (const it of items) {
-    const { element } = createCaseCard({
-      title: it.title,
-      description: it.description,
-      href: it.href,
-      imageUrl: it.thumbnailUrl || it.thumbnail || "",
-    });
-    layout.appendChild(element);
+  if (layout) {
+    if (!isHydrating || layout.children.length === 0) {
+      layout.textContent = "";
+      for (const it of items) {
+        const { element } = createCaseCard({
+          title: it.title,
+          description: it.description,
+          href: it.href,
+          imageUrl: it.thumbnailUrl || it.thumbnail || "",
+        });
+        layout.appendChild(element);
+      }
+    }
+    layout.dataset.csHydrated = "true";
   }
 
   // Build Dribbble CTA once, movable
   const dribbbleHref = `https://dribbble.com/${dribbbleProfile}`;
-  const { element: cta } = createUIButton({
-    label: "See more on Dribbble",
-    variant: "secondary",
-    href: dribbbleHref,
-    target: "_blank",
-    rel: "noopener",
-  });
+  const ctaSetup = () => {
+    if (explore && explore.dataset.csCtaHydrated === "true") return;
+    if (!ctaTop && !ctaBottom) return null;
+    const { element } = createUIButton({
+      label: "See more on Dribbble",
+      variant: "secondary",
+      href: dribbbleHref,
+      target: "_blank",
+      rel: "noopener",
+    });
+    const mq = window.matchMedia("(min-width: 576px)");
+    const placeCta = () => {
+      if (ctaTop) ctaTop.querySelectorAll(".btn-md").forEach((el) => el.remove());
+      if (ctaBottom)
+        ctaBottom.querySelectorAll(".btn-md").forEach((el) => el.remove());
+      if (mq.matches) {
+        if (ctaTop) ctaTop.appendChild(element);
+      } else if (ctaBottom) {
+        ctaBottom.appendChild(element);
+      } else if (ctaTop) {
+        ctaTop.appendChild(element);
+      }
+    };
+    placeCta();
+    if (mq.addEventListener) {
+      mq.addEventListener("change", placeCta);
+      cleanupFns.push(() => mq.removeEventListener("change", placeCta));
+    } else if (mq.addListener) {
+      mq.addListener(placeCta);
+      cleanupFns.push(() => mq.removeListener(placeCta));
+    }
+    cleanupFns.push(() => {
+      if (element.parentNode) element.parentNode.removeChild(element);
+      if (explore) delete explore.dataset.csCtaHydrated;
+    });
+    if (explore) explore.dataset.csCtaHydrated = "true";
+    return mq;
+  };
+
+  const mq = window.matchMedia("(min-width: 576px)");
+  ctaSetup();
 
   let shots = Array.isArray(shotsData) ? shotsData.slice() : [];
   shots =
@@ -76,17 +126,22 @@ export async function mountCaseStudies({
       ? shots.slice(-shotsLimit).reverse()
       : shots.slice().reverse();
 
-  const resolvedShots = shots.map((item) => {
-    if (!item || typeof item !== "object") return item;
-    const image = resolveAssetPath(item.image || item.thumbnail || "", import.meta.url) || item.image || "";
-    return { ...item, image };
-  });
+  const resolvedShots = shots
+    .map((item) => {
+      if (!item || typeof item !== "object") return null;
+      const image =
+        resolveAssetPath(item.image || item.thumbnail || "", import.meta.url) ||
+        item.image ||
+        "";
+      return { ...item, image };
+    })
+    .filter(Boolean);
 
   if (!resolvedShots.length) {
-    explore.hidden = true;
-  } else {
-    // Render shots
-    rail.innerHTML = "";
+    if (explore) explore.hidden = true;
+  } else if (explore && rail) {
+    explore.hidden = false;
+    rail.textContent = "";
     const track = document.createElement("div");
     track.className = "explore-track";
     rail.appendChild(track);
@@ -113,22 +168,7 @@ export async function mountCaseStudies({
       track.appendChild(a);
     }
 
-    // Position CTA: top for desktop, bottom for mobile
-    const mq = window.matchMedia("(min-width: 576px)");
-    const placeCta = () => {
-      if (mq.matches) {
-        ctaTop.textContent = "";
-        ctaTop.appendChild(cta);
-      } else {
-        ctaBottom.textContent = "";
-        ctaBottom.appendChild(cta);
-      }
-    };
-    placeCta();
-    mq.addEventListener?.("change", placeCta);
-
-    // Prepare marquee init to run after fragment is attached to DOM
-    initShotsMarqueeFn = () => {
+    const initShotsMarquee = () => {
       const originals = Array.from(track.children);
       if (!originals.length) return;
 
@@ -165,7 +205,7 @@ export async function mountCaseStudies({
         }
       })();
 
-      const baseSpeed = 30; // px/s
+      const baseSpeed = 30;
       let curSpeed = baseSpeed;
       let targetSpeed = baseSpeed;
       let offset = 0;
@@ -248,20 +288,17 @@ export async function mountCaseStudies({
         track.style.transform = "";
       };
     };
+
+    requestAnimationFrame(() => initShotsMarquee());
   }
 
-  container.textContent = "";
-  container.appendChild(frag);
-  if (initShotsMarqueeFn) requestAnimationFrame(() => initShotsMarqueeFn());
-
-  // Equalize .cs-desc heights based on tallest description
-  const getDescs = () => Array.from(layout.querySelectorAll(".cs-desc"));
-  const mq = window.matchMedia("(min-width: 576px)");
+  const getDescs = () =>
+    Array.from(root.querySelectorAll(".cs-desc")).filter(Boolean);
 
   const computeAndSetMaxDesc = () => {
     if (!layout) return;
     layout.style.removeProperty("--cs-desc-h");
-    if (!mq.matches) return; // skip equalisation on mobile
+    if (!mq.matches) return;
     const descs = getDescs();
     if (!descs.length) return;
     const max = descs.reduce(
@@ -270,19 +307,38 @@ export async function mountCaseStudies({
     );
     if (max > 0) layout.style.setProperty("--cs-desc-h", `${Math.ceil(max)}px`);
   };
+
   const ro = new ResizeObserver(() => computeAndSetMaxDesc());
   getDescs().forEach((el) => ro.observe(el));
   const onResize = () => computeAndSetMaxDesc();
   window.addEventListener("resize", onResize, { passive: true });
-  mq.addEventListener?.("change", computeAndSetMaxDesc);
+  if (mq.addEventListener) {
+    mq.addEventListener("change", computeAndSetMaxDesc);
+  } else if (mq.addListener) {
+    mq.addListener(computeAndSetMaxDesc);
+  }
   requestAnimationFrame(computeAndSetMaxDesc);
 
-  return () => {
+  cleanupFns.push(() => {
     try {
       ro.disconnect();
     } catch {}
     window.removeEventListener("resize", onResize);
-    mq.removeEventListener?.("change", computeAndSetMaxDesc);
+    if (mq.removeEventListener) {
+      mq.removeEventListener("change", computeAndSetMaxDesc);
+    } else if (mq.removeListener) {
+      mq.removeListener(computeAndSetMaxDesc);
+    }
+  });
+
+  return () => {
+    cleanupFns.forEach((fn) => {
+      try {
+        if (typeof fn === "function") fn();
+      } catch {}
+    });
+    if (layout) delete layout.dataset.csHydrated;
+    if (explore) delete explore.dataset.csCtaHydrated;
     if (shotsCleanup) {
       try {
         shotsCleanup();

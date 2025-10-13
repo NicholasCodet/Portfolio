@@ -27,8 +27,13 @@ export function mountCaseBody({
   if (!container) return () => {};
 
   const tpl = getTemplate();
-  const frag = tpl.content.cloneNode(true);
-  const root = frag.querySelector(".case-body-root");
+  let root = container.querySelector(".case-body-root");
+  if (!root) {
+    const frag = tpl.content.cloneNode(true);
+    container.textContent = "";
+    container.appendChild(frag);
+    root = container.querySelector(".case-body-root");
+  }
   if (!root) return () => {};
 
   // Pull data from JSON once at the top
@@ -300,7 +305,7 @@ export function mountCaseBody({
     const textImpact = renderParagraphContent(after(iImpact, "paragraph"));
     const thirdImage = nextOfTypeAfter(iImpact, "image");
 
-    root.innerHTML = `
+    const legacyMarkup = `
       ${renderImage(firstImage)}
       ${
         titleLandscape
@@ -339,6 +344,7 @@ export function mountCaseBody({
       ${textImpact ? `${textImpact}` : ""}
       ${renderImage(thirdImage)}
     `;
+    root.innerHTML = legacyMarkup;
   } else {
     // Structured path
     const ctx = data.context || {};
@@ -380,9 +386,6 @@ export function mountCaseBody({
 
     root.innerHTML = parts.filter(Boolean).join("");
   }
-
-  container.textContent = "";
-  container.appendChild(frag);
 
   return () => {};
 }

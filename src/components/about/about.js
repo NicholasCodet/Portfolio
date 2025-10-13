@@ -56,11 +56,23 @@ export function mountAbout({
   if (!container) return () => {};
 
   const tpl = getTemplate();
-  const frag = tpl.content.cloneNode(true);
+  let root = container.querySelector(".about-layout");
+  let isHydrating = false;
+  if (!root) {
+    const frag = tpl.content.cloneNode(true);
+    container.textContent = "";
+    container.appendChild(frag);
+    root = container.querySelector(".about-layout");
+  } else {
+    isHydrating = true;
+  }
+  if (!root) return () => {};
+
+  const cleanupFns = [];
 
   // Profile image and id
-  const media = frag.querySelector(".about-media");
-  const roleEl = frag.querySelector(".about-id .role");
+  const media = root.querySelector(".about-media");
+  const roleEl = root.querySelector(".about-id .role");
   if (roleEl && role != null) roleEl.textContent = String(role);
 
   if (media) {
@@ -80,17 +92,25 @@ export function mountAbout({
       imgs = [photo].filter(Boolean);
     }
     if (!imgs.length) imgs = [photo];
-    mountUIStack(media, { images: imgs, desktopDefaultDirection: "up" });
+    if (typeof media.dataset.aboutStackHydrated === "undefined") {
+      const cleanup = mountUIStack(media, {
+        images: imgs,
+        desktopDefaultDirection: "up",
+      });
+      if (typeof cleanup === "function") cleanupFns.push(cleanup);
+      media.dataset.aboutStackHydrated = "true";
+    }
   }
 
   // Socials
-  const socialsList = frag.querySelector(".about-socials");
+  const socialsList = root.querySelector(".about-socials");
   const socials = filterByIds(
     Array.isArray(socialsData) ? socialsData : [],
     socialIds,
     (s) => s.name || s.id
   );
-  if (socialsList) {
+  if (socialsList && socialsList.dataset.aboutHydrated !== "true") {
+    if (isHydrating) socialsList.textContent = "";
     for (const s of socials) {
       const li = document.createElement("li");
       const a = document.createElement("a");
@@ -104,16 +124,18 @@ export function mountAbout({
       li.appendChild(a);
       socialsList.appendChild(li);
     }
+    socialsList.dataset.aboutHydrated = "true";
   }
 
   // Toolkit
-  const toolsList = frag.querySelector(".tools");
+  const toolsList = root.querySelector(".tools");
   const tools = filterByIds(
     Array.isArray(toolkitData) ? toolkitData : [],
     toolIds,
     (t) => t.id || t.label || t.name
   );
-  if (toolsList) {
+  if (toolsList && toolsList.dataset.aboutHydrated !== "true") {
+    if (isHydrating) toolsList.textContent = "";
     for (const t of tools) {
       const li = document.createElement("li");
       li.className = "tool";
@@ -129,19 +151,23 @@ export function mountAbout({
       li.appendChild(span);
       toolsList.appendChild(li);
     }
+    toolsList.dataset.aboutHydrated = "true";
   }
 
   // Thought
-  const titleEl = frag.querySelector(".about-thought .headline-1");
-  const textEl = frag.querySelector(".about-thought-text");
+  const titleEl = root.querySelector(".about-thought .headline-1");
+  const textEl = root.querySelector(".about-thought-text");
   if (titleEl && thoughtTitle != null)
     titleEl.textContent = String(thoughtTitle);
   if (textEl && thought != null) textEl.textContent = String(thought);
 
-  container.textContent = "";
-  container.appendChild(frag);
-
-  return () => {};
+  return () => {
+    cleanupFns.forEach((fn) => {
+      try {
+        if (typeof fn === "function") fn();
+      } catch {}
+    });
+  };
 }
 
 if (typeof window !== "undefined") {

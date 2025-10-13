@@ -39,58 +39,73 @@ export function mountTestimonials({
   }
 
   const tpl = getTemplate();
-  const frag = tpl.content.cloneNode(true);
-  const layout = frag.querySelector(".t-layout");
-  const startupsRoot = frag.querySelector(".t-startups");
-  const startupsTrack = startupsRoot?.querySelector(".t-startups-track");
+  let layout = container.querySelector(".t-layout");
+  let startupsRoot = container.querySelector(".t-startups");
+  let startupsTrack = startupsRoot?.querySelector(".t-startups-track");
+  let isHydrating = false;
+  if (!layout || !startupsRoot || !startupsTrack) {
+    const frag = tpl.content.cloneNode(true);
+    container.textContent = "";
+    container.appendChild(frag);
+    layout = container.querySelector(".t-layout");
+    startupsRoot = container.querySelector(".t-startups");
+    startupsTrack = startupsRoot?.querySelector(".t-startups-track");
+  } else {
+    isHydrating = true;
+  }
+
+  const cleanupFns = [];
   let hasStartupsCarousel = false;
 
-  for (const t of cards) {
-    const item = document.createElement("div");
-    item.className = "t-item";
-    const fig = document.createElement("figure");
-    fig.className = "t-figure";
+  if (layout && (layout.children.length === 0 || !isHydrating)) {
+    layout.textContent = "";
+    for (const t of cards) {
+      const item = document.createElement("div");
+      item.className = "t-item";
+      const fig = document.createElement("figure");
+      fig.className = "t-figure";
 
-    const block = document.createElement("blockquote");
-    block.className = "t-quote";
-    const p = document.createElement("p");
-    p.className = "text-md";
-    p.textContent = String(t.quote || "");
-    block.appendChild(p);
+      const block = document.createElement("blockquote");
+      block.className = "t-quote";
+      const p = document.createElement("p");
+      p.className = "text-md";
+      p.textContent = String(t.quote || "");
+      block.appendChild(p);
 
-    const fc = document.createElement("figcaption");
-    fc.className = "t-author";
+      const fc = document.createElement("figcaption");
+      fc.className = "t-author";
 
-    const avatarUrl = resolveAssetPath(t.avatar || "", baseUrl) || "";
-    if (avatarUrl) {
-      const img = document.createElement("img");
-      img.className = "t-avatar";
-      img.setAttribute("src", avatarUrl);
-      img.setAttribute("alt", "");
-      img.setAttribute("width", String(t.avatarW || 44));
-      img.setAttribute("height", String(t.avatarH || 44));
-      img.setAttribute("loading", "lazy");
-      img.setAttribute("decoding", "async");
-      fc.appendChild(img);
+      const avatarUrl = resolveAssetPath(t.avatar || "", baseUrl) || "";
+      if (avatarUrl) {
+        const img = document.createElement("img");
+        img.className = "t-avatar";
+        img.setAttribute("src", avatarUrl);
+        img.setAttribute("alt", "");
+        img.setAttribute("width", String(t.avatarW || 44));
+        img.setAttribute("height", String(t.avatarH || 44));
+        img.setAttribute("loading", "lazy");
+        img.setAttribute("decoding", "async");
+        fc.appendChild(img);
+      }
+
+      const meta = document.createElement("div");
+      meta.className = "t-meta";
+      const strong = document.createElement("strong");
+      strong.className = "name";
+      strong.textContent = String(t.author || "");
+      const span = document.createElement("span");
+      span.className = "role";
+      const companyLabel = t.company ? ` @${t.company}` : "";
+      span.textContent = [t.role || "", companyLabel].filter(Boolean).join("");
+      meta.appendChild(strong);
+      meta.appendChild(span);
+      fc.appendChild(meta);
+
+      fig.appendChild(block);
+      fig.appendChild(fc);
+      item.appendChild(fig);
+      layout.appendChild(item);
     }
-
-    const meta = document.createElement("div");
-    meta.className = "t-meta";
-    const strong = document.createElement("strong");
-    strong.className = "name";
-    strong.textContent = String(t.author || "");
-    const span = document.createElement("span");
-    span.className = "role";
-    const companyLabel = t.company ? ` @${t.company}` : "";
-    span.textContent = [t.role || "", companyLabel].filter(Boolean).join("");
-    meta.appendChild(strong);
-    meta.appendChild(span);
-    fc.appendChild(meta);
-
-    fig.appendChild(block);
-    fig.appendChild(fc);
-    item.appendChild(fig);
-    layout.appendChild(item);
   }
 
   if (startupsRoot && startupsTrack) {
@@ -108,13 +123,14 @@ export function mountTestimonials({
       .filter(Boolean);
 
     if (!resolvedStartups.length) {
-      startupsRoot.remove();
+      startupsRoot.hidden = true;
     } else {
+      startupsRoot.hidden = false;
       const rows = Array.from(
         startupsTrack.querySelectorAll(".t-startups-row")
       );
       if (!rows.length) {
-        startupsRoot.remove();
+        startupsRoot.hidden = true;
       } else {
         const minLogos = Math.max(1, Number(startupsMinItems) || 1);
         let rowItems = resolvedStartups.slice();
@@ -142,22 +158,26 @@ export function mountTestimonials({
           }
         };
 
-        rows.forEach((row) => renderRow(row));
+        const needsRows =
+          !isHydrating ||
+          !startupsTrack.dataset.tStartupsHydrated ||
+          rows.some((row) => row.children.length === 0);
+        if (needsRows) {
+          rows.forEach((row) => renderRow(row));
+        }
+        startupsTrack.dataset.tStartupsHydrated = "true";
         hasStartupsCarousel = rows.some((row) => row.children.length > 0);
         if (!hasStartupsCarousel) {
-          startupsRoot.remove();
+          startupsRoot.hidden = true;
         }
       }
     }
   }
 
-  container.textContent = "";
-  container.appendChild(frag);
-
   let startupsCarouselInstance = null;
   if (hasStartupsCarousel) {
     const track = container.querySelector(".t-startups-track");
-    if (track) {
+    if (track && !track.dataset.tStartupsCarousel) {
       startupsCarouselInstance = mountCarousel(track, {
         autoplay: {
           enabled: true,
@@ -169,6 +189,11 @@ export function mountTestimonials({
         draggable: false,
         keyboard: false,
         loop: true,
+      });
+      track.dataset.tStartupsCarousel = "true";
+      cleanupFns.push(() => {
+        if (track.dataset.tStartupsCarousel)
+          delete track.dataset.tStartupsCarousel;
       });
     }
   }
@@ -203,6 +228,12 @@ export function mountTestimonials({
         startupsCarouselInstance.destroy();
       } catch {}
     }
+    if (startupsTrack) delete startupsTrack.dataset.tStartupsHydrated;
+    cleanupFns.forEach((fn) => {
+      try {
+        if (typeof fn === "function") fn();
+      } catch {}
+    });
   };
 }
 

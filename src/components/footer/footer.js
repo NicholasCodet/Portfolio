@@ -58,7 +58,19 @@ export function mountFooter(selector = ".section.footer", opts = {}) {
   } = opts;
 
   const tpl = getTemplate();
-  const frag = tpl.content.cloneNode(true);
+  let wrap = container.querySelector(".ft-wrap");
+  let bottom = container.querySelector(".ft-bottom");
+  let isHydrating = false;
+  if (!wrap || !bottom) {
+    const frag = tpl.content.cloneNode(true);
+    container.textContent = "";
+    container.appendChild(frag);
+    wrap = container.querySelector(".ft-wrap");
+    bottom = container.querySelector(".ft-bottom");
+  } else {
+    isHydrating = true;
+  }
+  if (!wrap) return () => {};
 
   // Resolve asset/data URLs relative to this module
   const spriteUrl = new URL(spritePath, import.meta.url).href;
@@ -69,19 +81,22 @@ export function mountFooter(selector = ".section.footer", opts = {}) {
   // Ensure sprite available
   inlineSpriteOnce(spriteUrl).catch(() => {});
 
-  // Prepare actions container where we will inject UI buttons
-  const actions = frag.querySelector(".actions");
-  const yearP = frag.querySelector(".copyright");
+  const actions = wrap.querySelector(".actions");
+  const yearP = bottom?.querySelector(".copyright");
+  const projList = wrap.querySelector(".ft-list.projects");
+  const socialList = wrap.querySelector(".ft-list.socials");
 
   const cleanupFns = [];
 
   if (actions) {
-    // clear previous children if any
-    actions.textContent = "";
+    if (isHydrating) {
+      Array.from(actions.querySelectorAll(".btn-md")).forEach((el) => el.remove());
+    } else {
+      actions.textContent = "";
+    }
     const defaultCopyLabel = email;
     const copiedLabel = "Email copied ✓";
 
-    // Email button
     const { element: emailBtn, cleanup: cleanupEmailBtn } = createUIButton({
       label: "Email me",
       variant: "primary",
@@ -93,7 +108,6 @@ export function mountFooter(selector = ".section.footer", opts = {}) {
     });
     if (typeof cleanupEmailBtn === "function") cleanupFns.push(cleanupEmailBtn);
 
-    // Copy email button
     const { element: copyButton, cleanup: cleanupCopy } = createUIButton({
       label: defaultCopyLabel,
       variant: "secondary",
@@ -119,8 +133,8 @@ export function mountFooter(selector = ".section.footer", opts = {}) {
     actions.appendChild(emailBtn);
     actions.appendChild(copyButton);
 
-    // Track cleanup for the copy listener
     if (typeof cleanupCopy === "function") cleanupFns.push(cleanupCopy);
+    actions.dataset.footerHydrated = "true";
   }
 
   if (yearP) {
@@ -128,10 +142,9 @@ export function mountFooter(selector = ".section.footer", opts = {}) {
     yearP.textContent = `© ${year} — Designed & coded by Nicholas Codet. All rights reserved.`;
   }
 
-  // Fill Projects
   const featured = featuredCases(projectsLimit);
-  const projList = frag.querySelector(".ft-list.projects");
-  if (projList) {
+  if (projList && (!isHydrating || projList.children.length === 0)) {
+    if (isHydrating) projList.textContent = "";
     for (const p of featured) {
       const li = document.createElement("li");
       const a = document.createElement("a");
@@ -151,10 +164,9 @@ export function mountFooter(selector = ".section.footer", opts = {}) {
     }
   }
 
-  // Fill Socials
   const socials = filterByIds(socialsAll, socialIds, (s) => s.name || s.id);
-  const socialList = frag.querySelector(".ft-list.socials");
-  if (socialList) {
+  if (socialList && (!isHydrating || socialList.children.length === 0)) {
+    if (isHydrating) socialList.textContent = "";
     for (const s of socials) {
       const li = document.createElement("li");
       const a = document.createElement("a");
@@ -173,9 +185,6 @@ export function mountFooter(selector = ".section.footer", opts = {}) {
     }
   }
 
-  // Mount
-  container.appendChild(frag);
-
   return function cleanup() {
     cleanupFns.forEach((fn) => {
       try {
@@ -184,6 +193,7 @@ export function mountFooter(selector = ".section.footer", opts = {}) {
         // Ignore cleanup errors
       }
     });
+    if (actions) delete actions.dataset.footerHydrated;
   };
 }
 

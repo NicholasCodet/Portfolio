@@ -39,8 +39,21 @@ export async function mountReferences({
   while (rowItems.length < minItems) rowItems = rowItems.concat(items);
 
   const tpl = getTemplate();
-  const frag = tpl.content.cloneNode(true);
-  const rows = frag.querySelectorAll(".refs-row");
+  let root = container.querySelector(".refs-layout");
+  let isHydrating = false;
+  if (!root) {
+    const frag = tpl.content.cloneNode(true);
+    container.textContent = "";
+    container.appendChild(frag);
+    root = container.querySelector(".refs-layout");
+  } else {
+    isHydrating = true;
+  }
+  if (!root) return () => {};
+
+  const cleanupFns = [];
+
+  const rows = root.querySelectorAll(".refs-row");
   const renderRow = (ul) => {
     for (const it of rowItems) {
       const li = document.createElement("li");
@@ -60,15 +73,18 @@ export async function mountReferences({
       ul.appendChild(li);
     }
   };
-  rows.forEach((ul) => renderRow(ul));
 
-  container.textContent = "";
-  container.appendChild(frag);
+  rows.forEach((ul) => {
+    if (!ul) return;
+    if (ul.dataset.refsHydrated === "true" && !isHydrating) return;
+    if (isHydrating) ul.textContent = "";
+    renderRow(ul);
+    ul.dataset.refsHydrated = "true";
+  });
 
-  const track = container.querySelector(".refs-track");
-  if (track) {
-    // ui-carousel marquee mode expects duplicated content (template already has two rows)
-    mountCarousel(track, {
+  const track = root.querySelector(".refs-track");
+  if (track && track.dataset.refsCarouselHydrated !== "true") {
+    const destroy = mountCarousel(track, {
       autoplay: {
         enabled: true,
         mode: "marquee",
@@ -80,9 +96,23 @@ export async function mountReferences({
       keyboard: false,
       loop: true,
     });
+    cleanupFns.push(() => {
+      if (typeof destroy === "function") destroy();
+      delete track.dataset.refsCarouselHydrated;
+    });
+    track.dataset.refsCarouselHydrated = "true";
   }
 
-  return () => {};
+  return () => {
+    cleanupFns.forEach((fn) => {
+      try {
+        if (typeof fn === "function") fn();
+      } catch {}
+    });
+    rows.forEach((ul) => {
+      if (ul) delete ul.dataset.refsHydrated;
+    });
+  };
 }
 
 if (typeof window !== "undefined") {

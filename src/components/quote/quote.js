@@ -45,65 +45,124 @@ export function mountQuote({
   }
 
   const tpl = getTemplate();
-  const frag = tpl.content.cloneNode(true);
-
-  // Remap classes according to prefix
-  const find = (suffix, legacy) =>
-    frag.querySelector(`.${DEFAULT_PREFIX}-${suffix}`) ||
-    (legacy ? frag.querySelector(legacy) : null);
-
-  const fig = find("figure", ".testimony-figure");
-  const bq = find("text", ".testimony-quote");
-  const pEl =
-    frag.querySelector(`.${DEFAULT_PREFIX}-text p`) ||
-    frag.querySelector(".testimony-quote p");
-  const cap = find("author", ".testimony-author");
-  const meta = find("meta", ".testimony-meta");
-  const nameEl =
-    frag.querySelector(`.${DEFAULT_PREFIX}-meta .name`) ||
-    frag.querySelector(".testimony-meta .name");
-  const roleEl =
-    frag.querySelector(`.${DEFAULT_PREFIX}-meta .role`) ||
-    frag.querySelector(".testimony-meta .role");
-
-  if (classPrefix !== DEFAULT_PREFIX) {
-    if (fig) fig.className = `${classPrefix}-figure`;
-    if (bq) bq.className = `${classPrefix}-text ${classPrefix}-quote`;
-    if (cap) cap.className = `${classPrefix}-author`;
-    if (meta) meta.className = `${classPrefix}-meta`;
+  let figure =
+    container.querySelector(`.${classPrefix}-figure`) ||
+    container.querySelector(`.${DEFAULT_PREFIX}-figure`);
+  let isHydrating = false;
+  if (!figure) {
+    const frag = tpl.content.cloneNode(true);
+    container.textContent = "";
+    container.appendChild(frag);
+    figure = container.querySelector(`.${DEFAULT_PREFIX}-figure`);
+  } else {
+    isHydrating = true;
   }
+  if (!figure) return () => {};
+
+  const remapClass = (el, klass) => {
+    if (!el) return;
+    el.className = klass;
+  };
+
+  const ensurePrefixedClasses = () => {
+    if (classPrefix !== DEFAULT_PREFIX) {
+      remapClass(figure, `${classPrefix}-figure`);
+    }
+
+    const blockquote =
+      figure.querySelector(`.${DEFAULT_PREFIX}-text`) ||
+      figure.querySelector(`.${classPrefix}-text`) ||
+      figure.querySelector(".testimony-quote") ||
+      figure.querySelector(".quote-text");
+    const caption =
+      figure.querySelector(`.${DEFAULT_PREFIX}-author`) ||
+      figure.querySelector(`.${classPrefix}-author`) ||
+      figure.querySelector(".testimony-author") ||
+      figure.querySelector(".quote-author");
+    const meta =
+      figure.querySelector(`.${DEFAULT_PREFIX}-meta`) ||
+      figure.querySelector(`.${classPrefix}-meta`) ||
+      figure.querySelector(".testimony-meta") ||
+      figure.querySelector(".quote-meta");
+
+    if (blockquote) {
+      const nextPrefix =
+        classPrefix !== DEFAULT_PREFIX ? classPrefix : DEFAULT_PREFIX;
+      remapClass(
+        blockquote,
+        `${nextPrefix}-text ${nextPrefix}-quote`.trim()
+      );
+    }
+    if (caption && classPrefix !== DEFAULT_PREFIX) {
+      remapClass(caption, `${classPrefix}-author`);
+    }
+    if (meta && classPrefix !== DEFAULT_PREFIX) {
+      remapClass(meta, `${classPrefix}-meta`);
+    }
+  };
+
+  ensurePrefixedClasses();
+
+  const block =
+    figure.querySelector(`.${classPrefix}-text`) ||
+    figure.querySelector(`.${DEFAULT_PREFIX}-text`) ||
+    figure.querySelector(".quote-text") ||
+    figure.querySelector(".testimony-quote");
+  const pEl =
+    block?.querySelector("p") ||
+    figure.querySelector(`.${classPrefix}-text p`) ||
+    figure.querySelector(`.${DEFAULT_PREFIX}-text p`);
+  const caption =
+    figure.querySelector(`.${classPrefix}-author`) ||
+    figure.querySelector(`.${DEFAULT_PREFIX}-author`) ||
+    figure.querySelector(".quote-author") ||
+    figure.querySelector(".testimony-author");
+  const meta =
+    caption?.querySelector(`.${classPrefix}-meta`) ||
+    caption?.querySelector(`.${DEFAULT_PREFIX}-meta`) ||
+    caption?.querySelector(".quote-meta") ||
+    caption?.querySelector(".testimony-meta");
+  const nameEl = meta?.querySelector(".name");
+  const roleEl = meta?.querySelector(".role");
 
   if (pEl) {
-    // support both { text, author, ... } and { quote, author, ... }
     const txt = t.text || t.quote || "";
     pEl.textContent = String(txt);
-    // adjust heading style class
     pEl.className = headlineClass;
   }
   if (nameEl) nameEl.textContent = String(t.author || t.name || "");
   if (roleEl) {
-    const parts = [t.role || "", t.company ? `@${t.company}` : ""].filter(Boolean);
+    const parts = [t.role || "", t.company ? `@${t.company}` : ""].filter(
+      Boolean
+    );
     roleEl.textContent = parts.join(" ").trim();
   }
 
   const avatarUrl = resolveAssetPath(t.avatar || "", baseUrl) || "";
-  if (avatarUrl && cap) {
-    const img = document.createElement("img");
-    img.className =
-      classPrefix === DEFAULT_PREFIX
-        ? `${DEFAULT_PREFIX}-avatar`
-        : `${classPrefix}-avatar`;
-    img.setAttribute("src", avatarUrl);
-    img.setAttribute("alt", "");
-    img.setAttribute("width", String(t.avatarW || 44));
-    img.setAttribute("height", String(t.avatarH || 44));
-    img.setAttribute("loading", "lazy");
-    img.setAttribute("decoding", "async");
-    cap.insertBefore(img, cap.firstChild);
+  if (caption) {
+    let img =
+      caption.querySelector("img") ||
+      caption.querySelector(`.${classPrefix}-avatar`) ||
+      caption.querySelector(`.${DEFAULT_PREFIX}-avatar`);
+    if (avatarUrl) {
+      if (!img) {
+        img = document.createElement("img");
+        caption.insertBefore(img, caption.firstChild || null);
+      }
+      img.className =
+        classPrefix === DEFAULT_PREFIX
+          ? `${DEFAULT_PREFIX}-avatar`
+          : `${classPrefix}-avatar`;
+      img.setAttribute("src", avatarUrl);
+      img.setAttribute("alt", "");
+      img.setAttribute("width", String(t.avatarW || 44));
+      img.setAttribute("height", String(t.avatarH || 44));
+      img.setAttribute("loading", "lazy");
+      img.setAttribute("decoding", "async");
+    } else if (img) {
+      img.remove();
+    }
   }
-
-  container.textContent = "";
-  container.appendChild(frag);
 
   return () => {};
 }

@@ -27,11 +27,21 @@ export async function mountCaseHero({
   if (!container) return () => {};
 
   const tpl = getTemplate();
-  const frag = tpl.content.cloneNode(true);
-  const rootEl = frag.querySelector(".case-hero-root");
-  const titleEl = frag.querySelector(".case-title");
-  const sumEl = frag.querySelector(".summary");
-  const metaEl = frag.querySelector(".case-meta");
+  let rootEl = container.querySelector(".case-hero-root");
+  let isHydrating = false;
+  if (!rootEl) {
+    const frag = tpl.content.cloneNode(true);
+    container.textContent = "";
+    container.appendChild(frag);
+    rootEl = container.querySelector(".case-hero-root");
+  } else {
+    isHydrating = true;
+  }
+  if (!rootEl) return () => {};
+
+  const titleEl = rootEl.querySelector(".case-title");
+  const sumEl = rootEl.querySelector(".summary");
+  const metaEl = rootEl.querySelector(".case-meta");
 
   // Inline sprite for back icon
   try {
@@ -42,20 +52,25 @@ export async function mountCaseHero({
   const homeHref = "../index.html";
 
   if (rootEl) {
-    const backLink = document.createElement("a");
-    backLink.className = "link back";
+    let backLink = rootEl.querySelector(".link.back");
+    if (!backLink) {
+      backLink = document.createElement("a");
+      backLink.className = "link back";
+      rootEl.insertBefore(backLink, rootEl.firstChild);
+    } else if (backLink !== rootEl.firstChild) {
+      rootEl.insertBefore(backLink, rootEl.firstChild);
+    }
     backLink.setAttribute("aria-label", "Back home");
     bindSafeLink(backLink, homeHref);
 
-    const icon = createSvgUse("icon-arrowLeft-linear", {
+    backLink.textContent = "";
+    const svg = createSvgUse("icon-arrowLeft-linear", {
       size: 24,
       className: "icon linear",
     });
     const label = document.createElement("span");
     label.textContent = "Back home";
-
-    backLink.append(icon, label);
-    rootEl.insertBefore(backLink, rootEl.firstChild);
+    backLink.append(svg, label);
   }
 
   const title = String(
@@ -75,6 +90,7 @@ export async function mountCaseHero({
   // Render meta items if available
   const metaItems = Array.isArray(data.meta) ? data.meta : [];
   if (metaEl && metaItems.length) {
+    metaEl.textContent = "";
     for (const m of metaItems) {
       const item = document.createElement("div");
       item.className = "case-meta-item";
@@ -89,11 +105,9 @@ export async function mountCaseHero({
       metaEl.appendChild(item);
     }
   } else if (metaEl) {
-    metaEl.remove();
+    metaEl.textContent = "";
+    if (!isHydrating) metaEl.remove();
   }
-
-  container.textContent = "";
-  container.appendChild(frag);
 
   return () => {};
 }

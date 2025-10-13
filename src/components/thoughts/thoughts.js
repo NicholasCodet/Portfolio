@@ -50,57 +50,67 @@ export async function mountThoughts({
   }
 
   const tpl = getTemplate();
-  const frag = tpl.content.cloneNode(true);
-  const listEl = frag.querySelector(".w-list");
-
-  for (const art of items) {
-    const li = document.createElement("li");
-    li.className = "w-item";
-
-    const a = document.createElement("a");
-    const isExternal = art.externalUrl && art.href === art.externalUrl;
-    bindSafeLink(a, art.href || "#", {
-      target: isExternal ? "_blank" : undefined,
-    });
-
-    const card = document.createElement("article");
-    card.className = "w-card";
-
-    const left = document.createElement("div");
-    left.className = "w-left";
-    const meta = document.createElement("div");
-    meta.className = "w-meta text-sm";
-    const date = art.published ? formatDate(art.published) : "";
-    const mins = Number(art.minutes) ? `${art.minutes} min` : "";
-    const metaText = [date, mins].filter(Boolean).join(" • ");
-    meta.textContent = metaText;
-    const title = document.createElement("h4");
-    title.className = "w-title sub-heading-2";
-    title.textContent = String(art.title || "");
-    left.appendChild(meta);
-    left.appendChild(title);
-
-    const right = document.createElement("div");
-    right.className = "w-right";
-    const spanLink = document.createElement("span");
-    spanLink.className = "link";
-    spanLink.appendChild(document.createTextNode("Read the article"));
-    const icon = createSvgUse("icon-arrowRight-linear", {
-      size: 24,
-      className: "icon linear",
-    });
-    spanLink.appendChild(icon);
-    right.appendChild(spanLink);
-
-    card.appendChild(left);
-    card.appendChild(right);
-    a.appendChild(card);
-    li.appendChild(a);
-    listEl.appendChild(li);
+  let root = container.querySelector(".w-root");
+  let isHydrating = false;
+  if (!root) {
+    const frag = tpl.content.cloneNode(true);
+    container.textContent = "";
+    container.appendChild(frag);
+    root = container.querySelector(".w-root");
+  } else {
+    isHydrating = true;
   }
+  if (!root) return () => {};
 
-  container.textContent = "";
-  container.appendChild(frag);
+  const listEl = root.querySelector(".w-list");
+  if (listEl && (!isHydrating || listEl.children.length === 0)) {
+    listEl.textContent = "";
+    for (const art of items) {
+      const li = document.createElement("li");
+      li.className = "w-item";
+
+      const a = document.createElement("a");
+      const isExternal = art.externalUrl && art.href === art.externalUrl;
+      bindSafeLink(a, art.href || "#", {
+        target: isExternal ? "_blank" : undefined,
+      });
+
+      const card = document.createElement("article");
+      card.className = "w-card";
+
+      const left = document.createElement("div");
+      left.className = "w-left";
+      const meta = document.createElement("div");
+      meta.className = "w-meta text-sm";
+      const date = art.published ? formatDate(art.published) : "";
+      const mins = Number(art.minutes) ? `${art.minutes} min` : "";
+      const metaText = [date, mins].filter(Boolean).join(" • ");
+      meta.textContent = metaText;
+      const title = document.createElement("h4");
+      title.className = "w-title sub-heading-2";
+      title.textContent = String(art.title || "");
+      left.appendChild(meta);
+      left.appendChild(title);
+
+      const right = document.createElement("div");
+      right.className = "w-right";
+      const spanLink = document.createElement("span");
+      spanLink.className = "link";
+      spanLink.appendChild(document.createTextNode("Read the article"));
+      const icon = createSvgUse("icon-arrowRight-linear", {
+        size: 24,
+        className: "icon linear",
+      });
+      spanLink.appendChild(icon);
+      right.appendChild(spanLink);
+
+      card.appendChild(left);
+      card.appendChild(right);
+      a.appendChild(card);
+      li.appendChild(a);
+      listEl.appendChild(li);
+    }
+  }
 
   return () => {};
 }
