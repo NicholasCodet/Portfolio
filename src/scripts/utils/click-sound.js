@@ -1,4 +1,4 @@
-import defaultSoundUrl from "../../assets/sounds/arcade.m4a?url";
+import defaultSoundUrl from "../../assets/sounds/arcade.wav?url";
 
 export function initClickSound({
   src = defaultSoundUrl,

@@ -61,8 +61,7 @@ export function mountFooter(selector = ".section.footer", opts = {}) {
   const frag = tpl.content.cloneNode(true);
 
   // Resolve asset/data URLs relative to this module
-  const base = new URL(".", import.meta.url);
-  const spriteUrl = new URL(spritePath, base).href;
+  const spriteUrl = new URL(spritePath, import.meta.url).href;
 
   // Use statically imported data to avoid fetch failures in dev/build
   const socialsAll = Array.isArray(socialsDataRaw) ? socialsDataRaw : [];
