@@ -37,7 +37,17 @@ export function resolveAssetPath(p, baseModuleUrl) {
   // 3) Fallback to module-relative URL if provided
   if (baseModuleUrl) {
     try {
-      return new URL(p, baseModuleUrl).href;
+      const url = new URL(p, baseModuleUrl);
+      if (url.protocol === "file:") {
+        const pathname = url.pathname.replace(/\\/g, "/");
+        const idx = pathname.lastIndexOf("/assets/");
+        if (idx !== -1) {
+          const assetPath = pathname.slice(idx);
+          return assetPath.startsWith("/") ? assetPath : `/${assetPath}`;
+        }
+        return pathname;
+      }
+      return url.href;
     } catch {}
   }
   return null;

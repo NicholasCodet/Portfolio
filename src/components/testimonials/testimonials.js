@@ -160,12 +160,12 @@ export function mountTestimonials({
 
         const needsRows =
           !isHydrating ||
-          !startupsTrack.dataset.tStartupsHydrated ||
+          !startupsTrack.__tStartupsHydrated ||
           rows.some((row) => row.children.length === 0);
         if (needsRows) {
           rows.forEach((row) => renderRow(row));
         }
-        startupsTrack.dataset.tStartupsHydrated = "true";
+        startupsTrack.__tStartupsHydrated = true;
         hasStartupsCarousel = rows.some((row) => row.children.length > 0);
         if (!hasStartupsCarousel) {
           startupsRoot.hidden = true;
@@ -177,7 +177,7 @@ export function mountTestimonials({
   let startupsCarouselInstance = null;
   if (hasStartupsCarousel) {
     const track = container.querySelector(".t-startups-track");
-    if (track && !track.dataset.tStartupsCarousel) {
+    if (track && !track.__tStartupsCarousel) {
       startupsCarouselInstance = mountCarousel(track, {
         autoplay: {
           enabled: true,
@@ -190,10 +190,9 @@ export function mountTestimonials({
         keyboard: false,
         loop: true,
       });
-      track.dataset.tStartupsCarousel = "true";
+      track.__tStartupsCarousel = true;
       cleanupFns.push(() => {
-        if (track.dataset.tStartupsCarousel)
-          delete track.dataset.tStartupsCarousel;
+        track.__tStartupsCarousel = false;
       });
     }
   }
@@ -228,7 +227,7 @@ export function mountTestimonials({
         startupsCarouselInstance.destroy();
       } catch {}
     }
-    if (startupsTrack) delete startupsTrack.dataset.tStartupsHydrated;
+    if (startupsTrack) startupsTrack.__tStartupsHydrated = false;
     cleanupFns.forEach((fn) => {
       try {
         if (typeof fn === "function") fn();

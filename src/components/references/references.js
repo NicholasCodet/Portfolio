@@ -76,14 +76,14 @@ export async function mountReferences({
 
   rows.forEach((ul) => {
     if (!ul) return;
-    if (ul.dataset.refsHydrated === "true" && !isHydrating) return;
+    if (ul.__refsHydrated && !isHydrating) return;
     if (isHydrating) ul.textContent = "";
     renderRow(ul);
-    ul.dataset.refsHydrated = "true";
+    ul.__refsHydrated = true;
   });
 
   const track = root.querySelector(".refs-track");
-  if (track && track.dataset.refsCarouselHydrated !== "true") {
+  if (track && !track.__refsCarouselHydrated) {
     const destroy = mountCarousel(track, {
       autoplay: {
         enabled: true,
@@ -98,9 +98,9 @@ export async function mountReferences({
     });
     cleanupFns.push(() => {
       if (typeof destroy === "function") destroy();
-      delete track.dataset.refsCarouselHydrated;
+      track.__refsCarouselHydrated = false;
     });
-    track.dataset.refsCarouselHydrated = "true";
+    track.__refsCarouselHydrated = true;
   }
 
   return () => {
@@ -110,7 +110,7 @@ export async function mountReferences({
       } catch {}
     });
     rows.forEach((ul) => {
-      if (ul) delete ul.dataset.refsHydrated;
+      if (ul) ul.__refsHydrated = false;
     });
   };
 }

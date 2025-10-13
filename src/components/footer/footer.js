@@ -88,7 +88,7 @@ export function mountFooter(selector = ".section.footer", opts = {}) {
 
   const cleanupFns = [];
 
-  if (actions) {
+  if (actions && !actions.__footerHydrated) {
     if (isHydrating) {
       Array.from(actions.querySelectorAll(".btn-md")).forEach((el) => el.remove());
     } else {
@@ -134,7 +134,7 @@ export function mountFooter(selector = ".section.footer", opts = {}) {
     actions.appendChild(copyButton);
 
     if (typeof cleanupCopy === "function") cleanupFns.push(cleanupCopy);
-    actions.dataset.footerHydrated = "true";
+    actions.__footerHydrated = true;
   }
 
   if (yearP) {
@@ -193,7 +193,7 @@ export function mountFooter(selector = ".section.footer", opts = {}) {
         // Ignore cleanup errors
       }
     });
-    if (actions) delete actions.dataset.footerHydrated;
+    if (actions) actions.__footerHydrated = false;
   };
 }
 

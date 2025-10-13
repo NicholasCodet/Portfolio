@@ -37,6 +37,9 @@ function createSocialIconFromPaths(s, { size = 24, className = "icon" } = {}) {
   return svg;
 }
 
+const HERO_ACTIONS_KEY = Symbol("hero-actions-hydrated");
+const HERO_SOCIALS_KEY = Symbol("hero-socials-hydrated");
+
 export async function mountHero({
   selector = "section.hero",
   email = "hello@nicholascodet.com",
@@ -71,7 +74,7 @@ export async function mountHero({
   const orEl = root.querySelector(".hero-actions .or");
 
   // Build email button via ui-button preset.
-  if (actions && !actions.dataset.heroHydrated) {
+  if (actions && !actions[HERO_ACTIONS_KEY]) {
     if (isHydrating) {
       Array.from(actions.querySelectorAll(".btn-md")).forEach((el) => el.remove());
     }
@@ -92,10 +95,10 @@ export async function mountHero({
     if (orEl && list && orEl.nextSibling !== list) {
       actions.insertBefore(orEl, list);
     }
-    actions.dataset.heroHydrated = "true";
+    actions[HERO_ACTIONS_KEY] = true;
   }
 
-  if (list && !list.dataset.heroHydrated) {
+  if (list && !list[HERO_SOCIALS_KEY]) {
     if (isHydrating) list.textContent = "";
     const socials = filterByIds(
       Array.isArray(socialsData) ? socialsData : [],
@@ -115,7 +118,7 @@ export async function mountHero({
       li.appendChild(a);
       list.appendChild(li);
     }
-    list.dataset.heroHydrated = "true";
+    list[HERO_SOCIALS_KEY] = true;
   }
 
   return () => {};

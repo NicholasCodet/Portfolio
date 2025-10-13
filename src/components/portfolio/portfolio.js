@@ -73,13 +73,13 @@ export async function mountCaseStudies({
         layout.appendChild(element);
       }
     }
-    layout.dataset.csHydrated = "true";
+    layout.__csHydrated = true;
   }
 
   // Build Dribbble CTA once, movable
   const dribbbleHref = `https://dribbble.com/${dribbbleProfile}`;
   const ctaSetup = () => {
-    if (explore && explore.dataset.csCtaHydrated === "true") return;
+    if (explore && explore.__csCtaHydrated) return;
     if (!ctaTop && !ctaBottom) return null;
     const { element } = createUIButton({
       label: "See more on Dribbble",
@@ -111,9 +111,9 @@ export async function mountCaseStudies({
     }
     cleanupFns.push(() => {
       if (element.parentNode) element.parentNode.removeChild(element);
-      if (explore) delete explore.dataset.csCtaHydrated;
+      if (explore) explore.__csCtaHydrated = false;
     });
-    if (explore) explore.dataset.csCtaHydrated = "true";
+    if (explore) explore.__csCtaHydrated = true;
     return mq;
   };
 

@@ -40,6 +40,10 @@ function createSocialIconFromPaths(s, { size = 20, className = "icon" } = {}) {
   return svg;
 }
 
+const ABOUT_STACK_KEY = Symbol("about-stack-mounted");
+const ABOUT_SOCIALS_KEY = Symbol("about-socials-mounted");
+const ABOUT_TOOLS_KEY = Symbol("about-tools-mounted");
+
 /*=== Set Component ===*/
 export function mountAbout({
   selector = "section.about",
@@ -92,13 +96,13 @@ export function mountAbout({
       imgs = [photo].filter(Boolean);
     }
     if (!imgs.length) imgs = [photo];
-    if (typeof media.dataset.aboutStackHydrated === "undefined") {
+    if (!media[ABOUT_STACK_KEY]) {
       const cleanup = mountUIStack(media, {
         images: imgs,
         desktopDefaultDirection: "up",
       });
       if (typeof cleanup === "function") cleanupFns.push(cleanup);
-      media.dataset.aboutStackHydrated = "true";
+      media[ABOUT_STACK_KEY] = true;
     }
   }
 
@@ -109,7 +113,7 @@ export function mountAbout({
     socialIds,
     (s) => s.name || s.id
   );
-  if (socialsList && socialsList.dataset.aboutHydrated !== "true") {
+  if (socialsList && !socialsList[ABOUT_SOCIALS_KEY]) {
     if (isHydrating) socialsList.textContent = "";
     for (const s of socials) {
       const li = document.createElement("li");
@@ -124,7 +128,7 @@ export function mountAbout({
       li.appendChild(a);
       socialsList.appendChild(li);
     }
-    socialsList.dataset.aboutHydrated = "true";
+    socialsList[ABOUT_SOCIALS_KEY] = true;
   }
 
   // Toolkit
@@ -134,7 +138,7 @@ export function mountAbout({
     toolIds,
     (t) => t.id || t.label || t.name
   );
-  if (toolsList && toolsList.dataset.aboutHydrated !== "true") {
+  if (toolsList && !toolsList[ABOUT_TOOLS_KEY]) {
     if (isHydrating) toolsList.textContent = "";
     for (const t of tools) {
       const li = document.createElement("li");
@@ -151,7 +155,7 @@ export function mountAbout({
       li.appendChild(span);
       toolsList.appendChild(li);
     }
-    toolsList.dataset.aboutHydrated = "true";
+    toolsList[ABOUT_TOOLS_KEY] = true;
   }
 
   // Thought
