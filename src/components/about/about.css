@@ -184,6 +184,18 @@
   min-width: 0;
 }
 
+@media (min-width: 576px) {
+  .about-meta {
+    flex-wrap: nowrap;
+  }
+
+  .about-career .career-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-24);
+  }
+}
+
 @media (min-width: 960px) {
   .about-layout {
     flex-direction: row;
@@ -206,6 +218,11 @@
 
   .about-id {
     flex: auto;
+  }
+
+  .about-career .career-list {
+    display: flex;
+    gap: var(--space-0);
   }
 
   .career-row {
