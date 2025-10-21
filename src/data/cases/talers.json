@@ -19,6 +19,11 @@
     ],
 
     "context": {
+      "image": {
+        "src": "../../assets/images/cs-talers/talers-cover.webp",
+        "alt": "Talers Cover",
+        "caption": "Talers is an all-in-one writing platform that helps authors organise, write, and publish their work seamlessly in one place."
+      },
       "title": "Context",
       "content": [
         {

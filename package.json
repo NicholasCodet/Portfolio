@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && npm run prerender",
-    "prerender": "node scripts/prerender.mjs",
+    "prerender": "node public/scripts/prerender.mjs",
     "preview": "vite preview"
   },
   "devDependencies": {

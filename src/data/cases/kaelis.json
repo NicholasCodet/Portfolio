@@ -18,6 +18,11 @@
     ],
 
     "context": {
+      "image": {
+        "src": "../../assets/images/cs-kaelis/kaelis-cover.webp",
+        "alt": "Kaelis Cover",
+        "caption": "Kaelis a discreet wearable designed to enable secure, offline crypto payments and identity control through simple."
+      },
       "title": "Context",
       "content": [
         {
@@ -51,17 +56,17 @@
       "title": "",
       "items": [
         {
-          "src": "../../assets/images/cs-kaelis/kaelis-screens.webp",
+          "src": "../../assets/images/cs-kaelis/kaelis-main.webp",
           "alt": "Kaelis dashboard overview",
           "caption": "Core app screens for setup, recovery, and state feedback-clarity without crypto jargon."
         },
         {
-          "src": "../../assets/images/cs-kaelis/kaelis-ring.webp",
+          "src": "../../assets/images/cs-kaelis/kaelis-detail-01.webp",
           "alt": "Kaelis ring technology",
           "caption": "Kaelis ring with Secure Element, NFC, and touch sensors for offline gesture control."
         },
         {
-          "src": "../../assets/images/cs-kaelis/kaelis-dashboard.webp",
+          "src": "../../assets/images/cs-kaelis/kaelis-detail-02.webp",
           "alt": "Kaelis ring pairing",
           "caption": "Seedless onboarding through secure ring pairing-simple, clear, and stress-free."
         }

@@ -6,10 +6,10 @@ import { Window } from "happy-dom";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const projectRoot = path.resolve(__dirname, "..");
+const projectRoot = path.resolve(__dirname, "..", "..");
 const distDir = path.resolve(projectRoot, "dist");
 const ssrOutDir = path.resolve(projectRoot, ".prerender");
-const ssrEntry = path.resolve(projectRoot, "scripts/prerender-entry.js");
+const ssrEntry = path.resolve(__dirname, "prerender-entry.js");
 
 await build({
   configFile: false,

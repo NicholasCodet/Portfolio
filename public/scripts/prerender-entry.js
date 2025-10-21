@@ -1,0 +1,13 @@
+export { mountHero } from "../../src/components/hero/hero.js";
+export { mountReferences } from "../../src/components/references/references.js";
+export { mountQuote } from "../../src/components/quote/quote.js";
+export { mountAbout } from "../../src/components/about/about.js";
+export { mountTestimonials } from "../../src/components/testimonials/testimonials.js";
+export { mountCaseStudies } from "../../src/components/portfolio/portfolio.js";
+export { mountKPI } from "../../src/components/kpi/kpi.js";
+export { mountThoughts } from "../../src/components/thoughts/thoughts.js";
+export { mountFooter } from "../../src/components/footer/footer.js";
+export { mountCaseHero } from "../../src/components/case-hero/case-hero.js";
+export { mountCaseBody } from "../../src/components/case-body/case-body.js";
+export { mountRelatedProjects } from "../../src/components/related-projects/related-projects.js";
+export { getCaseBySlug } from "../../src/scripts/utils/cases.js";
