@@ -1,8 +1,8 @@
 import "./testimonials.css";
 import tplHTML from "./testimonials.html?raw";
 
-import testimonialsData from "../../data/testimonials.json";
 import refsData from "../../data/references.json";
+import testimonialsData from "../../data/testimonials.json";
 
 import { resolveAssetPath } from "../../scripts/utils/assets.js";
 import { mountCarousel } from "../ui-carousel/ui-carousel.js";
@@ -22,7 +22,7 @@ const baseUrl = import.meta.url;
 
 export function mountTestimonials({
   selector = "section.testimonials",
-  limit = 3,
+  limit = 6,
   startupsMinItems = 6,
   startupsPxPerSec = 20,
 } = {}) {
