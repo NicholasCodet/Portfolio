@@ -2,3 +2,8 @@
 @import url(./tokens.css);
 @import url(./base.css);
 @import url(./layouts.css);
+
+.heading-4 {
+    font-size: var(--text-lg);
+}
+

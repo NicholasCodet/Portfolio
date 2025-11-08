@@ -94,8 +94,8 @@ export async function mountCaseHero({
     for (const m of metaItems) {
       const item = document.createElement("div");
       item.className = "case-meta-item";
-      const lab = document.createElement("p");
-      lab.className = "sub-heading-2";
+      const lab = document.createElement("h4");
+      lab.className = "heading-4";
       lab.textContent = String((m && m.label) || "-");
       const val = document.createElement("p");
       val.className = "text-lg";

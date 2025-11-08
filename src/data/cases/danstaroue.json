@@ -1,0 +1,105 @@
+{
+    "card": {
+        "thumbnail": "../../assets/images/cs-danstaroue/danstaroue-thumbnail.webp",
+        "title": "", 
+        "description": "",
+        "date": "", 
+        "tag": [""], 
+        "featured": false, 
+        "priority": 1
+    }, 
+
+
+    "case": {
+        "title": "", 
+        "summary": "", 
+        "meta": [
+            {"label": "Role", "value": "Lead Designer"}, 
+            {"label": "Duration", "value": "Weeks"}, 
+            {"label": "Domain", "value": "SaaS"}
+        ], 
+
+        "context": {
+            "image": {
+                "src": "", 
+                "alt": "", 
+                "caption": ""
+            }, 
+
+            "title": "Context", 
+            "content": [
+                {
+                    "text": ""
+                },
+                {
+                    "text": ""
+                }
+            ]
+        },
+
+        "process": {
+            "title": "Process", 
+            "content": [
+                {
+                    "title": "",
+                    "text": ""
+                },
+                                {
+                    "title": "",
+                    "text": ""
+                },
+                                {
+                    "title": "",
+                    "text": ""
+                }
+            ]
+        },
+
+        "media": {
+            "title": "",
+            "items": [
+                {
+                    "src": "", 
+                    "alt": "", 
+                    "caption": ""
+                },
+                                {
+                    "src": "", 
+                    "alt": "", 
+                    "caption": ""
+                },
+                                {
+                    "src": "", 
+                    "alt": "", 
+                    "caption": ""
+                }
+            ]
+        },
+
+        "outcome": {
+            "title": "Outcome", 
+            "content": {
+                "text": ""
+            },
+            "kpi": {
+                "items": [
+                    {
+                        "number": "",
+                        "text": ""
+                    },
+                                        {
+                        "number": "",
+                        "text": ""
+                    },
+                                        {
+                        "number": "",
+                        "text": ""
+                    }
+                ]
+            }
+        }
+    },
+    
+
+    "full-case": {}
+}
