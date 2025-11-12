@@ -1,18 +1,18 @@
 {
     "card": {
         "thumbnail": "../../assets/images/cs-danstaroue/danstaroue-thumbnail.webp",
-        "title": "", 
-        "description": "",
+        "title": "DTR The Bike Care Companion", 
+        "description": "Digital platform connecting cyclists and mechanics, turning bike maintenance into a seamless, trackable, and eco-friendly experience.",
         "date": "", 
         "tag": [""], 
-        "featured": false, 
+        "featured": true, 
         "priority": 1
     }, 
 
 
     "case": {
-        "title": "", 
-        "summary": "", 
+        "title": "Keep Rolling: Designing Dans ta Roue, the Digital Mechanic for Urban Cyclists", 
+        "summary": "I worked with the founder of a dans ta roue to design an MVP progressive web app that helps cyclists maintain their bikes and connect with trusted mechanics. Acting as Lead Designer, I led research, UX strategy and end-to-end design. The result was a validated MVP used by early adopters, enabling more efficient repair bookings and clearer maintenance tracking.", 
         "meta": [
             {"label": "Role", "value": "Lead Designer"}, 
             {"label": "Duration", "value": "Weeks"}, 
@@ -29,10 +29,13 @@
             "title": "Context", 
             "content": [
                 {
-                    "text": ""
+                    "text": "The project emerged within a startup incubator supporting founders tackling mobility and sustainability challenges. As cycling adoption surged across French cities, we identified a gap: cyclists struggled to maintain their bikes and access trustworthy mechanics, while mechanics lacked tools to manage requests efficiently."
                 },
                 {
-                    "text": ""
+                    "text": "During this year-long collaboration, I supported the founder by leading discovery, framing the product vision, structuring features and delivering the full design system and prototype. When the founder temporarily stepped back, I also assumed product management duties to keep momentum and stakeholder alignment."
+                },
+                {
+                    "text": "Core challenge: Cyclists lacked a simple and reliable way to diagnose issues, track maintenance and find professionals, and mechanics needed a streamlined service and appointment process."
                 }
             ]
         },
@@ -41,16 +44,16 @@
             "title": "Process", 
             "content": [
                 {
-                    "title": "",
-                    "text": ""
+                    "title": "Research & Discovery",
+                    "text": "I conducted interviews with commuter and enthusiast cyclists, as well as professional mechanics. I mapped their journeys and frustrations: scattered maintenance notes, unreliable online searches for mechanics, manual appointment booking and no clear repair history. I complemented this with heuristic analysis and review of competing tools across cycling and automotive maintenance."
                 },
                                 {
-                    "title": "",
-                    "text": ""
+                    "title": "Ideation & Prototyping",
+                    "text": "Together with the founder, I facilitated collaborative ideation sessions to align on scope, feasibility and technical constraints. We defined core MVP features: maintenance log, simple diagnostic assistant, mechanic search and appointment booking. I mapped the app's structure, prioritising high-value use cases and defining flows that reduced uncertainty and friction for both cyclists and mechanics."
                 },
                                 {
-                    "title": "",
-                    "text": ""
+                    "title": "Interface & Systems Design",
+                    "text": "I produced low-fidelity flows, wireframes and a high-fidelity interactive prototype. Design decisions focused on clarity, trust and action. I adapted an existing brand system to mobile use, refined colours and typography and built a modular design system. User walkthroughs and expert feedback helped validate usability and allowed us to refine booking interactions and maintenance history screens."
                 }
             ]
         },
@@ -79,21 +82,21 @@
         "outcome": {
             "title": "Outcome", 
             "content": {
-                "text": ""
+                "text": "The MVP delivered a seamless experience for maintenance tracking, troubleshooting and mechanic booking. By centralising communication and repair logs, it created confidence for cyclists and operational clarity for mechanics. The project successfully validated market appetite and set the foundation for feature expansion and wider roll-out."
             },
             "kpi": {
                 "items": [
                     {
-                        "number": "",
-                        "text": ""
+                        "number": "3.5k",
+                        "text": "Active users in the first 4 months after launch"
                     },
                                         {
-                        "number": "",
-                        "text": ""
+                        "number": "1.2k",
+                        "text": "Appointments facilitated with local mechanics"
                     },
                                         {
-                        "number": "",
-                        "text": ""
+                        "number": "4.8 / 5",
+                        "text": "Average satisfaction score from early testers and mechanics"
                     }
                 ]
             }
