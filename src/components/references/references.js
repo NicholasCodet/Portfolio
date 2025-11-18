@@ -22,7 +22,7 @@ const baseUrl = import.meta.url;
 export async function mountReferences({
   selector = "section.references",
   minItems = 5,
-  pxPerSec = 20,
+  pxPerSec = 30,
 } = {}) {
   const section = document.querySelector(selector);
   if (!section) return () => {};

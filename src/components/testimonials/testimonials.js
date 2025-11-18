@@ -182,7 +182,7 @@ export function mountTestimonials({
         autoplay: {
           enabled: true,
           mode: "marquee",
-          speed: Number(startupsPxPerSec) || 20,
+          speed:  30,
           pauseOnHover: false,
           pauseOnVisibility: true,
         },

@@ -118,10 +118,10 @@
   list-style: none;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-40);
+  gap: var(--space-80);
   flex: 0 0 auto;
   min-width: max-content;
-  padding-inline-end: var(--space-40);
+  padding-inline-end: var(--space-80);
 }
 
 .testimonials .t-startups-row + .t-startups-row {
