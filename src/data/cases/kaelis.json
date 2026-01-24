@@ -10,7 +10,7 @@
   },
   "case": {
     "title": "A Tap Away from Freedom: The Design Behind Kælis",
-    "summary": "Kaelis is a discreet wearable that enables secure, offline crypto payments and decentralised identity through simple gestures. As Product Owner, I led the full project from research to functional prototyping bridging UX, hardware, and Web3 logic. The goal was to make cold-wallet-grade security accessible and stress-proof, even under pressure or without connectivity.",
+    "summary": "Kaelis is a discreet wearable that enables secure, offline crypto payments and decentralised identity through simple gestures. As Founder, I led the full project from research to functional prototyping bridging UX, hardware, and Web3 logic. The goal was to make cold-wallet-grade security accessible and stress-proof, even under pressure or without connectivity.",
     "meta": [
       { "label": "Role", "value": "Project Owner" },
       { "label": "Duration", "value": "34 Weeks" },
@@ -26,7 +26,7 @@
       "title": "Context",
       "content": [
         {
-          "text": "The project began as an independent exploration of Web3 and IoT convergence, addressing the growing need for privacy-preserving payment devices that function without network reliance. Most crypto wallets depend on screens, seed phrases, and cloud backups processes that alienate mainstream users and fail in low-connectivity or coercive contexts."
+          "text": "The project began as an independent exploration of Web3 and IoT convergence, addressing the growing need for privacy-preserving payment devices that function without network reliance. Most crypto wallets depend on screens, seed phrases, and cloud backups processes that scare off mainstream users and fail in low-connectivity or coercive contexts."
         },
         {
           "text": "As a solo designer, I led research, product strategy, and prototyping, collaborating with crypto and hardware engineers for technical validation. The challenge was to design a screenless, gesture-driven payment device that remains secure, comprehensible, and recoverable, even offline."
@@ -43,7 +43,7 @@
         },
         {
           "title": "Ideation & Prototyping",
-          "text": "I translated behavioural insights into a finite-state model defining how gestures (tap, triple tap, long press, custom sequence) map to system states like “Paired”, “Ghost Mode”, or “Wiped”. Rapid prototyping with Arduino Nano, capacitive sensors, and 3D-printed rings allowed real-world testing of gesture reliability and haptic feedback under stress."
+          "text": "I translated behavioural insights into a finite-state model defining how gestures (tap, triple tap, long press, custom sequence) map to system states like “Paired”, “Decoy”, or “Wiped”. Rapid prototyping with Arduino Nano, capacitive sensors, and 3D-printed rings allowed real-world testing of gesture reliability and haptic feedback under stress."
         },
         {
           "title": "Interface & Systems Design",
@@ -96,5 +96,7 @@
       }
     }
   },
-  "full-case": {}
+  "full-case": {
+    "title": "HelloWorld"
+  }
 }

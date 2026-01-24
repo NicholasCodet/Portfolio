@@ -1,21 +1,21 @@
 {
   "card": {
     "thumbnail": "",
-    "title": "Re:quest",
+    "title": "",
     "description": "",
     "date": "",
     "tag": [],
     "featured": false,
-    "priority": 0
+    "priority": 2
   },
 
   "case": {
-    "title": "On the Far Side of the Mirror: Crafting Re:Quest's Reality",
+    "title": "",
     "summary": "",
     "meta": [
-      { "label": "Role", "value": "Lead Designer" },
-      { "label": "Duration", "value": "25 Weeks" },
-      { "label": "Domain", "value": "GaaS + AR" }
+      { "label": "Role", "value": "" },
+      { "label": "Duration", "value": "" },
+      { "label": "Domain", "value": "" }
     ],
 
     "context": {

@@ -5,13 +5,13 @@
         "description": "Digital platform connecting cyclists and mechanics, turning bike maintenance into a seamless experience.",
         "date": "", 
         "tag": [""], 
-        "featured": true, 
+        "featured": false, 
         "priority": 1
     }, 
 
 
     "case": {
-        "title": "Keep Rolling: Designing Dans ta Roue, the Digital Mechanic for Urban Cyclists", 
+        "title": "Keep Rolling: Designing DTR, the Digital Mechanic for Urban Cyclists", 
         "summary": "I worked with the founder of a dans ta roue to design an MVP progressive web app that helps cyclists maintain their bikes and connect with trusted mechanics. Acting as Lead Designer, I led research, UX strategy and end-to-end design. The result was a validated MVP used by early adopters, enabling more efficient repair bookings and clearer maintenance tracking.", 
         "meta": [
             {"label": "Role", "value": "Lead Designer"}, 

@@ -6,7 +6,7 @@
     "date": "",
     "tag": [""],
     "featured": true,
-    "priority": 2
+    "priority": 3
   },
 
   "case": {
@@ -22,12 +22,12 @@
       "image": {
         "src": "../../assets/images/cs-talers/talers-cover.webp",
         "alt": "Talers Cover",
-        "caption": "Talers is an all-in-one writing platform that helps authors organise, write, and publish their work seamlessly in one place."
+        "caption": "Talers is an all-in-one writing platform that helps authors organise, write, and publish their work in one place."
       },
       "title": "Context",
       "content": [
         {
-          "text": "The project began within 1Kubator, where the founder had identified a clear gap in the writing market. Existing tools forced authors to juggle several disconnected apps from note-taking and drafting to editing and progress tracking, creating friction and loss of focus. Talers was conceived as an accessible, all-in-one writing platform that simplifies this fragmented experience."
+          "text": "The project began within 1Kubator, where the founder had identified a clear gap in the writing market. Existing tools forced authors to juggle several disconnected apps from note-taking and drafting to editing and publishing, creating friction and loss of focus. Talers was conceived as an accessible, all-in-one writing platform that simplifies this fragmented experience."
         },
         {
           "text": "My role covered the full design spectrum, from discovery to delivery. I led design strategy, and brand development, while maintaining close collaboration with the founder, who handled full-stack development. The challenge was to create a platform intuitive enough for new writers yet powerful enough to support long-form, structured writing. The core problem was clear: writers were losing creative flow to disorganisation and tool overload."
@@ -94,7 +94,7 @@
     },
 
     "quote": {
-      "text": "Collaborating on Talers was seamless. The design process balanced speed with rigor, and the outcome exceeded expectations—clean UX, clear priorities, and a product our early writers loved.",
+      "text": "Collaborating on Talers was seamless. The design process balanced speed with rigor, and the outcome exceeded expectations, clean UX, clear priorities, and a product our early writers loved.",
       "author": "Matthieu Gindre",
       "role": "Founder",
       "company": "Talers",
