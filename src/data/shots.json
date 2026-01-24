@@ -1,14 +1,4 @@
 [
-    {
-    "title": "Peaks",
-    "image": "/src/assets/images/shots/peaks.webp",
-    "url": "https://dribbble.com/shots/26979236-Peaks"
-  },
-  {
-    "title": "1K Production",
-    "image": "/src/assets/images/shots/1kprod.webp",
-    "url": "https://dribbble.com/shots/26744835-1KProduction-Website"
-  },
   {
     "title": "The Neo Festival 2021",
     "image": "/src/assets/images/shots/neofestival.webp",
@@ -38,5 +28,15 @@
     "title": "Dans Ta Roue",
     "image": "/src/assets/images/shots/danstaroue.webp",
     "url": "https://dribbble.com/shots/25233797-Dans-ta-Roue"
+  },
+  {
+    "title": "1K Production",
+    "image": "/src/assets/images/shots/1kprod.webp",
+    "url": "https://dribbble.com/shots/26744835-1KProduction-Website"
+  },
+  {
+    "title": "Peaks",
+    "image": "/src/assets/images/shots/peaks.webp",
+    "url": "https://dribbble.com/shots/26979236-Peaks"
   }
 ]
